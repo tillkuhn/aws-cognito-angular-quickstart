@@ -1,6 +1,15 @@
 Cognito Quickstart
 ===================================================
 
+## Build
+* [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
+* Apply `infra.tf` plan
+```
+terraform init
+terraform plan
+terraform apply -auto-approve
+```
+
 ## What does this app do?
 ![QuickStart Angular2 Cognito App](/aws/meta/Cognito-Angular2-QuickStart.png?raw=true)
 

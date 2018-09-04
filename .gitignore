@@ -38,3 +38,7 @@ Thumbs.db
 # Build Artifacts
 upload.zip
 resetConfig.sh
+
+# Terraform
+/.terraform
+terraform.tfstate*
