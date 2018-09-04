@@ -22,6 +22,7 @@ import {LogoutComponent, RegistrationConfirmationComponent} from "./public/auth/
 import {ResendCodeComponent} from "./public/auth/resend/resendCode.component";
 import {NewPasswordComponent} from "./public/auth/newpassword/newpassword.component";
 import { MFAComponent } from './public/auth/mfa/mfa.component';
+import { DishesComponent } from './dishes/dishes.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { MFAComponent } from './public/auth/mfa/mfa.component';
         MyProfileComponent,
         SecureHomeComponent,
         JwtComponent,
-        AppComponent
+        AppComponent,
+        DishesComponent
     ],
     imports: [
         BrowserModule,
