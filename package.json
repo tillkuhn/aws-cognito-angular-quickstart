@@ -1,15 +1,19 @@
 {
-  "name": "aws-cognito-angular-quickstart",
-  "version": "1.0.0",
-  "author": "Vladimir Budilov",
-  "homepage": "http://cognito.budilov.com",
+  "name": "yummy-aws",
+  "version": "0.0.1",
+  "author": "Till Kuhn",
+  "homepage": "https://github.com/tillkuhn/yummy-aws",
   "contributors": [
     {
       "name": "Vladimir Budilov",
       "url": "http://budilov.com"
+    },
+    {
+      "name": "Till Kuhn",
+      "url": "https://github.com/tillkuhn"
     }
   ],
-  "description": "A single-page web app, based on angular4, utilizing Amazon Cognito, S3, and DynamoDB (serverless architecture)",
+  "description": "A single-page web app, based on https://github.com/awslabs/aws-cognito-angular-quickstart usingg angular4, utilizing Amazon Cognito, S3, DynamoDB (serverless architecture) and Terraform",
   "angular-cli": {},
   "scripts": {
     "start": "ng serve --port 3333 --open",
