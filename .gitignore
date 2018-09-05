@@ -42,3 +42,6 @@ resetConfig.sh
 # Terraform
 /.terraform
 terraform.tfstate*
+
+## generated from templates
+src/environments/environment.ts

@@ -42,12 +42,12 @@ export class UserLoginService {
 
     authenticate(username: string, password: string, callback: CognitoCallback) {
         console.log("UserLoginService: starting the authentication");
-
+        // see https://github.com/aws-amplify/amplify-js/tree/master/packages/amazon-cognito-identity-js
         let authenticationData = {
             Username: username,
             Password: password,
         };
-        let authenticationDetails = new AuthenticationDetails(authenticationData);
+        let authenticationDetails =  new AuthenticationDetails(authenticationData);
 
         let userData = {
             Username: username,
@@ -55,8 +55,9 @@ export class UserLoginService {
         };
 
         console.log("UserLoginService: Params set...Authenticating the user");
-        let cognitoUser = new CognitoUser(userData);
-        console.log("UserLoginService: config is " + AWS.config);
+        let cognitoUser =  new CognitoUser(userData);
+        console.log("UserLoginService: config is " + username + ":" + password + " " + AWS.config);
+        cognitoUser.setAuthenticationFlowType('USER_PASSWORD_AUTH');
         cognitoUser.authenticateUser(authenticationDetails, {
             newPasswordRequired: (userAttributes, requiredAttributes) => callback.cognitoCallback(`User needs to set password.`, null),
             onSuccess: result => this.onLoginSuccess(callback, result),

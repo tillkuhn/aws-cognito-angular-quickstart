@@ -1,10 +1,10 @@
+variable "app_id" {}
+variable "app_name" {}
 variable "aws_profile" {}
 variable "identity_pool_name" {}
 variable "user_pool_name" {}
 variable "bucket_name" {}
 variable "role_name_prefix" {}
-variable "app_id" {}
-variable "app_name" {}
 variable "env" {
   default = "dev"
 }
@@ -79,8 +79,8 @@ EOF
 }
 
 ## create dynamodb tables
-resource "aws_dynamodb_table" "logintrail-table" {
-  name           = "${var.app_id}-login-trail"
+resource "aws_dynamodb_table" "logintrail" {
+  name           = "${var.app_id}-logintrail"
   read_capacity  = 1
   write_capacity = 1
   hash_key       = "userId"
@@ -168,7 +168,7 @@ resource "aws_iam_role_policy" "authenticated" {
         "dynamodb:DeleteItem"
       ],
       "Resource": [
-        "${aws_dynamodb_table.logintrail-table.arn}"
+        "${aws_dynamodb_table.logintrail.arn}"
       ],
       "Condition": {
         "ForAllValues:StringEquals": {
@@ -226,3 +226,24 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 #output "generated_ids" {
 #  value = "aws_cognito_identity_pool is ${aws_cognito_identity_pool.main.id} dbtable arn ${aws_dynamodb_table.logintrail-table.arn}"
 #}
+data "template_file" "environment" {
+  template = "${file("${path.module}/src/environments/environment.ts.tmpl")}"
+
+  vars {
+    identityPoolId = "${aws_cognito_identity_pool.main.id}"
+    ddbTableName = "${aws_dynamodb_table.logintrail.name}"
+    region = "${var.aws_region}"
+    bucketRegion = "${var.aws_region}"
+    userPoolId = "${aws_cognito_user_pool.main.id}}"
+    clientId = "${aws_cognito_user_pool_client.main.id}"
+  }
+}
+
+output "generated_ids" {
+  value = "${data.template_file.environment.rendered}"
+}
+
+resource "local_file" "environment" {
+  content     = "${data.template_file.environment.rendered}"
+  filename = "${path.module}/src/environments/environment.ts"
+}
