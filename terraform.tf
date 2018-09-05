@@ -57,8 +57,10 @@ resource "aws_dynamodb_table" "logintrail" {
 }
 
 # Create the user pool
+# https://www.terraform.io/docs/providers/aws/r/cognito_user_pool.html
 resource "aws_cognito_user_pool" "main" {
   name = "${var.user_pool_name}"
+  auto_verified_attributes = ["email"]
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
@@ -66,11 +68,12 @@ resource "aws_cognito_user_pool" "main" {
 }
 
 # Create the user pool client
+#https://www.terraform.io/docs/providers/aws/r/cognito_user_pool_client.html
 #$aws_cmd cognito-idp create-user-pool-client --user-pool-id $USER_POOL_ID --no-generate-secret --client-name webapp --region $REGION > /tmp/$POOL_NAME-create-user-pool-client
-#USER_POOL_CLIENT_ID=$(grep -E '"ClientId":' /tmp/$POOL_NAME-create-user-pool-client | awk -F'"' '{print $4}')
 resource "aws_cognito_user_pool_client" "main" {
   name = "webapp"
   generate_secret = false
+  explicit_auth_flows = ["USER_PASSWORD_AUTH"]
   user_pool_id = "${aws_cognito_user_pool.main.id}"
 }
 
