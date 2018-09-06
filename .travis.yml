@@ -14,5 +14,5 @@ cache:
 script:
 #- npm run lint
 #- npm run test:headless
-- npm run travis
+- npm run buildci
 #- xvfb-run npm run e2e
