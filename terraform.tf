@@ -12,6 +12,9 @@ variable "env" {
 variable "aws_region" {
   default = "eu-central-1"
 }
+variable "route53_subdomain" {}
+variable "route53_zone" {}
+variable "route53_alias_zone_id" {}
 
 ## you can also use key and secret here, we prefer a profile in ~/.aws/credentials
 provider "aws" {
@@ -22,11 +25,56 @@ provider "aws" {
 ## this is the target bucket where we deploy our web application
 resource "aws_s3_bucket" "webapp" {
   bucket = "${var.bucket_name}"
-  acl    = "private"
-
+  region = "${var.aws_region}"
+  #acl    = "private"
+  policy = <<EOF
+{
+  "Id": "bucket_policy_site",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "bucket_policy_site_main",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Principal": "*"
+    }
+  ]
+}
+EOF
+  website {
+    index_document = "index.html"
+    error_document = "404.html"
+  }
+  force_destroy = true
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
+  }
+}
+
+## create sync script to upload app distribution into se3 bucked
+resource "local_file" "deployment" {
+  content     = "#!/usr/bin/env bash\nnpm run build\naws s3 sync ./dist/ s3://${var.bucket_name} --region ${var.aws_region} --profile ${var.aws_profile}\n"
+  filename = "${path.module}/deploy.sh"
+}
+
+## register bucket as alias in route53
+data "aws_route53_zone" "selected" {
+  name         = "${var.route53_zone}"
+  private_zone = false
+}
+
+resource "aws_route53_record" "domain" {
+  zone_id = "${data.aws_route53_zone.selected.zone_id}"
+  name    = "${var.route53_subdomain}.${data.aws_route53_zone.selected.name}"
+  type = "A"
+  alias {
+    name = "s3-website.${var.aws_region}.amazonaws.com."
+    zone_id = "${var.route53_alias_zone_id}"
+    evaluate_target_health = false
   }
 }
 
@@ -265,6 +313,12 @@ resource "local_file" "environment" {
   content     = "${data.template_file.environment.rendered}"
   filename = "${path.module}/src/environments/environment.ts"
 }
+
+resource "local_file" "environment_prod" {
+  content     = "${data.template_file.environment.rendered}"
+  filename = "${path.module}/src/environments/environment.prod.ts"
+}
+
 
 ## dump output
 output "generated_ids" {
