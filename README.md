@@ -2,6 +2,7 @@ Cognito Quickstart
 ===================================================
 
 ## Build
+[![Build Status](https://travis-ci.org/tillkuhn/yummy-aws.svg?branch=master)](https://travis-ci.org/tillkuhn/yummy-aws)
 * [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
 * Apply `infra.tf` plan
 ```
