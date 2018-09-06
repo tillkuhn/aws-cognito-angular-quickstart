@@ -1,6 +1,10 @@
 <h2>My Dishes</h2>
 <ul class="dishes">
-  <li *ngFor="let dish of dishes">
+  <li *ngFor="let dish of dishes"
+      [class.selected]="dish === selectedDish"
+      (click)="onSelect(dish)">
     <span class="badge">{{dish.id}}</span> {{dish.name}}
   </li>
 </ul>
+
+<app-dish-detail [dish]="selectedDish"></app-dish-detail>

@@ -24,6 +24,7 @@ import {NewPasswordComponent} from './public/auth/newpassword/newpassword.compon
 import {MFAComponent} from './public/auth/mfa/mfa.component';
 import {DishesComponent} from './secure/dishes/dishes.component';
 import {DishService} from './service/dish.service';
+import { DishDetailComponent } from './secure/dish-detail/dish-detail.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import {DishService} from './service/dish.service';
         SecureHomeComponent,
         JwtComponent,
         AppComponent,
-        DishesComponent
+        DishesComponent,
+        DishDetailComponent
     ],
     imports: [
         BrowserModule,
