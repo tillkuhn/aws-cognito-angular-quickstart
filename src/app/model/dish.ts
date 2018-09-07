@@ -18,6 +18,8 @@ export class Dish {
     @attribute()
     name: string;
     @attribute()
+    origin: string;
+    @attribute()
     authenticName: string;
     @attribute()
     rating: number

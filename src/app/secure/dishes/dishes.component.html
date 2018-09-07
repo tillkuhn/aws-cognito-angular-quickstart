@@ -1,10 +1,18 @@
 <h2>My Dishes</h2>
-<ul class="dishes">
-  <li *ngFor="let dish of dishes"
-      [class.selected]="dish === selectedDish"
-      (click)="onSelect(dish)">
-    <span class="badge">{{dish.name}}</span> {{dish.rating}}
-  </li>
-</ul>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped">
+        <tr>
+            <th>Dish</th>
+            <th>Origin</th>
+            <th>Rating</th>
+        </tr>
+        <tr *ngFor="let dish of dishes" [class.selected]="dish === selectedDish" (click)="onSelect(dish)">
+            <td>{{ dish.name }}</td>
+            <td>{{ dish.origin }}</td>
+            <td>{{ dish.rating }}</td>
+        </tr>
+    </table>
+</div>
 
 <app-dish-detail [dish]="selectedDish"></app-dish-detail>

@@ -1,6 +1,8 @@
 <div *ngIf="dish">
     <form (ngSubmit)="onSubmit()" #dishForm="ngForm">
-        <h2>{{dish.name | uppercase}}</h2>
+        <h2><img src="assets/img/origins/{{dish.origin}}.png" alt="origin"/>{{dish.name | uppercase}}</h2>
+        <img src="{{dish.imageUrl}}" alt="{{dish.name}} image" width="150px"/>
+
         <div>
             <a href="{{dish.primaryUrl}}" target="_recipe">Recipe </a>
             <span>Id: </span>{{dish.id}} <span>createdAt: </span>{{dish.createdAt}}
