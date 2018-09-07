@@ -1,17 +1,12 @@
 import {Injectable} from '@angular/core';
-
-import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment';
-
-// import {Stuff} from "../secure/useractivity/useractivity.component";
 import * as AWS from 'aws-sdk/global';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import {Dish} from '../model/dish';
-import {DISHES} from '../model/mock-dishes';
 import {CognitoUtil} from './cognito.service';
-import {Stuff} from '../secure/useractivity/useractivity.component';
-
+import {DataMapper, ScanIterator} from '@aws/dynamodb-data-mapper';
 // import { MessageService } from './message.service';
+import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class DishService {
@@ -20,10 +15,30 @@ export class DishService {
     constructor(public cognitoUtil: CognitoUtil) {
     }
 
-    getDishesMock(): Observable<Dish[]> {
-        // TODO: send the message _after_ fetching the dishes
-        // this.messageService.add('DishService: fetched dishes');
-        return Observable.of(DISHES);
+    // See https://github.com/awslabs/dynamodb-data-mapper-js/blob/master/README.md
+    updateDish(dish: Dish) {
+        const mapper = new DataMapper({
+            client: new DynamoDB({region: 'eu-central-1'}), // the SDK client used to execute operations
+            tableNamePrefix: 'yummy' // optionally, you can provide a table prefix to keep your dev and prod tables separate
+        });
+        mapper.put(dish).then(objectSaved => {
+            // the record has been saved
+        });
+
+    }
+
+    async scanDishes( ) {
+        const mapper = new DataMapper({
+            client: new DynamoDB({region: 'eu-central-1'}), // the SDK client used to execute operations
+            tableNamePrefix: 'yummy' // optionally, you can provide a table prefix to keep your dev and prod tables separate
+        });
+        let dishes = new Array();
+        for await (const item of mapper.scan(Dish)) {
+            // individual items will be yielded as the scan is performed
+            dishes.push(of(item));
+        }
+        return of(dishes);
+        //return mapper.scan(Dish);
     }
 
     getDishes(): Observable<Dish[]> {
@@ -61,6 +76,6 @@ export class DishService {
             }
         }
 
-        return Observable.of(dishes);
+        return of(dishes);
     }
 }

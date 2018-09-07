@@ -1,0 +1,131 @@
+{
+  "yummy-dish": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "C29F7C30-408A-4FAA-8CD9-C0384AA2FED9"
+          },
+          "createdAt": {
+            "S": "2015-06-28T08:37:14.524Z"
+          },
+          "name": {
+            "S": "Pho Bo Rindfleischsuppe"
+          },
+          "authenticName": {
+            "S": "Phở bò"
+          },
+          "primaryUrl": {
+            "S": "https://asiastreetfood.com/rezepte/pho_bo_hanoi/"
+          },
+          "imageUrl": {
+            "S": "http://www.taste.com.au/images/recipes/nb/2008/02/19014_l.jpg"
+          },
+          "rating": {
+            "N": "8"
+          },
+          "timesServed": {
+            "N": "10"
+          },
+          "lastServed": {
+            "S": "2018-06-28T08:37:14.524Z"
+          },
+          "origin": {
+            "S": "vn"
+          },
+          "tags": {
+            "SS": [
+              "asia",
+              "suppe",
+              "beef"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "20944EC5-EC7B-4AD0-A8B0-F40D928388FC"
+          },
+          "createdAt": {
+            "S": "2016-06-28T08:37:14.524Z"
+          },
+          "name": {
+            "S": "Tom Yum Suppe"
+          },
+          "authenticName": {
+            "S": "ต้มยำกุ้ง"
+          },
+          "primaryUrl": {
+            "S": "ตhttp://www.eatingthaifood.com/2014/08/tom-yum-soup-recipe/"
+          },
+          "imageUrl": {
+            "S": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTvrOY_7LYt96GDXqCbT5D0qLgqbOw5XlN6Xt0wYUBoghrbhpgd"
+          },
+          "rating": {
+            "N": "8"
+          },
+          "timesServed": {
+            "N": "11"
+          },
+          "lastServed": {
+            "S": "2018-06-28T08:37:14.524Z"
+          },
+          "origin": {
+            "S": "th"
+          },
+          "tags": {
+            "SS": [
+              "asia",
+              "suppe",
+              "shrimp",
+              "spicy"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {
+            "S": "724E9548-83F1-4BE6-B7E6-9113E548FE2E"
+          },
+          "createdAt": {
+            "S": "2017-06-28T08:37:14.524Z"
+          },
+          "name": {
+            "S": "Ohn No Khaut Swe"
+          },
+
+          "primaryUrl": {
+            "S": "http://www.meemalee.com/2010/08/ohn-no-khao-swe-burmese-coconut-chicken.html"
+          },
+          "imageUrl": {
+            "S": "https://timafe.files.wordpress.com/2017/04/img_5508_dish_mini.jpg?w=1068&h=&crop=1&zoom=2"
+          },
+          "rating": {
+            "N": "7"
+          },
+          "timesServed": {
+            "N": "4"
+          },
+          "lastServed": {
+            "S": "2018-04-28T08:37:14.524Z"
+          },
+          "origin": {
+            "S": "mm"
+          },
+          "tags": {
+            "SS": [
+              "asia",
+              "suppe"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

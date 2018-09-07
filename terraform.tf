@@ -107,13 +107,13 @@ resource "aws_dynamodb_table" "dish" {
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "id"
   # (Optional, Forces new resource) The attribute to use as the range (sort) key. Must also be defined as an attribute
-  range_key      = "name"
+  range_key      = "createdAt"
   attribute {
     name = "id"
     type = "S"
   }
   attribute {
-    name = "name"
+    name = "createdAt"
     type = "S"
   }
   tags {

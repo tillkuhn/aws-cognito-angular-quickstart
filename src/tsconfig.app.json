@@ -6,7 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
-      "es2016",
+      "esnext",
       "dom"
     ],
     "outDir": "../out-tsc/app",

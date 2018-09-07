@@ -3,7 +3,7 @@
   <li *ngFor="let dish of dishes"
       [class.selected]="dish === selectedDish"
       (click)="onSelect(dish)">
-    <span class="badge">{{dish.id}}</span> {{dish.name}}
+    <span class="badge">{{dish.name}}</span> {{dish.rating}}
   </li>
 </ul>
 

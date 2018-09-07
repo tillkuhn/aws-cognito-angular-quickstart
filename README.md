@@ -1,15 +1,7 @@
-Cognito Quickstart
+Yummy AWS Quickstart
 ===================================================
-
-## Build
 [![Build Status](https://travis-ci.org/tillkuhn/yummy-aws.svg?branch=master)](https://travis-ci.org/tillkuhn/yummy-aws)
-* [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
-* Apply `infra.tf` plan
-```
-terraform init
-terraform plan
-terraform apply -auto-approve
-```
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## What does this app do?
 ![QuickStart Angular2 Cognito App](/aws/meta/Cognito-Angular2-QuickStart.png?raw=true)
@@ -17,7 +9,6 @@ terraform apply -auto-approve
 ## Tech Stack
 ### Required Tools
 * [aws cli](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
-* [eb cli](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html)
 * [npm](https://www.npmjs.com/)
 * [angular-cli](https://github.com/angular/angular-cli)
 
@@ -34,7 +25,7 @@ terraform apply -auto-approve
 * [Install or update your aws cli](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) 
 * [Install or update your eb cli](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html) 
 * [Install angular-cli](https://github.com/angular/angular-cli)
-
+* [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
 
 ## Getting the code and running it locally
 _This uses the pre-configured AWS resources hosted by AWS_
@@ -54,32 +45,26 @@ npm start
 ```
 
 ## Creating AWS Resources
-This sample application can be deployed to either Elastic Beanstalk or S3. S3 will host this application as a static site
-while Elastic Beanstalk gives you the capability of adding backend operations to the application. 
+This sample application can be deployed S3. S3 will host this application as a static site
 
-* [What is Elastic Beanstalk](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html)
 * [What is S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
-
-**createResources.sh requires your [aws cli to be configured](http://docs.aws.amazon.com/cli/latest/userguide/controlling-output.html) for JSON output.**
+* Run terraform to build the underlying infrastructrure
 
 ```
-# Install the AWS resources and deploy your application to either Elastic Beanstalk or S3
-cd aws
-./createResources.sh
+terraform init
+terraform plan
+terraform apply -auto-approve
 ```
 
-Running the above command will create the necessary AWS resources and build & deploy your code to AWS. 
-It will prompt you to choose your deployment target (S3 or Elastic Beanstalk). Choosing 'S3' makes your deployment
-completely serverless, while choosing Elastic Beanstalk will create an EC2 instance that will host this NodeJS app. 
 
 *Caution:* You might incur AWS charges after running the setup script
 
-## After initially running the ```createResources.sh``` script, use the below commands to rebuild and redeploy
+## After initially running ```terrfaform```, use the below commands to rebuild and redeploy
 
 ### _S3:_ Update, Build and Deploy
 ```
-# Build the project and sync the output with the S3 bucket
-npm run build; cd dist; aws s3 sync . s3://[BUCKET_NAME]/
+# Build the project and sync the output with the S3 bucket.
+./deploy.sh
 ```
 ```
 # Test your deployed application
@@ -90,20 +75,10 @@ for a leaner deployment bundle. At this point of time, AWS Beanstalk requires al
 including the devDependencies to be under the dependencies section. But if you're not using Beanstalk then you can
 optimize as you wish.*__
 
-*or*
+## Import Data
 
-### _Beanstalk:_ Update, Build and Deploy
-```
-# Commit your changes in order to deploy it to your environment
-git add .
-git commit
-eb deploy
-```
-```
-# View your deployed application in a browser
-eb open
-```
-
+* https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html
+* https://docs.aws.amazon.com/de_de/amazondynamodb/latest/developerguide/SampleData.LoadData.html
 ## Local Testing
 
 This section contains instructions on how to test the application locally (using mocked services instead of the real AWS services).
