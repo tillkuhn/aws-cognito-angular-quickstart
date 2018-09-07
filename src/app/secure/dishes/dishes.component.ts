@@ -9,7 +9,7 @@ import { DishService } from '../../service/dish.service';
 })
 export class DishesComponent implements OnInit {
 
-  dishes: Dish[];
+  dishes: Array<Dish>;
 
   selectedDish: Dish;
   constructor(private dishService: DishService ) { }
@@ -23,7 +23,9 @@ export class DishesComponent implements OnInit {
   }
 
   getDishes(): void {
-    this.dishService.getDishes()
-      .subscribe(dishes => this.dishes = dishes);
+      console.log("Scanning dishes");
+      this.dishes = new Array<Dish>();
+      this.dishService.scanDishes(this.dishes);
+    //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
   }
 }

@@ -265,14 +265,12 @@ resource "aws_iam_role_policy" "authenticated" {
         "dynamodb:GetItem",
         "dynamodb:BatchGetItem",
         "dynamodb:Query",
-        "dynamodb:Scan",
         "dynamodb:PutItem",
         "dynamodb:UpdateItem",
         "dynamodb:DeleteItem"
       ],
       "Resource": [
-        "${aws_dynamodb_table.logintrail.arn}",
-        "${aws_dynamodb_table.dish.arn}"
+        "${aws_dynamodb_table.logintrail.arn}"
       ],
       "Condition": {
         "ForAllValues:StringEquals": {
@@ -281,6 +279,32 @@ resource "aws_iam_role_policy" "authenticated" {
           ]
         }
       }
+    },
+   {
+      "Effect": "Allow",
+      "Action": [
+        "mobileanalytics:PutEvents",
+        "cognito-sync:*",
+        "cognito-identity:*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:BatchGetItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem"
+      ],
+      "Resource": [
+        "${aws_dynamodb_table.dish.arn}"
+      ]
     }
   ]
 }

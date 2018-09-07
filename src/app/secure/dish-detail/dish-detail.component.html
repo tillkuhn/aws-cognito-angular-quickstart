@@ -1,17 +1,21 @@
-
 <div *ngIf="dish">
-
-  <h2>{{dish.name | uppercase}} Details</h2>
-  <div><span>Id: </span>{{dish.id}} <span>createdAt: </span>{{dish.createdAt}}</div>
-  <div>
-    <label>Name:
-      <input [(ngModel)]="dish.name" placeholder="name">
-    </label>
-  </div>
-  <div>
-    <label>Rating:
-      <input [(ngModel)]="dish.rating" placeholder="rating">
-    </label>
-  </div>
-
+    <form (ngSubmit)="onSubmit()" #dishForm="ngForm">
+        <h2>{{dish.name | uppercase}}</h2>
+        <div>
+            <a href="{{dish.primaryUrl}}" target="_recipe">Recipe </a>
+            <span>Id: </span>{{dish.id}} <span>createdAt: </span>{{dish.createdAt}}
+        </div>
+        <div>
+            <label>Name:
+                <input [(ngModel)]="dish.name" placeholder="name" name="name" size="50">
+            </label>
+        </div>
+        <div>
+            <label>Rating:
+                <input [(ngModel)]="dish.rating" placeholder="rating" name="rating" size="5 ">
+            </label>
+        </div>
+        <!--https://angular.io/guide/forms-->
+        <button type="submit" class="btn btn-success">Submit Dish</button>
+    </form>
 </div>
