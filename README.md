@@ -2,6 +2,7 @@ Yummy AWS Quickstart
 ===================================================
 [![Build Status](https://travis-ci.org/tillkuhn/yummy-aws.svg?branch=master)](https://travis-ci.org/tillkuhn/yummy-aws)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![dependencies Status](https://david-dm.org/tillkuhn/yummy-aws/status.svg)](https://david-dm.org/tillkuhn/yummy-aws)
 
 ## What does this app do?
 ![QuickStart Angular2 Cognito App](/aws/meta/Cognito-Angular2-QuickStart.png?raw=true)
