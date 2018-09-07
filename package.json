@@ -22,8 +22,8 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
-    "buildci": "npm install && ng build --configuration=ci",
-    "build": "npm install && ng build --prod --aot=false"
+    "buildci": "npm install && rm -rf node_modules/@types/babel-traverse && ng build --configuration=ci",
+    "build": "npm install && rm -rf node_modules/@types/babel-traverse && ng build --prod --aot=true && cp src/404.html dist"
   },
   "private": true,
   "dependencies": {
@@ -44,8 +44,6 @@
     "core-js": "^2.5.4",
     "css-star-rating": "^1.2.4",
     "esnext": "^3.3.1",
-    "express": "^4.16.3",
-    "mongodb": "^3.1.4",
     "rxjs": "^6.0.0",
     "webpack": "^4.17.2",
     "webpack-dev-server": "^3.1.8",

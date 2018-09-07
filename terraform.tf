@@ -57,7 +57,7 @@ EOF
 
 ## create sync script to upload app distribution into se3 bucked
 resource "local_file" "deployment" {
-  content     = "#!/usr/bin/env bash\nnpm run build\naws s3 sync ./dist/ s3://${var.bucket_name} --region ${var.aws_region} --profile ${var.aws_profile}\n"
+  content     = "#!/usr/bin/env bash\nnpm run build\naws s3 sync ./dist/ s3://${var.bucket_name} --region ${var.aws_region} --delete --profile ${var.aws_profile}\n"
   filename = "${path.module}/deploy.sh"
 }
 
