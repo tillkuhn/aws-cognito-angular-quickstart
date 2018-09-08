@@ -14,6 +14,8 @@
             >
             </tag-input-dropdown>
         </tag-input>
+        <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'default'" [showText]="false"
+                    [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
         <div>
             <label>Name:
                 <input [(ngModel)]="dish.name" placeholder="name" name="name" size="50">

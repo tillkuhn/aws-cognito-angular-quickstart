@@ -29,13 +29,7 @@ export class DishDetailComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log('Saving dish tags' + JSON.stringify(this.selectedTags));
-        // convert to string array should be done by onAdding
-        /*this.dish.tags = [];
-        for (let tag of this.selectedTags) {
-            this.dish.tags.push(tag.value);
-        }*/
-        console.log('Saving dish tagsaa ' + JSON.stringify(this.dish.tags));
+        console.log('Saving dish tags' + JSON.stringify(this.dish));
 
         this.dishService.saveDish(this.dish);
         //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
