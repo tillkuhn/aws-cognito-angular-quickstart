@@ -20,17 +20,19 @@ export class Dish {
     @attribute()
     origin: string;
     @attribute()
-    authenticName: string;
+    authenticName?: string;
     @attribute()
     rating: number
     @attribute()
-    timesServed: number
+    timesServed?: number
     @attribute()
-    primaryUrl: string;
+    primaryUrl?: string;
     @attribute()
-    imageUrl: string;
+    imageUrl?: string;
     @attribute()
     completed?: boolean;
-    @rangeKey()
-    lastServed: Date;
+    @attribute()
+    lastServed?: string;
+    @attribute({memberType: {type: 'String'}})
+    tags?: Array<string>;
 }

@@ -1,6 +1,14 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
+import {e} from '@angular/core/src/render3';
+
+/*
+export interface AutoCompleteModel {
+    value: any;
+    display: string;
+}
+*/
 
 @Component({
     selector: 'app-dish-detail',
@@ -11,6 +19,9 @@ export class DishDetailComponent implements OnInit {
 
     @Input() dish: Dish;
 
+    public selectableTags = ['Soup','Spicy','Noodles'];
+    //public selectedTags: TagModel[];
+
     constructor(private dishService: DishService) {
     }
 
@@ -18,7 +29,14 @@ export class DishDetailComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log('Saving dish');
+        console.log('Saving dish tags' + JSON.stringify(this.selectedTags));
+        // convert to string array should be done by onAdding
+        /*this.dish.tags = [];
+        for (let tag of this.selectedTags) {
+            this.dish.tags.push(tag.value);
+        }*/
+        console.log('Saving dish tagsaa ' + JSON.stringify(this.dish.tags));
+
         this.dishService.saveDish(this.dish);
         //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
     }

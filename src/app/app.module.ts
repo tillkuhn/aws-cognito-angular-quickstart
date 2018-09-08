@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {UserRegistrationService} from './service/user-registration.service';
@@ -24,8 +24,9 @@ import {NewPasswordComponent} from './public/auth/newpassword/newpassword.compon
 import {MFAComponent} from './public/auth/mfa/mfa.component';
 import {DishesComponent} from './secure/dishes/dishes.component';
 import {DishService} from './service/dish.service';
-import { DishDetailComponent } from './secure/dish-detail/dish-detail.component';
-
+import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
+import {TagInputModule} from 'ngx-chips';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
     declarations: [
@@ -52,7 +53,10 @@ import { DishDetailComponent } from './secure/dish-detail/dish-detail.component'
     imports: [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpModule,
+        TagInputModule,
+        BrowserAnimationsModule,
         routing
     ],
     providers: [

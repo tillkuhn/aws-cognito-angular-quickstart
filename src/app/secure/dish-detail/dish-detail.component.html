@@ -1,12 +1,19 @@
 <div *ngIf="dish">
     <form (ngSubmit)="onSubmit()" #dishForm="ngForm">
-        <h2><img src="assets/img/origins/{{dish.origin}}.png" alt="origin"/>{{dish.name | uppercase}}</h2>
-        <img src="{{dish.imageUrl}}" alt="{{dish.name}} image" width="150px"/>
+        <h3>
+            <img src="{{dish.imageUrl}}" alt="{{dish.name}} image" width="150px"/>
+            <span>{{dish.name | uppercase}}</span>
+            <img src="assets/img/origins/{{dish.origin}}.png" alt="origin" />
+        </h3>
 
-        <div>
-            <a href="{{dish.primaryUrl}}" target="_recipe">Recipe </a>
-            <span>Id: </span>{{dish.id}} <span>createdAt: </span>{{dish.createdAt}}
-        </div>
+        <tag-input [(ngModel)]="dish.tags" name="tags" [modelAsStrings]="true">
+            <tag-input-dropdown
+                    [autocompleteItems]="selectableTags"
+                    [showDropdownIfEmpty]="true"
+                    [dynamicUpdate]="false"
+            >
+            </tag-input-dropdown>
+        </tag-input>
         <div>
             <label>Name:
                 <input [(ngModel)]="dish.name" placeholder="name" name="name" size="50">
@@ -16,7 +23,11 @@
             <label>Rating:
                 <input [(ngModel)]="dish.rating" placeholder="rating" name="rating" size="5 ">
             </label>
+            <a href="{{dish.primaryUrl}}" target="_recipe"> → Open External Recipe </a>
         </div>
+
+        <pre>{{dish.tags | json}}</pre>
+
         <!--https://angular.io/guide/forms-->
         <button type="submit" class="btn btn-success">Submit Dish</button>
     </form>
