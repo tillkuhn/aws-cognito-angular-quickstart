@@ -23,7 +23,7 @@ export class DynamoDBService {
 
     getLogEntries(mapArray: Array<Stuff>) {
         console.log("DynamoDBService: reading from DDB with creds - " + AWS.config.credentials);
-        var params = {
+        let params = {
             TableName: environment.ddbTableName,
             KeyConditionExpression: "userId = :userId",
             ExpressionAttributeValues: {

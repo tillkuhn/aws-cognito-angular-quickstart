@@ -14,7 +14,7 @@
             >
             </tag-input-dropdown>
         </tag-input>
-        <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'default'" [showText]="false"
+        <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
                     [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
         <div>
             <label>Name:
@@ -32,5 +32,8 @@
 
         <!--https://angular.io/guide/forms-->
         <button type="submit" class="btn btn-success">Submit Dish</button>
+        <button type="button" (click)="onRefresh()"class="btn btn-info"> Refresh</button>
+        <button type="button" (click)="onDelete()"class="btn btn-warning"> Delete</button>
+        <pre>{{dish|json}}</pre>
     </form>
 </div>

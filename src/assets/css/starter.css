@@ -13,16 +13,6 @@ html {
     background-size: cover;
 }
 
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    /*font-weight: 200;*/
-}
 
 .topnav {
     font-size: 14px;

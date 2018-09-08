@@ -26,6 +26,26 @@ export class DishDetailComponent implements OnInit {
     }
 
     ngOnInit() {
+
+    }
+
+    onRefresh() {
+        console.log("proudly presents dish details of " +this.dish.id);
+        this.dishService.getDishDetails(this.dish)
+            .then(myItem => {
+                console.log("found it" + JSON.stringify(myItem));
+                this.dish = myItem;
+                // the item was found
+            })
+            .catch(err => {
+                console.error(err);
+                // the item was not found
+            });
+    }
+
+    onDelete() {
+        console.log("wegdisch");
+         this.dishService.deleteDish(this.dish);
     }
 
     onSubmit() {

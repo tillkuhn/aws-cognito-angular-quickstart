@@ -4,7 +4,23 @@ Yummy AWS Quickstart
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![dependencies Status](https://david-dm.org/tillkuhn/yummy-aws/status.svg)](https://david-dm.org/tillkuhn/yummy-aws)
 
+## Get the Code and get running quickly
+```
+git clone https://github.com/tillkuhn/yummy-aws.git yummy
+cd yummy
+npm i
+```
+```
+# Run the app in dev mode
+npm start
+```
+
 ## What does this app do?
+
+Technially this is a fork from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) based on Angular 6, AWS Cognito and Dynamo DB with a lot of additions and changes.
+
+None technically it's an app that lets me managed recipes for my favourite dishes 🥣 🥡
+
 ![QuickStart Angular2 Cognito App](/aws/meta/Cognito-Angular2-QuickStart.png?raw=true)
 
 ## Tech Stack
@@ -16,11 +32,11 @@ Yummy AWS Quickstart
 ### Frameworks
 * [AWS JavaScript SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/browser-intro.html)
 * [Angular 2](https://angular.io/docs/ts/latest/quickstart.html)
-    * [TypeScript](https://www.typescriptlang.org/docs/tutorial.html)
+* [TypeScript](https://www.typescriptlang.org/docs/tutorial.html)
 * [Bootstrap](http://getbootstrap.com/)
 
 ## AWS Setup
-##### Install the required tools (the installation script only runs on Linux and Mac)
+##### Install the required tools)
 * Create an AWS account
 * Install [npm](https://www.npmjs.com/)
 * [Install or update your aws cli](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) 
@@ -28,22 +44,6 @@ Yummy AWS Quickstart
 * [Install angular-cli](https://github.com/angular/angular-cli)
 * [Install Terraform](https://www.terraform.io/intro/getting-started/install.html)
 
-## Getting the code and running it locally
-_This uses the pre-configured AWS resources hosted by AWS_
-
-```
-# Clone it from github
-git clone --depth 1 git@github.com:awslabs/aws-cognito-angular2-quickstart.git
-```
-```
-# Install the NPM packages
-cd aws-cognito-angular2-quickstart
-npm install
-```
-```
-# Run the app in dev mode
-npm start
-```
 
 ## Creating AWS Resources
 This sample application can be deployed S3. S3 will host this application as a static site
@@ -57,10 +57,9 @@ terraform plan
 terraform apply -auto-approve
 ```
 
-
 *Caution:* You might incur AWS charges after running the setup script
 
-## After initially running ```terrfaform```, use the below commands to rebuild and redeploy
+## After initially running `terrfaform`, use the below commands to rebuild and redeploy
 
 ### _S3:_ Update, Build and Deploy
 ```
@@ -80,6 +79,7 @@ optimize as you wish.*__
 
 * https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html
 * https://docs.aws.amazon.com/de_de/amazondynamodb/latest/developerguide/SampleData.LoadData.html
+
 ## Local Testing
 
 This section contains instructions on how to test the application locally (using mocked services instead of the real AWS services).
@@ -90,8 +90,3 @@ To test this application using [LocalStack](https://github.com/localstack/locals
 ```
 pip install awscli-local
 ```
-Simply parameterize the `./createResources.sh` installation script with `aws_cmd=awslocal`:
-```
-cd aws; aws_cmd=awslocal ./createResources.sh
-```
-Once the code is deployed to the local S3 server, the application is accessible via http://localhost:4572/cognitosample-localapp/index.html (Assuming "localapp" has been chosen as resource name in the previous step)
