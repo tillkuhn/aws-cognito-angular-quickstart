@@ -33,6 +33,6 @@ export class Dish {
     completed?: boolean;
     @attribute()
     lastServed?: string;
-    @attribute({memberType: {type: 'String'}})
-    tags?: Array<string>;
+    @attribute({memberType: 'String'})
+    tags?: Set<string>;
 }
