@@ -1,31 +1,36 @@
-import { Component, OnInit } from '@angular/core';
-import { Dish } from '../../model/dish';
-import { DishService } from '../../service/dish.service';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {Dish} from '../../model/dish';
+import {DishService} from '../../service/dish.service';
+import {NgProgress} from '@ngx-progressbar/core';
 
 @Component({
-  selector: 'app-dishes',
-  templateUrl: './dishes.component.html',
-  styleUrls: ['./dishes.component.css']
+    selector: 'app-dishes',
+    templateUrl: './dishes.component.html',
+    styleUrls: ['./dishes.component.css']
 })
 export class DishesComponent implements OnInit {
+    dishes: Array<Dish>;
 
-  dishes: Array<Dish>;
+    selectedDish: Dish;
 
-  selectedDish: Dish;
-  constructor(private dishService: DishService ) { }
+    constructor(private dishService: DishService, public progress: NgProgress) {
+    }
 
-  ngOnInit() {
-    this.getDishes();
-  }
+    ngOnInit() {
+        this.getDishes();
+    }
 
-  onSelect(dish: Dish): void {
-    this.selectedDish = dish;
-  }
+    onSelect(dish: Dish): void {
+        this.selectedDish = dish;
+    }
 
-  getDishes(): void {
-      console.log("Scanning dishes");
-      this.dishes = new Array<Dish>();
-      this.dishService.scanDishes(this.dishes);
-    //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
-  }
+    getDishes(): void {
+        //this.progress.start();
+
+        console.log('Scanning dishes');
+        this.dishes = new Array<Dish>();
+        this.dishService.scanDishes(this.dishes);
+        //this.progress.complete();
+        //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
+    }
 }

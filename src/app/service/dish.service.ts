@@ -23,9 +23,9 @@ export class DishService {
         for await (const item of this.getMapper().scan({valueConstructor: Dish,projection: ['id','name','rating','origin','createdAt']})) {
          //for await (const item of this.getMapper().scan(Dish)) {
         // individual items will be yielded as the scan is performed
-            dishes.push(item);
+          dishes.push(item);
         }
-    } q
+    }
 
     saveDish(dish) { // put
         //const toSave = Object.assign(new MyDomainObject, {id: 'foo'});
@@ -42,6 +42,7 @@ export class DishService {
         return this.getMapper().delete(Object.assign(new Dish(), {id: dish.id,createdAt: dish.createdAt}));
     }
 
+    /* Helper */
     getMapper() {
         let clientParams:any = {};
         if (environment.dynamodb_endpoint) {

@@ -1,7 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+//import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 import {AppComponent} from './app.component';
 import {UserRegistrationService} from './service/user-registration.service';
 import {UserParametersService} from './service/user-parameters.service';
@@ -28,6 +29,8 @@ import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
 import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BarRatingModule} from 'ngx-bar-rating';
+import {NgProgressModule} from '@ngx-progressbar/core';
+import {NgProgressHttpModule} from '@ngx-progressbar/http';
 
 @NgModule({
     declarations: [
@@ -55,10 +58,18 @@ import {BarRatingModule} from 'ngx-bar-rating';
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpModule,
+       // HttpModule,
+        HttpClientModule,
         TagInputModule,
         BrowserAnimationsModule,
         BarRatingModule,
+        NgProgressModule.forRoot({
+            spinnerPosition: 'right',
+            color: '#f71cff',
+            thick: true
+        }),
+        NgProgressHttpModule.forRoot(),
+
         routing
     ],
     providers: [

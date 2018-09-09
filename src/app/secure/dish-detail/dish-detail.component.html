@@ -5,7 +5,9 @@
             <span>{{dish.name | uppercase}}</span>
             <img src="assets/img/origins/{{dish.origin}}.png" alt="origin" />
         </h3>
-
+        <button class="chip" (click)="testHttp()" [disabled]="preventAbuse" type="button">
+            {{ preventAbuse ? 'Wait...' : 'Test Http Request' }}
+        </button>
         <tag-input [(ngModel)]="dish.tags" name="tags" [modelAsStrings]="true">
             <tag-input-dropdown
                     [autocompleteItems]="selectableTags"

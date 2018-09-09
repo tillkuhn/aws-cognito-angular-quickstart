@@ -1,8 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
-import {e} from '@angular/core/src/render3';
-
+import { HttpClient } from '@angular/common/http';
 /*
 export interface AutoCompleteModel {
     value: any;
@@ -18,11 +17,11 @@ export interface AutoCompleteModel {
 export class DishDetailComponent implements OnInit {
 
     @Input() dish: Dish;
-
+    preventAbuse = false;
     public selectableTags = ['Soup','Spicy','Noodles'];
     //public selectedTags: TagModel[];
 
-    constructor(private dishService: DishService) {
+    constructor(private dishService: DishService,private http: HttpClient) {
     }
 
     ngOnInit() {
@@ -55,6 +54,16 @@ export class DishDetailComponent implements OnInit {
         //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
     }
 
+
+    testHttp() {
+        this.preventAbuse = true;
+        this.http.get('https://reqres.in/api/users?delay=2').subscribe(res => {
+            console.log(res);
+            setTimeout(() => {
+                this.preventAbuse = false;
+            }, 800);
+        });
+    }
     // TODO: Remove this when we're done
     get diagnostic() {
         return JSON.stringify(this.dish);

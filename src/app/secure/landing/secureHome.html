@@ -62,7 +62,10 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-
+                    Pro: <ng-progress></ng-progress>
+                    <ng-progress #progressBar></ng-progress>
+                    <button (click)="progressBar.start()">Start</button>
+                    <button (click)="progressBar.complete()">Complete</button>
                     <router-outlet></router-outlet>
                 </div>
                 <!-- /.col-lg-12 -->

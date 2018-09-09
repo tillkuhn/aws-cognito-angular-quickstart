@@ -8,6 +8,7 @@
             <th>Rating</th>
         </tr>
         <tr *ngFor="let dish of dishes" [class.selected]="dish === selectedDish" (click)="onSelect(dish)">
+            <td>{{ dish.id }}</td>
             <td>{{ dish.name }}</td>
             <td>{{ dish.origin }}</td>
             <td>{{ dish.rating }}</td>

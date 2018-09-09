@@ -38,6 +38,8 @@
     "@angular/router": "^6.1.0",
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "@ngx-progressbar/core": "^5.1.2",
+    "@ngx-progressbar/http": "^5.1.2",
     "amazon-cognito-identity-js": "^2.0.23",
     "aws-sdk": "^2.308.0",
     "body-parser": "^1.18.3",
