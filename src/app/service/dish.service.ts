@@ -27,8 +27,15 @@ export class DishService {
         }
     }
 
+    /**
+     * Save dish (PUT)
+     * @param dish
+     */
     saveDish(dish) { // put
         //const toSave = Object.assign(new MyDomainObject, {id: 'foo'});
+        // update stamp
+        dish.updatedAt = new Date().toISOString();
+        dish.updatedBy = this.cognitoUtil.getCurrentUser().getUsername();
         this.getMapper().put(dish).then(objectSaved => {
             console.log('Dish is save');
         })

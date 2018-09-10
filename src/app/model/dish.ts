@@ -33,6 +33,10 @@ export class Dish {
     completed?: boolean;
     @attribute()
     lastServed?: string;
+    @attribute({defaultProvider: () => new Date().toISOString()})
+    updatedAt?: string;
+    @attribute()
+    updatedBy?: string;
     @attribute({memberType: 'String'})
     tags?: Set<string>;
 }
