@@ -40,6 +40,6 @@ export class Dish {
     updatedBy?: string;
     @attribute({memberType: 'String'})
     tags?: Set<string>;
-}
+
 
 }
