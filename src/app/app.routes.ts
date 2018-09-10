@@ -12,6 +12,7 @@ import {LogoutComponent, RegistrationConfirmationComponent} from './public/auth/
 import {ResendCodeComponent} from './public/auth/resend/resendCode.component';
 import {NewPasswordComponent} from './public/auth/newpassword/newpassword.component';
 import {DishesComponent} from './secure/dishes/dishes.component';
+import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
 
 const homeRoutes: Routes = [
     {
@@ -38,7 +39,6 @@ const homeRoutes: Routes = [
 
 const secureHomeRoutes: Routes = [
     {
-
         path: '',
         redirectTo: '/securehome',
         pathMatch: 'full'
@@ -50,6 +50,8 @@ const secureHomeRoutes: Routes = [
             {path: 'myprofile', component: MyProfileComponent},
             {path: 'useractivity', component: UseractivityComponent},
             {path: 'dishes', component: DishesComponent},
+            {path: 'dish-details/:id', component: DishDetailComponent },
+            {path: 'dish-details', component: DishDetailComponent },
             {path: '', component: MyProfileComponent}]
     }
 ];

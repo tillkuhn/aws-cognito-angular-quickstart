@@ -21,7 +21,7 @@ Technially this is a fork from [aws-cognito-angular-quickstart](https://github.c
 
 None technically it's an app that lets me managed recipes for my favourite dishes 🥣 🥡
 
-![QuickStart Angular2 Cognito App](/aws/meta/Cognito-Angular2-QuickStart.png?raw=true)
+![QuickStart Angular2 Cognito App](/docs/meta/Cognito-Angular2-QuickStart.png?raw=true)
 
 ## Tech Stack
 ### Required Tools
@@ -90,3 +90,10 @@ To test this application using [LocalStack](https://github.com/localstack/locals
 ```
 pip install awscli-local
 ```
+
+
+## Todos
+* Switch to [CSS Flags for orgin]( https://github.com/lipis/flag-icon-css)
+* Admin and beyond, check out [Authorization and Cognito groups](ttps://stackoverflow.com/questions/41828359/how-do-i-access-the-group-for-a-cognito-user-account)
+* Use [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/installing) and introduce filtering / sorting / paging
+* Try [In place edit module](https://github.com/qontu/ngx-inline-editor)

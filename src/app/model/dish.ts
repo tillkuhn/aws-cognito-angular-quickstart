@@ -13,7 +13,8 @@ export class Dish {
     id: string;
     //@rangeKey({defaultProvider: () => new Date()})
     //createdAt: Date;
-    @rangeKey({defaultProvider: () => new Date().toISOString()})
+    //@rangeKey({defaultProvider: () => new Date().toISOString()})
+    @attribute()
     createdAt: string;
     @attribute()
     name: string;
@@ -39,4 +40,6 @@ export class Dish {
     updatedBy?: string;
     @attribute({memberType: 'String'})
     tags?: Set<string>;
+}
+
 }

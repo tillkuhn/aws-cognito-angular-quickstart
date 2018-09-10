@@ -1,4 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
+import { Router } from '@angular/router';
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
 import {NgProgress} from '@ngx-progressbar/core';
@@ -9,28 +10,52 @@ import {NgProgress} from '@ngx-progressbar/core';
     styleUrls: ['./dishes.component.css']
 })
 export class DishesComponent implements OnInit {
-    dishes: Array<Dish>;
-
+    dishes: Dish[] = [];
     selectedDish: Dish;
+    addingDish = false;
 
-    constructor(private dishService: DishService, public progress: NgProgress) {
-    }
+    /*
+    error: any;
+    showNgFor = false;
+    */
+
+    constructor(
+        private dishService: DishService,
+        private progress: NgProgress,
+        private router: Router
+    ) {}
 
     ngOnInit() {
         this.getDishes();
     }
 
+    async getDishes() {
+        this.startService('getDishes');
+        for await (const item of this.dishService.getDishes()) {
+            this.dishes.push(item);
+        }
+        this.stopService('getDishes');
+    }
+
     onSelect(dish: Dish): void {
         this.selectedDish = dish;
+        this.addingDish = false;
     }
 
-    getDishes(): void {
-        //this.progress.start();
-
-        console.log('Scanning dishes');
-        this.dishes = new Array<Dish>();
-        this.dishService.scanDishes(this.dishes);
-        //this.progress.complete();
-        //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
+    gotoDetail(dish: Dish): void {
+        this.router.navigate(['/securehome/dish-details', dish.id]);
     }
+
+
+    // check https://www.bennadel.com/blog/3217-defining-function-and-callback-interfaces-in-typescript.htm
+    startService(operation: string) {
+        this.progress.start();
+        console.log(operation + ' started');
+    }
+
+    stopService(operation: string) {
+        this.progress.complete();
+        console.log(operation + ' completed');
+    }
+
 }

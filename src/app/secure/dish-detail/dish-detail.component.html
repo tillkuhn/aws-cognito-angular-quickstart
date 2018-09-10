@@ -5,10 +5,7 @@
             <span>{{dish.name | uppercase}}</span>
             <img src="assets/img/origins/{{dish.origin}}.png" alt="origin" />
         </h3>
-        <button class="chip" (click)="testHttp()" [disabled]="preventAbuse" type="button">
-            {{ preventAbuse ? 'Wait...' : 'Test Http Request' }}
-        </button>
-        <tag-input [(ngModel)]="dish.tags" name="tags" [modelAsStrings]="true">
+        <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true" [onAdding]="onAdding">
             <tag-input-dropdown
                     [autocompleteItems]="selectableTags"
                     [showDropdownIfEmpty]="true"
@@ -16,6 +13,7 @@
             >
             </tag-input-dropdown>
         </tag-input>
+        <pre>{{dish.tags}}</pre>
         <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
                     [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
         <div>
@@ -24,18 +22,18 @@
             </label>
         </div>
         <div>
-            <label>Rating:
-                <input [(ngModel)]="dish.rating" placeholder="rating" name="rating" size="5 ">
+            <label>Authentic Name:
+                <input [(ngModel)]="dish.authenticName" placeholder="Name in origin country" name="authenticName" size="50">
             </label>
             <a href="{{dish.primaryUrl}}" target="_recipe"> → Open External Recipe </a>
         </div>
 
-        <pre>{{dish.tags | json}}</pre>
+
 
         <!--https://angular.io/guide/forms-->
         <button type="submit" class="btn btn-success">Submit Dish</button>
-        <button type="button" (click)="onRefresh()"class="btn btn-info"> Refresh</button>
-        <button type="button" (click)="onDelete()"class="btn btn-warning"> Delete</button>
+        <button type="button" (click)="onRefresh()" class="btn btn-info"> Refresh</button>
+        <button type="button" (click)="onDelete()" class="btn btn-warning"> Delete</button>
         <pre>{{dish|json}}</pre>
     </form>
 </div>

@@ -1,4 +1,6 @@
-## see terraform.tfvars for actual settings
+################################################################
+## declare vars, see terraform.tfvars for actual settings
+################################################################
 variable "app_id" {}
 variable "app_name" {}
 variable "aws_profile" {}
@@ -21,8 +23,9 @@ provider "aws" {
   region     = "${var.aws_region}"
   profile    = "${var.aws_profile}"
 }
-
-## this is the target bucket where we deploy our web application
+#####################################################################
+## create and configure S3 bucket where we deploy our web application
+#####################################################################
 resource "aws_s3_bucket" "webapp" {
   bucket = "${var.bucket_name}"
   region = "${var.aws_region}"
@@ -55,7 +58,7 @@ EOF
   }
 }
 
-## create sync script to upload app distribution into se3 bucked
+## create sync script to upload app distribution into S3 bucket
 resource "local_file" "deployment" {
   content     = "#!/usr/bin/env bash\nnpm run build\naws s3 sync ./dist/ s3://${var.bucket_name} --region ${var.aws_region} --delete --profile ${var.aws_profile}\n"
   filename = "${path.module}/deploy.sh"
@@ -78,7 +81,28 @@ resource "aws_route53_record" "domain" {
   }
 }
 
+
+#####################################################################
 ## create dynamodb table(s) using our app id as prefix
+#####################################################################
+## main table for dishes
+resource "aws_dynamodb_table" "dish" {
+  name           = "${var.app_id}-dish"
+  read_capacity  = 3
+  write_capacity = 1
+  # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
+  hash_key       = "id"
+  attribute {
+    name = "id"
+    type = "S"
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+  }
+}
+
+## for login / logout events
 resource "aws_dynamodb_table" "logintrail" {
   name           = "${var.app_id}-logintrail"
   read_capacity  = 3
@@ -100,29 +124,11 @@ resource "aws_dynamodb_table" "logintrail" {
     Environment = "${var.env}"
   }
 }
-resource "aws_dynamodb_table" "dish" {
-  name           = "${var.app_id}-dish"
-  read_capacity  = 3
-  write_capacity = 1
-  # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
-  hash_key       = "id"
-  # (Optional, Forces new resource) The attribute to use as the range (sort) key. Must also be defined as an attribute
-  range_key      = "createdAt"
-  attribute {
-    name = "id"
-    type = "S"
-  }
-  attribute {
-    name = "createdAt"
-    type = "S"
-  }
-  tags {
-    Name = "${var.app_name}"
-    Environment = "${var.env}"
-  }
-}
 
 
+#####################################################################
+# Configure IAM and Cognito User pools
+#####################################################################
 ## Create a cognito user pool see https://www.terraform.io/docs/providers/aws/r/cognito_user_pool.html
 resource "aws_cognito_user_pool" "main" {
   name = "${var.user_pool_name}"
@@ -134,7 +140,6 @@ resource "aws_cognito_user_pool" "main" {
 }
 
 # Create a user pool client for the user pool see https://www.terraform.io/docs/providers/aws/r/cognito_user_pool_client.html
-#$aws_cmd cognito-idp create-user-pool-client --user-pool-id $USER_POOL_ID --no-generate-secret --client-name webapp --region $REGION > /tmp/$POOL_NAME-create-user-pool-client
 resource "aws_cognito_user_pool_client" "main" {
   name = "webapp"
   generate_secret = false
@@ -143,8 +148,6 @@ resource "aws_cognito_user_pool_client" "main" {
 }
 
 # create an id pool and attach the user pool and user pool client id to the identity pool
-#$aws_cmd cognito-identity update-identity-pool --allow-unauthenticated-identities --identity-pool-id $IDENTITY_POOL_ID --identity-pool-name $IDENTITY_POOL_NAME \
-#--cognito-identity-providers ProviderName=cognito-idp.$REGION.amazonaws.com/$USER_POOL_ID,ClientId=$USER_POOL_CLIENT_ID --region $REGION \
 resource "aws_cognito_identity_pool" "main" {
   identity_pool_name = "${var.identity_pool_name}"
   allow_unauthenticated_identities = true
@@ -155,8 +158,7 @@ resource "aws_cognito_identity_pool" "main" {
   }
 }
 
-# created unauthenticated role
-#  $aws_cmd iam create-role --role-name $ROLE_NAME_PREFIX-unauthenticated --assume-role-policy-document file:///tmp/unauthrole-trust-policy.json > /tmp/iamUnauthRole
+# create UNAuthenticated role
 resource "aws_iam_role" "unauthenticated" {
   name = "${var.role_name_prefix}-unauthenticated"
   assume_role_policy = <<EOF
@@ -183,7 +185,7 @@ resource "aws_iam_role" "unauthenticated" {
 EOF
 }
 
-# create policy for unauth role
+# create policy for UNauth role
 #$aws_cmd iam put-role-policy --role-name $ROLE_NAME_PREFIX-unauthenticated --policy-name CognitoPolicy --policy-document file://unauthrole.json
 resource "aws_iam_role_policy" "unauthenticated" {
   name = "CognitoPolicy"
@@ -209,8 +211,7 @@ EOF
 }
 
 
-# Create an IAM role for authenticated users
-#$aws_cmd iam create-role --role-name $ROLE_NAME_PREFIX-authenticated --assume-role-policy-document file:///tmp/authrole-trust-policy.json > /tmp/iamAuthRole
+# Create IAM role for AUTHenticated users
 resource "aws_iam_role" "authenticated" {
   name = "${var.role_name_prefix}-authenticated"
 
@@ -238,8 +239,7 @@ resource "aws_iam_role" "authenticated" {
 EOF
 }
 
-# Create an IAM role for authenticated users and grant access to dynamo db table(s)
-# $aws_cmd iam put-role-policy --role-name $ROLE_NAME_PREFIX-authenticated --policy-name CognitoPolicy --policy-document file:///tmp/authrole.json
+# Grant access to dynamo db table(s) for authenticated role
 resource "aws_iam_role_policy" "authenticated" {
   name = "CognitoPolicy"
   role = "${aws_iam_role.authenticated.id}"
@@ -312,7 +312,6 @@ EOF
 }
 
 ## Update cognito identity pool with the roles
-# $aws_cmd cognito-identity set-identity-pool-roles --identity-pool-id $IDENTITY_POOL_ID --roles authenticated=$AUTH_ROLE_ARN,unauthenticated=$UNAUTH_ROLE_ARN --region $REGION
 resource "aws_cognito_identity_pool_roles_attachment" "main" {
   identity_pool_id = "${aws_cognito_identity_pool.main.id}"
   roles {
@@ -321,7 +320,10 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
   }
 }
 
-## update environment.ts template with actual IDs used by the application
+#####################################################################
+# update environment.ts template with actual IDs used
+# by the application, create local env specific scripts
+#####################################################################
 data "template_file" "environment" {
   template = "${file("${path.module}/src/environments/environment.ts.tmpl")}"
   vars {
@@ -344,8 +346,7 @@ resource "local_file" "environment_prod" {
   filename = "${path.module}/src/environments/environment.prod.ts"
 }
 
-
 ## dump output
-output "generated_ids" {
-  value = "${data.template_file.environment.rendered}"
-}
+#output "generated_ids" {
+#  value = "${data.template_file.environment.rendered}"
+#}

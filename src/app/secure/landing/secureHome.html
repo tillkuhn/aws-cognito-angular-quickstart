@@ -42,6 +42,9 @@
                         <a [routerLink]="['/securehome/dishes']"><i class="fa fa-table fa-fw"></i> My Dishes</a>
                     </li>
                     <li>
+                        <a [routerLink]="['/securehome/dish-details']"><i class="fa fa-table fa-fw"></i> New Dish</a>
+                    </li>
+                    <li>
                         <a [routerLink]="['/securehome/myprofile']"><i class="fa fa-dashboard fa-fw"></i> My Profile</a>
                     </li>
                     <li>
@@ -62,10 +65,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    Pro: <ng-progress></ng-progress>
-                    <ng-progress #progressBar></ng-progress>
-                    <button (click)="progressBar.start()">Start</button>
-                    <button (click)="progressBar.complete()">Complete</button>
+                    <ng-progress></ng-progress>
                     <router-outlet></router-outlet>
                 </div>
                 <!-- /.col-lg-12 -->

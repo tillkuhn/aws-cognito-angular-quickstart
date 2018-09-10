@@ -6,6 +6,8 @@ import {CognitoUtil} from './cognito.service';
 import {DataMapper, ScanIterator, ScanOptions} from '@aws/dynamodb-data-mapper';
 // import { MessageService } from './message.service';
 @Injectable()
+
+// Read https://awslabs.github.io/dynamodb-data-mapper-js/packages/dynamodb-data-mapper/
 export class DishService {
 
     // constructor(private messageService: MessageService) { }
@@ -13,18 +15,9 @@ export class DishService {
     }
 
 
-    async scanDishes(dishes: Dish[]) {
-        //ProjectionExpressionA string that identifies one or more attributes to retrieve from the table. T"Description, RelatedItems[0], ProductReviews.FiveStar"
-        let newVar = {
-            projection: ['id','name','rating']
-        };
-
-        //options.projection =  ['id','name','rating'];
-        for await (const item of this.getMapper().scan({valueConstructor: Dish,projection: ['id','name','rating','origin','createdAt']})) {
-         //for await (const item of this.getMapper().scan(Dish)) {
-        // individual items will be yielded as the scan is performed
-          dishes.push(item);
-        }
+    getDishes() {
+        const returnFields = ['id','name','rating','origin','createdAt']; //one or more attributes to retrieve from the table.
+        return this.getMapper().scan({valueConstructor: Dish,projection: returnFields});
     }
 
     /**
@@ -41,8 +34,12 @@ export class DishService {
         })
     }
 
-    getDishDetails(dish: Dish) {
-        return this.getMapper().get(Object.assign(new Dish(), {id: dish.id,createdAt: dish.createdAt}));
+    getDishDetails(dishId) {
+        console.log("Get " + dishId);
+        return this.getMapper().get(Object.assign(new Dish(), {id: dishId}));
+        //     .catch(err => {
+        //         // the item was not found
+        //     })
     }
 
     deleteDish(dish: Dish) {
