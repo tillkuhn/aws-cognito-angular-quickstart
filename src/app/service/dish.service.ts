@@ -16,7 +16,7 @@ export class DishService {
 
 
     getDishes() {
-        const returnFields = ['id','name','rating','origin','createdAt']; //one or more attributes to retrieve from the table.
+        const returnFields = ['id','name','rating','origin','createdAt','timesServed','tags']; //one or more attributes to retrieve from the table.
         return this.getMapper().scan({valueConstructor: Dish,projection: returnFields});
     }
 

@@ -1,38 +1,86 @@
 <div *ngIf="dish">
     <form (ngSubmit)="onSubmit()" #dishForm="ngForm">
-        <h3>
-            <img src="{{dish.imageUrl}}" alt="{{dish.name}} image" width="150px"/>
-            <span>{{dish.name | uppercase}}</span>
-            <img src="assets/img/origins/{{dish.origin}}.png" alt="origin" />
-        </h3>
-        <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true" [onAdding]="onAdding">
-            <tag-input-dropdown
-                    [autocompleteItems]="selectableTags"
-                    [showDropdownIfEmpty]="true"
-                    [dynamicUpdate]="false"
-            >
-            </tag-input-dropdown>
-        </tag-input>
-        <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
-                    [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
-        <div>
-            <label>Name:
-                <input [(ngModel)]="dish.name" placeholder="name" name="name" size="50">
-            </label>
-        </div>
-        <div>
-            <label>Authentic Name:
-                <input [(ngModel)]="dish.authenticName" placeholder="Name in origin country" name="authenticName" size="50">
-            </label>
-            <a href="{{dish.primaryUrl}}" target="_recipe"> → Open External Recipe </a>
+
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{{dish.imageUrl}}" *ngIf="dish.imageUrl" width="200" />
+            </div>
+            <div class="col-md-8">
+                <h3>
+                    <img src="assets/img/origins/{{dish.origin}}.png" alt="origin" />
+                    {{dish.name}}
+                </h3>
+
+                <h4 ng-bind="dish.authenticName"></h4>
+                <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
+                            [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
+
+                <span>Served {{dish.timesServed}} times, last {{dish.lastServed}} </span>
+                <br />
+                <!-- see http://getbootstrap.com/components/-->
+                <a href="{{dish.primaryUrl}}" target="_recipe"> → Open Recipe </a>
+            </div>
         </div>
 
 
+        <div class="control-group">
+            <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true" [onAdding]="onAdding">
+                <tag-input-dropdown
+                        [autocompleteItems]="selectableTags"
+                        [showDropdownIfEmpty]="true"
+                        [dynamicUpdate]="false"
+                >
+                </tag-input-dropdown>
+            </tag-input>
+            </div>
+        <!-- naem(s) and origin -->
+        <div class="control-group">
+            <label class="control-label" for="name">Name (with optional authentic name and country)</label>
+            <div class="controls">
+                <input name="name" [(ngModel)]="dish.name" type="text" placeholder="Name of dish (required)" required="" size="50" />
+                <input name="authenticName"[(ngModel)]="dish.authenticName" type="text" placeholder="Authentic Name"  size="30"/>
+                <input name="origin"[(ngModel)]="dish.origin" type="text" placeholder="iso"  size="2"  />
+                <!--
+                <select name="country" ng-model="dish.country" ng-options="country.code as country.name group by country.area for country in countries">
+                    <option value="">-- choose country --</option>
+                </select>
+                -->
+
+            </div>
+        </div>
+
+        <!-- URL to picture -->
+        <div class="control-group">
+            <label class="control-label" for="url">Link to Recipe</label>
+            <div class="controls">
+                <input name="url" [(ngModel)]="dish.primaryUrl" placeholder="url" type="url" size="80" />
+            </div>
+        </div>
+        <!-- URL to picture -->
+        <div class="control-group">
+            <label class="control-label" for="url">URL to Picture</label>
+            <div class="controls">
+                <input name="imageUrl" [(ngModel)]="dish.imageUrl" placeholder="url" type="url" size="80" />
+            </div>
+        </div>
+        <!-- Notes-->
+
+        <div class="control-group">
+            <label class="control-label" for="url">Notes for this dish</label>
+
+            <div class="controls">
+                <textarea [(ngModel)]="dish.notes" name="notes" placeholder="Recipe Notes"  cols="80" rows="5" ></textarea>
+            </div>
+        </div>
 
         <!--https://angular.io/guide/forms-->
-        <button type="submit" class="btn btn-success">Submit Dish</button>
-        <button type="button" (click)="onRefresh()" class="btn btn-info"> Refresh</button>
-        <button type="button" (click)="onDelete()" class="btn btn-warning"> Delete</button>
-        <pre>{{dish|json}}</pre>
+        <button type="submit" class="btn btn-success">Submit Dish</button>&nbsp;
+        <button class="btn btn-primary">
+            <!--<span class="glyphicon glyphicon-cutlery"></span>--> Just Served</button>&nbsp;
+        <button type="button" (click)="onDelete()" class="btn btn-warning"> Delete Dish</button>&nbsp;
     </form>
+    <div>
+        <input type="checkbox" [(ngModel)]="debug"> Debug
+        <pre *ngIf="debug">{{dish|json}}</pre>
+    </div>
 </div>

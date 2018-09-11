@@ -38,6 +38,8 @@ export class Dish {
     updatedAt?: string;
     @attribute()
     updatedBy?: string;
+    @attribute()
+    notes?: string;
     @attribute({memberType: 'String'})
     tags?: Set<string>;
 

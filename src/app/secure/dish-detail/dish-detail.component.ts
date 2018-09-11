@@ -25,9 +25,9 @@ export class DishDetailComponent implements OnInit {
     selectedTags: Array<string>= [];
 
     error: any;
+    debug: false;
     navigated = false; // true if navigated here
-    //public selectedTags: TagModel[];
-    preventAbuse = false;
+
 
     constructor(
         private dishService: DishService,
@@ -70,19 +70,6 @@ export class DishDetailComponent implements OnInit {
         //    .filter(() => confirm);
     }
 
-    onRefresh() {
-        console.log("proudly presents dish details of " +this.dish.id);
-        this.dishService.getDishDetails(this.dish)
-            .then(myItem => {
-                console.log("found it" + JSON.stringify(myItem));
-                this.dish = myItem;
-                // the item was found
-            })
-            .catch(err => {
-                console.error(err);
-                // the item was not found
-            });
-    }
 
     onDelete() {
         console.log("wegdisch");
@@ -102,18 +89,4 @@ export class DishDetailComponent implements OnInit {
         //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
     }
 
-
-    testHttp() {
-        this.preventAbuse = true;
-        this.http.get('https://reqres.in/api/users?delay=2').subscribe(res => {
-            console.log(res);
-            setTimeout(() => {
-                this.preventAbuse = false;
-            }, 800);
-        });
-    }
-    // TODO: Remove this when we're done
-    get diagnostic() {
-        return JSON.stringify(this.dish);
-    }
 }
