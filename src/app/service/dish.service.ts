@@ -4,12 +4,16 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import {Dish} from '../model/dish';
 import {CognitoUtil} from './cognito.service';
 import {DataMapper, ScanIterator, ScanOptions} from '@aws/dynamodb-data-mapper';
+import {NGXLogger} from 'ngx-logger';
+import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class DishService {
 
-    constructor(public cognitoUtil: CognitoUtil) {
-    }
+    constructor(
+        public cognitoUtil: CognitoUtil,
+        private logger: NGXLogger
+    ){}
 
 
     getDishes() {

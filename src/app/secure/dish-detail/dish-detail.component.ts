@@ -23,7 +23,7 @@ export interface AutoCompleteModel {
 export class DishDetailComponent implements OnInit {
 
     @Input() dish: Dish;
-    selectableTags = [{display: 'Soup', value: 'suppe'}];
+    selectableTags: Array<TagModel> = [];
     selectedTags: Array<string> = [];
 
     error: any;
@@ -65,8 +65,33 @@ export class DishDetailComponent implements OnInit {
                 this.dish = new Dish();
             }
         });
-        // init tags
-        this.dishService.getTagMap();
+        this.initTagMap();
+    }
+
+    async initTagMap() {
+        let tagmap: Map<string, number> = new Map();
+        for await (const dishItem of this.dishService.getTagMap()) {
+            if (dishItem.tags) {
+                for (let it = dishItem.tags.values(), val = null; val = it.next().value;) {
+                    let mapkey = val.toLocaleLowerCase();
+                    if (tagmap.get(mapkey)) {
+                        tagmap.set(mapkey, tagmap.get(mapkey) + 1);
+                    } else {
+                        tagmap.set(mapkey, 1);
+                    }
+                }
+            }
+        }
+        tagmap.forEach((val: number, key: string) => {
+            this.selectableTags.push({
+                display: key.charAt(0).toUpperCase() + key.slice(1) + ' (' + val + ')',
+                value: key.toLocaleLowerCase(),
+                rank: val
+            })
+        });
+        this.selectableTags.sort(function (a, b) {
+            return (b.rank > a.rank) ? 1 : ((a.rank > b.rank) ? -1 : 0);
+        });
 
     }
 
@@ -82,8 +107,6 @@ export class DishDetailComponent implements OnInit {
     onSubmit() {
         let settags: Set<string> = new Set<string>();
         for (let item in this.selectedTags) {
-            this.logger.info('add ' + item);
-
             settags.add(this.selectedTags[item]);
         }
         this.dish.tags = settags;
