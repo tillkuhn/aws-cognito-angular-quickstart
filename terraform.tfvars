@@ -1,6 +1,6 @@
 aws_profile = "yummy"
 aws_region = "eu-central-1"
-bucket_name = "yummy-dev.timafe.net"
+bucket_name = "yummy.timafe.net"
 identity_pool_name = "yummy"
 user_pool_name = "yummy"
 role_name_prefix = "yummy"

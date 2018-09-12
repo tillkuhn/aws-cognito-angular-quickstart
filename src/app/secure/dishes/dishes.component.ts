@@ -30,16 +30,17 @@ export class DishesComponent implements OnInit {
     }
 
     async getDishes() {
-        this.startService('getDishes');
+        this.startServiceCall("getDishes");
         for await (const item of this.dishService.getDishes()) {
             this.dishes.push(item);
-        }
-        this.stopService('getDishes');
+        };
+        this.stopServiceCall("getDishes");
     }
 
     onSelect(dish: Dish): void {
         this.selectedDish = dish;
         this.addingDish = false;
+        this.gotoDetail(dish);
     }
 
     gotoDetail(dish: Dish): void {
@@ -47,13 +48,14 @@ export class DishesComponent implements OnInit {
     }
 
 
+
     // check https://www.bennadel.com/blog/3217-defining-function-and-callback-interfaces-in-typescript.htm
-    startService(operation: string) {
+    startServiceCall(operation: string) {
         this.progress.start();
-        console.log(operation + ' started');
+        console.log(operation + ' started getlos');
     }
 
-    stopService(operation: string) {
+    stopServiceCall(operation: string) {
         this.progress.complete();
         console.log(operation + ' completed');
     }

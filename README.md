@@ -97,3 +97,5 @@ pip install awscli-local
 * Admin and beyond, check out [Authorization and Cognito groups](ttps://stackoverflow.com/questions/41828359/how-do-i-access-the-group-for-a-cognito-user-account)
 * Use [ngx-datatable](https://swimlane.gitbook.io/ngx-datatable/installing) and introduce filtering / sorting / paging
 * Try [In place edit module](https://github.com/qontu/ngx-inline-editor)
+* Check out [Push notifications](https://github.com/silveridea/ngx-push-notifications)
+* https://github.com/scttcper/ngx-toastr

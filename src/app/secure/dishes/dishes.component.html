@@ -6,16 +6,17 @@
             <th>Dish</th>
             <th>Origin</th>
             <th>Rating</th>
-            <th>Actions</th>
+            <th>Served</th>
         </tr>
         <tr *ngFor="let dish of dishes" [class.selected]="dish === selectedDish" (click)="onSelect(dish)">
             <td>{{ dish.name }}</td>
             <td>{{ dish.origin }}</td>
             <td>{{ dish.rating }}</td>
             <td>{{ dish.timesServed }}</td>
+            <!--
             <td>
                 <button (click)="gotoDetail(dish)" class="btn btn-info">View Details</button>
-            </td>
+            </td>-->
         </tr>
     </table>
 </div>
