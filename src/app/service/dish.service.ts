@@ -29,9 +29,7 @@ export class DishService {
         // update stamp
         dish.updatedAt = new Date().toISOString();
         dish.updatedBy = this.cognitoUtil.getCurrentUser().getUsername();
-        this.getMapper().put(dish).then(objectSaved => {
-            console.log('Dish is save');
-        })
+        return this.getMapper().put(dish);
     }
 
     getDishDetails(dishId) {

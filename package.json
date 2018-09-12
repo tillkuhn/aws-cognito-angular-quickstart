@@ -27,7 +27,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^6.1.0",
+    "@angular/animations": "^6.1.7",
     "@angular/common": "^6.1.0",
     "@angular/compiler": "^6.1.0",
     "@angular/core": "^6.1.0",
@@ -47,6 +47,7 @@
     "css-star-rating": "^1.2.4",
     "ngx-bar-rating": "^1.1.0",
     "ngx-chips": "^1.9.7",
+    "ngx-toastr": "^9.0.2",
     "rxjs": "^6.0.0",
     "webpack": "^4.17.2",
     "webpack-dev-server": "^3.1.8",
