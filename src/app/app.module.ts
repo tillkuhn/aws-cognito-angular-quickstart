@@ -31,6 +31,7 @@ import {BarRatingModule} from 'ngx-bar-rating';
 import {NgProgressModule} from '@ngx-progressbar/core';
 import {NgProgressHttpModule} from '@ngx-progressbar/http';
 import {ToastrModule} from 'ngx-toastr';
+import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 
 @NgModule({
     declarations: [
@@ -64,6 +65,7 @@ import {ToastrModule} from 'ngx-toastr';
         BarRatingModule,
         BrowserAnimationsModule, // required animations module
         ToastrModule.forRoot(), // ToastrModule added
+        LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG}),
         NgProgressModule.forRoot({
             spinnerPosition: 'right',
             color: '#f71cff',

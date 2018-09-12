@@ -6,6 +6,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {TagModel} from 'ngx-chips/core/accessor';
 import {ToastrService} from 'ngx-toastr';
+import {NGXLogger} from 'ngx-logger';
 
 /*
 export interface AutoCompleteModel {
@@ -34,7 +35,8 @@ export class DishDetailComponent implements OnInit {
         private dishService: DishService,
         private http: HttpClient,
         private route: ActivatedRoute,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private logger: NGXLogger
     ) {
     }
 
@@ -45,7 +47,7 @@ export class DishDetailComponent implements OnInit {
                 this.navigated = true;
                 this.dishService.getDishDetails(id)
                     .then(dishItem => {
-                        console.log('found item' + dishItem.tags.entries());
+                        this.logger.info('found item' + dishItem.tags.entries());
                         for (var it = dishItem.tags.values(), val = null; val = it.next().value;) {
                             this.selectedTags.push(val);
                         }
@@ -66,7 +68,7 @@ export class DishDetailComponent implements OnInit {
     onAdding(tag: TagModel): Observable<TagModel> {
         //const confirm = window.confirm('Do you really want to add this tag?');
         // Adding {"display":"Spicy","value":"Spicy"}
-        console.log('Adding ' + JSON.stringify(tag));
+        this.logger.info('Adding ' + JSON.stringify(tag));
         //this.selectedTags.push(tag.value);
         return of(tag);
         //return Observable
@@ -76,19 +78,19 @@ export class DishDetailComponent implements OnInit {
 
 
     onDelete() {
-        console.log('wegdisch');
+        this.logger.info('wegdisch');
         this.dishService.deleteDish(this.dish);
     }
 
     onSubmit() {
         let settags: Set<string> = new Set<string>();
         for (let item in this.selectedTags) {
-            console.log('add ' + item);
+            this.logger.info('add ' + item);
 
             settags.add(this.selectedTags[item]);
         }
         this.dish.tags = settags;
-        console.log('Saving dish tags' + JSON.stringify(this.dish));
+        this.logger.info('Saving dish tags' + JSON.stringify(this.dish));
         this.dishService.saveDish(this.dish).then(objectSaved => {
             this.toastr.success('Dish is save!', 'Hurray!');
         })

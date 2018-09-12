@@ -4,20 +4,17 @@ import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import {Dish} from '../model/dish';
 import {CognitoUtil} from './cognito.service';
 import {DataMapper, ScanIterator, ScanOptions} from '@aws/dynamodb-data-mapper';
-// import { MessageService } from './message.service';
-@Injectable()
 
-// Read https://awslabs.github.io/dynamodb-data-mapper-js/packages/dynamodb-data-mapper/
+@Injectable()
 export class DishService {
 
-    // constructor(private messageService: MessageService) { }
     constructor(public cognitoUtil: CognitoUtil) {
     }
 
 
     getDishes() {
-        const returnFields = ['id','name','rating','origin','createdAt','timesServed','tags']; //one or more attributes to retrieve from the table.
-        return this.getMapper().scan({valueConstructor: Dish,projection: returnFields});
+        const returnFields = ['id', 'name', 'rating', 'origin', 'createdAt', 'timesServed', 'tags']; //one or more attributes to retrieve from the table.
+        return this.getMapper().scan({valueConstructor: Dish, projection: returnFields});
     }
 
     /**
@@ -33,20 +30,16 @@ export class DishService {
     }
 
     getDishDetails(dishId) {
-        console.log("Get " + dishId);
         return this.getMapper().get(Object.assign(new Dish(), {id: dishId}));
-        //     .catch(err => {
-        //         // the item was not found
-        //     })
     }
 
     deleteDish(dish: Dish) {
-        return this.getMapper().delete(Object.assign(new Dish(), {id: dish.id,createdAt: dish.createdAt}));
+        return this.getMapper().delete(Object.assign(new Dish(), {id: dish.id, createdAt: dish.createdAt}));
     }
 
     /* Helper */
     getMapper() {
-        let clientParams:any = {};
+        let clientParams: any = {};
         if (environment.dynamodb_endpoint) {
             clientParams.endpoint = environment.dynamodb_endpoint;
         }

@@ -1,8 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
 import {NgProgress} from '@ngx-progressbar/core';
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
     selector: 'app-dishes',
@@ -22,19 +23,22 @@ export class DishesComponent implements OnInit {
     constructor(
         private dishService: DishService,
         private progress: NgProgress,
-        private router: Router
-    ) {}
+        private router: Router,
+        private logger: NGXLogger
+    ) {
+    }
 
     ngOnInit() {
         this.getDishes();
     }
 
     async getDishes() {
-        this.startServiceCall("getDishes");
+        this.startServiceCall('getDishes');
         for await (const item of this.dishService.getDishes()) {
             this.dishes.push(item);
-        };
-        this.stopServiceCall("getDishes");
+        }
+        ;
+        this.stopServiceCall('getDishes');
     }
 
     onSelect(dish: Dish): void {
@@ -48,16 +52,15 @@ export class DishesComponent implements OnInit {
     }
 
 
-
     // check https://www.bennadel.com/blog/3217-defining-function-and-callback-interfaces-in-typescript.htm
     startServiceCall(operation: string) {
         this.progress.start();
-        console.log(operation + ' started getlos');
+        this.logger.info(operation + ' started getlos');
     }
 
     stopServiceCall(operation: string) {
         this.progress.complete();
-        console.log(operation + ' completed');
+        this.logger.info(operation + ' completed');
     }
 
 }
