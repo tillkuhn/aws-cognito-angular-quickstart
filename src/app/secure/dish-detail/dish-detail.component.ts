@@ -65,6 +65,9 @@ export class DishDetailComponent implements OnInit {
                 this.dish = new Dish();
             }
         });
+        // init tags
+        this.dishService.getTagMap();
+
     }
 
 
