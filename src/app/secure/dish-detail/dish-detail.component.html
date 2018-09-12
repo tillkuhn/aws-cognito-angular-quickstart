@@ -2,20 +2,20 @@
     <form (ngSubmit)="onSubmit()" #dishForm="ngForm">
 
         <div class="row">
-            <div class="col-md-4">
-                <img src="{{dish.imageUrl}}" *ngIf="dish.imageUrl" width="200" />
+            <div class="col-md-3">
+                <img src="{{dish.imageUrl}}" *ngIf="dish.imageUrl" width="300" />
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <h3>
                     <img src="assets/img/origins/{{dish.origin}}.png" alt="origin" />
                     {{dish.name}}
                 </h3>
 
-                <h4 ng-bind="dish.authenticName"></h4>
+                <h4>{{dish.authenticName}}</h4>
                 <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
                             [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
 
-                <span>Served {{dish.timesServed}} times, last {{dish.lastServed}} </span>
+                <span>Served {{dish.timesServed}} times, last {{dish.lastServed|date:mediumDate}} </span>
                 <br />
                 <!-- see http://getbootstrap.com/components/-->
                 <a href="{{dish.primaryUrl}}" target="_recipe"> → Open Recipe </a>
