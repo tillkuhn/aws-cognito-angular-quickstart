@@ -3,10 +3,10 @@ import {ActivatedRoute, Params} from '@angular/router';
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
 import {TagModel} from 'ngx-chips/core/accessor';
 import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
+import {DishTag} from '../../model/DishTag';
 
 /*
 export interface AutoCompleteModel {
@@ -23,7 +23,7 @@ export interface AutoCompleteModel {
 export class DishDetailComponent implements OnInit {
 
     @Input() dish: Dish;
-    selectableTags: Array<TagModel> = [];
+    selectableTags: Array<DishTag> = [];
     selectedTags: Array<string> = [];
 
     error: any;
@@ -89,7 +89,8 @@ export class DishDetailComponent implements OnInit {
                 rank: val
             })
         });
-        this.selectableTags.sort(function (a, b) {
+        // sort descending by value
+        this.selectableTags.sort(function (a: DishTag, b: DishTag) {
             return (b.rank > a.rank) ? 1 : ((a.rank > b.rank) ? -1 : 0);
         });
 
