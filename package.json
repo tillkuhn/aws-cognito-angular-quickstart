@@ -42,6 +42,7 @@
     "@ngx-progressbar/http": "^5.1.2",
     "amazon-cognito-identity-js": "^2.0.23",
     "aws-sdk": "^2.308.0",
+    "babel-eslint": "^9.0.0",
     "body-parser": "^1.18.3",
     "core-js": "^2.5.4",
     "css-star-rating": "^1.2.4",

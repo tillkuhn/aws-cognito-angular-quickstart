@@ -71,7 +71,8 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
 
     isLoggedIn(message: string, isLoggedIn: boolean) {
         if (isLoggedIn) {
-            this.router.navigate(['/securehome']);
+            // auto redirect to my dishes page after login
+            this.router.navigate(['/securehome/dishes']);
         }
     }
 

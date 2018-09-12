@@ -23,7 +23,7 @@ export interface AutoCompleteModel {
 export class DishDetailComponent implements OnInit {
 
     @Input() dish: Dish;
-    selectableTags = ['Soup', 'Spicy', 'Noodles', 'deftig', 'kartoffeln'];
+    selectableTags = [{display: 'Soup', value: 'suppe'}];
     selectedTags: Array<string> = [];
 
     error: any;
@@ -47,9 +47,11 @@ export class DishDetailComponent implements OnInit {
                 this.navigated = true;
                 this.dishService.getDishDetails(id)
                     .then(dishItem => {
-                        this.logger.info('found item' + dishItem.tags.entries());
-                        for (var it = dishItem.tags.values(), val = null; val = it.next().value;) {
-                            this.selectedTags.push(val);
+                        if (dishItem.tags) {
+                            this.logger.info('found item' + dishItem.tags.entries());
+                            for (var it = dishItem.tags.values(), val = null; val = it.next().value;) {
+                                this.selectedTags.push(val);
+                            }
                         }
                         this.dish = dishItem;
                         // the item was found
@@ -65,21 +67,13 @@ export class DishDetailComponent implements OnInit {
         });
     }
 
-    onAdding(tag: TagModel): Observable<TagModel> {
-        //const confirm = window.confirm('Do you really want to add this tag?');
-        // Adding {"display":"Spicy","value":"Spicy"}
-        this.logger.info('Adding ' + JSON.stringify(tag));
-        //this.selectedTags.push(tag.value);
-        return of(tag);
-        //return Observable
-        //    .of(tag)
-        //    .filter(() => confirm);
-    }
-
 
     onDelete() {
-        this.logger.info('wegdisch');
-        this.dishService.deleteDish(this.dish);
+        const confirm = window.confirm('Do you really want to delete this dish?');
+        if (confirm) {
+            this.logger.info('wegdisch');
+            this.dishService.deleteDish(this.dish);
+        }
     }
 
     onSubmit() {

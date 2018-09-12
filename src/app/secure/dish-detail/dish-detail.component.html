@@ -24,7 +24,8 @@
 
 
         <div class="control-group">
-            <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true" [onAdding]="onAdding">
+            <!-- [onAdding]="onAdding" -->
+            <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true" >
                 <tag-input-dropdown
                         [autocompleteItems]="selectableTags"
                         [showDropdownIfEmpty]="true"
@@ -81,6 +82,6 @@
     </form>
     <div>
         <input type="checkbox" [(ngModel)]="debug"> Debug
-        <pre *ngIf="debug">{{dish|json}}</pre>
+        <pre *ngIf="debug">{{dish|json}}{{selectedTags|json}}</pre>
     </div>
 </div>

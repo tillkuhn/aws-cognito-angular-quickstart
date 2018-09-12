@@ -50,9 +50,4 @@ export class DishService {
         });
     }
 
-    // getDishesOld(): Observable<Dish[]> {
-    // return of(dishes);
-    //}
-
-
 }
