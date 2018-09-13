@@ -7,9 +7,10 @@
             </div>
             <div class="col-md-9">
                 <h3>
-                    <img src="assets/img/origins/{{dish.origin}}.png" alt="origin" />
+                    <img src="assets/flags/blank.gif" class="flag flag-{{dish.origin}}" alt="dish origin" />
                     {{dish.name}}
                 </h3>
+
 
                 <h4>{{dish.authenticName}}</h4>
                 <bar-rating [(rate)]="dish.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"

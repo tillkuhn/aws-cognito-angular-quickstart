@@ -99,4 +99,4 @@ pip install awscli-local
 * Try [In place edit module](https://github.com/qontu/ngx-inline-editor)
 * Check out [Push notifications](https://github.com/silveridea/ngx-push-notifications)
 * https://github.com/scttcper/ngx-toastr
-* [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)
+* [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
