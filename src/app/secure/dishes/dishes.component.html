@@ -1,6 +1,30 @@
 <h3><img src="assets/img/dish-48x48.png" alt="logo" width="24px" style="vertical-align:text-top"/>My Dishes</h3>
 
 <div class="table-responsive">
+    <ngx-datatable
+            class='material striped'
+            [rows]='dishes'
+            [columnMode]='"force"'
+            [headerHeight]='50'
+            [footerHeight]='50'
+            [rowHeight]='"auto"'
+
+            [selected]="selected"
+            [selectionType]="'single'"
+            (select)='onSelect($event)'>
+    >
+        <ngx-datatable-column name="Dish Name" prop="name" [width]="120"></ngx-datatable-column>
+        <ngx-datatable-column name="Origin" prop="origin" [width]="20" ></ngx-datatable-column>
+        <ngx-datatable-column name="Tags" prop="tags" >
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <span *ngFor="let i of value">{{i}} </span>
+            </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Served" prop="timesServed" [width]="20"></ngx-datatable-column>
+        <ngx-datatable-column name="Rated" prop="rating" [width]="20"></ngx-datatable-column>
+    </ngx-datatable>
+
+    <!--
     <table class="table table-hover table-striped">
         <tr>
             <th>Dish</th>
@@ -17,6 +41,12 @@
             <td>{{ dish.timesServed }}</td>
         </tr>
     </table>
+    -->
 </div>
-
+<div>
+    <input type="checkbox" [(ngModel)]="debug"> Debug
+    <pre *ngIf="debug">{{dishes|json}}</pre>
+</div>
+<!--
 <app-dish-detail [dish]="selectedDish"></app-dish-detail>
+-->

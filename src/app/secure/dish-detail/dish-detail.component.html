@@ -38,7 +38,7 @@
         <div class="control-group">
             <label class="control-label" for="name">Name (with optional authentic name and country)</label>
             <div class="controls">
-                <input name="name" [(ngModel)]="dish.name" type="text" placeholder="Name of dish (required)" required="" size="50" />
+                <input name="name" [(ngModel)]="dish.name" type="text" placeholder="Name of dish (required)" size="50"/>
                 <input name="authenticName"[(ngModel)]="dish.authenticName" type="text" placeholder="Authentic Name"  size="30"/>
                 <input name="origin"[(ngModel)]="dish.origin" type="text" placeholder="iso"  size="2"  />
                 <!--
@@ -50,11 +50,11 @@
             </div>
         </div>
 
-        <!-- URL to picture -->
+        <!-- URL to recipe -->
         <div class="control-group">
             <label class="control-label" for="url">Link to Recipe</label>
             <div class="controls">
-                <input name="url" [(ngModel)]="dish.primaryUrl" placeholder="url" type="url" size="80" />
+                <input name="url" [(ngModel)]="dish.primaryUrl" placeholder="url" type="url" size="80"  />
             </div>
         </div>
         <!-- URL to picture -->

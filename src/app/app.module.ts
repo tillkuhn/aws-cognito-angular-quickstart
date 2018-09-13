@@ -32,6 +32,7 @@ import {NgProgressModule} from '@ngx-progressbar/core';
 import {NgProgressHttpModule} from '@ngx-progressbar/http';
 import {ToastrModule} from 'ngx-toastr';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
     declarations: [
@@ -63,6 +64,7 @@ import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
         HttpClientModule,
         TagInputModule,
         BarRatingModule,
+        NgxDatatableModule,
         BrowserAnimationsModule, // required animations module
         ToastrModule.forRoot(), // ToastrModule added
         LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG}),

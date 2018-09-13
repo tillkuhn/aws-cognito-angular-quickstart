@@ -11,14 +11,8 @@ import {NGXLogger} from 'ngx-logger';
     styleUrls: ['./dishes.component.css']
 })
 export class DishesComponent implements OnInit {
-    dishes: Dish[] = [];
-    selectedDish: Dish;
-    addingDish = false;
-
-    /*
-    error: any;
-    showNgFor = false;
-    */
+    dishes: Array<Dish> = [];
+    selected: Array<Dish> = [];
 
     constructor(
         private dishService: DishService,
@@ -26,25 +20,34 @@ export class DishesComponent implements OnInit {
         private router: Router,
         private logger: NGXLogger
     ) {
+        this.getDishes();
     }
 
     ngOnInit() {
-        this.getDishes();
     }
 
     async getDishes() {
         this.startServiceCall('getDishes');
+        let newDishes = new Array<Dish>();
         for await (const item of this.dishService.getDishes()) {
-            this.dishes.push(item);
-        }
-        ;
+            newDishes.push(item);
+        };
+        //https://github.com/swimlane/ngx-datatable/issues/625
+        this.dishes = [...newDishes];
         this.stopServiceCall('getDishes');
     }
 
+    /*
     onSelect(dish: Dish): void {
         this.selectedDish = dish;
         this.addingDish = false;
         this.gotoDetail(dish);
+    }
+    */
+
+    onSelect({ selected }) {
+        this.logger.debug('Select Event', selected, this.selected);
+        this.gotoDetail(selected[0]);
     }
 
     gotoDetail(dish: Dish): void {

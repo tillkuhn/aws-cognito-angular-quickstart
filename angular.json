@@ -21,7 +21,10 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@swimlane/ngx-datatable/release/themes/material.css",
+              "node_modules/@swimlane/ngx-datatable/release/assets/icons.css",
+              "node_modules/@swimlane/ngx-datatable/release/index.css"
             ],
             "scripts": []
           },
