@@ -5,18 +5,17 @@ import {Dish} from '../model/dish';
 import {CognitoUtil} from './cognito.service';
 import {DataMapper, ScanIterator, ScanOptions} from '@aws/dynamodb-data-mapper';
 import {NGXLogger} from 'ngx-logger';
-import {Observable, of} from 'rxjs';
 
 @Injectable()
 export class DishService {
 
     constructor(
         public cognitoUtil: CognitoUtil,
-        private logger: NGXLogger
+        private log: NGXLogger
     ){}
 
-
     getDishes() {
+        this.log.info("scanning dishes from ddb");
         const returnFields = ['id', 'name','authenticName', 'rating', 'origin', 'createdAt', 'timesServed', 'tags']; //one or more attributes to retrieve from the table.
         return this.getMapper().scan({valueConstructor: Dish, projection: returnFields});
     }

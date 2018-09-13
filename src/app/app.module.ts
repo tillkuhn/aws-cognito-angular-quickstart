@@ -1,4 +1,4 @@
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule,BrowserTransferStateModule,TransferState} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -33,6 +33,9 @@ import {NgProgressHttpModule} from '@ngx-progressbar/http';
 import {ToastrModule} from 'ngx-toastr';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { CacheModule,CACHE} from '@ngx-cache/core';
+import { BrowserCacheModule, MemoryCacheService } from '@ngx-cache/platform-browser';
+//import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
 @NgModule({
     declarations: [
@@ -67,6 +70,13 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
         NgxDatatableModule,
         BrowserAnimationsModule, // required animations module
         ToastrModule.forRoot(), // ToastrModule added
+        CacheModule.forRoot(),
+        BrowserCacheModule.forRoot([
+            {
+                provide: CACHE,
+                useClass: MemoryCacheService // or, LocalStorageCacheService
+            }
+        ]),
         LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG}),
         NgProgressModule.forRoot({
             spinnerPosition: 'right',
@@ -84,6 +94,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
         UserRegistrationService,
         UserLoginService,
         DishService,
+        TransferState,
         UserParametersService],
     bootstrap: [AppComponent]
 })
