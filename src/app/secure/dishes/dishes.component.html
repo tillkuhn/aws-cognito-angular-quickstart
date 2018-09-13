@@ -8,7 +8,6 @@
             [headerHeight]='50'
             [footerHeight]='50'
             [rowHeight]='"auto"'
-
             [selected]="selected"
             [selectionType]="'single'"
             (select)='onSelect($event)'>
@@ -24,24 +23,6 @@
         <ngx-datatable-column name="Rated" prop="rating" [width]="20"></ngx-datatable-column>
     </ngx-datatable>
 
-    <!--
-    <table class="table table-hover table-striped">
-        <tr>
-            <th>Dish</th>
-            <th>Tags</th>
-            <th>Origin</th>
-            <th>Rating</th>
-            <th>Served</th>
-        </tr>
-        <tr *ngFor="let dish of dishes" [class.selected]="dish === selectedDish" (click)="onSelect(dish)">
-            <td>{{ dish.name }}</td>
-            <td> <span *ngFor="let i of dish.tags">{{i}} </span></td>
-            <td>{{ dish.origin }}</td>
-            <td>{{ dish.rating }}</td>
-            <td>{{ dish.timesServed }}</td>
-        </tr>
-    </table>
-    -->
 </div>
 <div>
     <input type="checkbox" [(ngModel)]="debug"> Debug

@@ -13,6 +13,7 @@ import {NGXLogger} from 'ngx-logger';
 export class DishesComponent implements OnInit {
     dishes: Array<Dish> = [];
     selected: Array<Dish> = [];
+    debug: false;
 
     constructor(
         private dishService: DishService,
@@ -37,13 +38,6 @@ export class DishesComponent implements OnInit {
         this.stopServiceCall('getDishes');
     }
 
-    /*
-    onSelect(dish: Dish): void {
-        this.selectedDish = dish;
-        this.addingDish = false;
-        this.gotoDetail(dish);
-    }
-    */
 
     onSelect({ selected }) {
         this.logger.debug('Select Event', selected, this.selected);
