@@ -104,7 +104,7 @@ export class AwsUtil {
     }
 
     static getCognitoParametersForIdConsolidation(idTokenJwt: string): {} {
-        this.log.info("AwsUtil: enter getCognitoParametersForIdConsolidation()");
+        console.info("AwsUtil: enter getCognitoParametersForIdConsolidation()");
         let url = 'cognito-idp.' + CognitoUtil._REGION.toLowerCase() + '.amazonaws.com/' + CognitoUtil._USER_POOL_ID;
         let logins: Array<string> = [];
         logins[url] = idTokenJwt;
