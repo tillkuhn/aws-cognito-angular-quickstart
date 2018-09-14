@@ -10,7 +10,8 @@ import { CacheService} from '@ngx-cache/core';
     templateUrl: './dishes.component.html',
     styleUrls: ['./dishes.component.css']
 })
-export class DishesComponent implements OnInit {
+export class DishesComponent  {
+
     dishes: Array<Dish> = [];
     selected: Array<Dish> = [];
     debug: false;
@@ -22,29 +23,37 @@ export class DishesComponent implements OnInit {
         private readonly cache: CacheService,
         private log: NGXLogger
     ) {
-        if (this.cache.has('dishes')) {
-            this.log.info("dishes coming from cache");
-            this.dishes=this.cache.get("dishes");
+        this.getDishes();
+    }
+
+    getDishes(): void  {
+        const CACHE_KEY_DISHES: string = 'dishes';
+
+        if (this.cache.has(CACHE_KEY_DISHES)) {
+            this.log.info("dishes coming from cache ", CACHE_KEY_DISHES);
+            this.dishes=this.cache.get(CACHE_KEY_DISHES);
         } else {
-            this.getDishes();
+            this.progress.start();
+            this.log.info("dished not cached loading start");
+            this.loadDishes().then((resolve) => {
+                this.log.info("Loading resolved");
+                this.dishes = resolve;
+                this.cache.set(CACHE_KEY_DISHES, resolve);
+            }).finally(() => {
+                this.log.info("Loading complete");
+                this.progress.complete();
+            });
         }
     }
-
-    ngOnInit() {
-    }
-
-    async getDishes() {
-        this.startServiceCall('getDishes');
+    async loadDishes(): Promise<Array<Dish>> {
+        // Async functions always return a promise, whether you use await or not. That promise resolves with whatever the async
+        // function returns, or rejects with whatever the async function throws. So with:
         let newDishes = new Array<Dish>();
         for await (const item of this.dishService.getDishes()) {
             newDishes.push(item);
         };
-        //https://github.com/swimlane/ngx-datatable/issues/625
-        this.dishes = [...newDishes];
-        this.cache.set("dishes",this.dishes);
-        this.stopServiceCall('getDishes');
+        return newDishes;
     }
-
 
     onSelect({ selected }) {
         this.log.debug('Select Event', selected, this.selected);
@@ -53,18 +62,6 @@ export class DishesComponent implements OnInit {
 
     gotoDetail(dish: Dish): void {
         this.router.navigate(['/securehome/dish-details', dish.id]);
-    }
-
-
-    // check https://www.bennadel.com/blog/3217-defining-function-and-callback-interfaces-in-typescript.htm
-    startServiceCall(operation: string) {
-        this.progress.start();
-        this.log.info(operation + ' started getlos');
-    }
-
-    stopServiceCall(operation: string) {
-        this.progress.complete();
-        this.log.info(operation + ' completed');
     }
 
 }

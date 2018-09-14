@@ -7,6 +7,7 @@ import {TagModel} from 'ngx-chips/core/accessor';
 import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
 import {DishTag} from '../../model/DishTag';
+import {NgProgress} from '@ngx-progressbar/core';
 
 /*
 export interface AutoCompleteModel {
@@ -36,7 +37,8 @@ export class DishDetailComponent implements OnInit {
         private http: HttpClient,
         private route: ActivatedRoute,
         private toastr: ToastrService,
-        private logger: NGXLogger
+        private progress: NgProgress,
+        private log: NGXLogger
     ) {
     }
 
@@ -45,10 +47,11 @@ export class DishDetailComponent implements OnInit {
             if (params['id'] !== undefined) {
                 const id = params['id'];
                 this.navigated = true;
+                this.progress.start();
                 this.dishService.getDishDetails(id)
                     .then(dishItem => {
                         if (dishItem.tags) {
-                            this.logger.info('found item' + dishItem.tags.entries());
+                            this.log.info('found item' + dishItem.tags.entries());
                             for (var it = dishItem.tags.values(), val = null; val = it.next().value;) {
                                 this.selectedTags.push(val);
                             }
@@ -57,8 +60,12 @@ export class DishDetailComponent implements OnInit {
                         // the item was found
                     })
                     .catch(err => {
-                        console.error(err);
+                        this.log.error(err);
+                        this.toastr.error(err, 'Error!');
                         // the item was not found
+                    })
+                    .finally(() => {
+                        this.progress.complete();
                     });
             } else {
                 this.navigated = false;
@@ -100,7 +107,7 @@ export class DishDetailComponent implements OnInit {
     onDelete() {
         const confirm = window.confirm('Do you really want to delete this dish?');
         if (confirm) {
-            this.logger.info('wegdisch');
+            this.log.info('wegdisch');
             this.dishService.deleteDish(this.dish);
         }
     }
@@ -111,7 +118,7 @@ export class DishDetailComponent implements OnInit {
             settags.add(this.selectedTags[item]);
         }
         this.dish.tags = settags;
-        this.logger.info('Saving dish tags' + JSON.stringify(this.dish));
+        this.log.info('Saving dish tags' + JSON.stringify(this.dish));
         this.dishService.saveDish(this.dish).then(objectSaved => {
             this.toastr.success('Dish is save!', 'Hurray!');
         })

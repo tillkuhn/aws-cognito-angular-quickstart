@@ -76,10 +76,18 @@
         </div>
 
         <!--https://angular.io/guide/forms-->
-        <button type="submit" class="btn btn-success">Submit Dish</button>&nbsp;
+        <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-save"></span>
+            Submit Dish
+        </button>&nbsp;
         <button class="btn btn-primary">
-            <!--<span class="glyphicon glyphicon-cutlery"></span>--> Just Served</button>&nbsp;
-        <button type="button" (click)="onDelete()" class="btn btn-warning"> Delete Dish</button>&nbsp;
+            <span class="glyphicon glyphicon-cutlery"></span>
+            Just Served
+        </button>&nbsp;
+        <button type="button" (click)="onDelete()" class="btn btn-warning">
+            <span class="glyphicon glyphicon-remove"></span>
+            Delete Dish
+        </button>
     </form>
     <div>
         <input type="checkbox" [(ngModel)]="debug"> Debug
