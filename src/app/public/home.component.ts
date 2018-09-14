@@ -17,7 +17,6 @@ export class AboutComponent {
 })
 export class HomeLandingComponent {
     constructor() {
-        console.log('HomeLandingComponent constructor');
     }
 }
 
@@ -29,7 +28,6 @@ export class HomeComponent implements OnInit {
 
     title = 'Yummy Dish DB';
     constructor() {
-        console.log('HomeComponent constructor');
     }
 
     ngOnInit() {

@@ -8,13 +8,8 @@ import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
 import {DishTag} from '../../model/DishTag';
 import {NgProgress} from '@ngx-progressbar/core';
-
-/*
-export interface AutoCompleteModel {
-    value: any;
-    display: string;
-}
-*/
+import {CacheService} from '@ngx-cache/core';
+import {error} from 'selenium-webdriver';
 
 @Component({
     selector: 'app-dish-detail',
@@ -31,13 +26,13 @@ export class DishDetailComponent implements OnInit {
     debug: false;
     navigated = false; // true if navigated here
 
-
     constructor(
         private dishService: DishService,
         private http: HttpClient,
         private route: ActivatedRoute,
         private toastr: ToastrService,
         private progress: NgProgress,
+        private readonly cache: CacheService,
         private log: NGXLogger
     ) {
     }
@@ -58,24 +53,53 @@ export class DishDetailComponent implements OnInit {
                         }
                         this.dish = dishItem;
                         // the item was found
-                    })
-                    .catch(err => {
-                        this.log.error(err);
-                        this.toastr.error(err, 'Error!');
-                        // the item was not found
-                    })
-                    .finally(() => {
-                        this.progress.complete();
-                    });
+                    }).catch(err => {
+                    this.log.error(err);
+                    this.toastr.error(err, 'Error loading dish!');
+                    // the item was not found
+                }).finally(() => {
+                    this.progress.complete();
+                });
             } else {
                 this.navigated = false;
                 this.dish = new Dish();
             }
         });
-        this.initTagMap();
+        this.getTags();
     }
 
-    async initTagMap() {
+    getTags(): void {
+        const CACHE_KEY_TAGS: string = 'tags';
+
+        if (this.cache.has(CACHE_KEY_TAGS)) {
+            this.log.info("tags coming from cache ", CACHE_KEY_TAGS);
+            this.selectableTags = this.cache.get(CACHE_KEY_TAGS);
+        } else {
+            this.progress.start();
+            this.initTagMap().then((tagmap) => {
+                tagmap.forEach((val: number, key: string) => {
+                    this.selectableTags.push({
+                        display: key.charAt(0).toUpperCase() + key.slice(1) + ' (' + val + ')',
+                        value: key.toLocaleLowerCase(),
+                        rank: val
+                    })
+                });
+                // sort descending by value
+                this.selectableTags.sort(function (a: DishTag, b: DishTag) {
+                    return (b.rank > a.rank) ? 1 : ((a.rank > b.rank) ? -1 : 0);
+                });
+                this.cache.set(CACHE_KEY_TAGS, this.selectableTags);
+            }).catch(err => {
+                this.log.error(err);
+                this.toastr.error(err, 'Error getting tags!');
+                // the item was not found
+            }).finally(() => {
+                this.progress.complete();
+            });
+        }
+    }
+
+    async initTagMap(): Promise<Map<string, number>> {
         let tagmap: Map<string, number> = new Map();
         for await (const dishItem of this.dishService.getTagMap()) {
             if (dishItem.tags) {
@@ -89,41 +113,48 @@ export class DishDetailComponent implements OnInit {
                 }
             }
         }
-        tagmap.forEach((val: number, key: string) => {
-            this.selectableTags.push({
-                display: key.charAt(0).toUpperCase() + key.slice(1) + ' (' + val + ')',
-                value: key.toLocaleLowerCase(),
-                rank: val
-            })
-        });
-        // sort descending by value
-        this.selectableTags.sort(function (a: DishTag, b: DishTag) {
-            return (b.rank > a.rank) ? 1 : ((a.rank > b.rank) ? -1 : 0);
-        });
-
+        return tagmap;
     }
 
 
     onDelete() {
         const confirm = window.confirm('Do you really want to delete this dish?');
         if (confirm) {
-            this.log.info('wegdisch');
-            this.dishService.deleteDish(this.dish);
+            this.progress.start();
+            this.dishService.deleteDish(this.dish).then(value => {
+                this.toastr.info("Dish successfully deleted");
+            }).catch(reason => {
+                this.toastr.error(reason,"Error during dish deletion");
+            }).finally(() => {
+                this.progress.complete();
+            });
+        }
+    }
+
+    onJustServed() {
+        if (isNaN(this.dish.timesServed)) {
+            this.dish.timesServed = 1;
+        } else {
+            this.dish.timesServed += 1;
         }
     }
 
     onSubmit() {
+        this.log.info('Saving dish',this.dish.name);
+        this.progress.start();
+        // convert ngx-chips array list to ddb optimized set
         let settags: Set<string> = new Set<string>();
         for (let item in this.selectedTags) {
-            settags.add(this.selectedTags[item]);
+            settags.add(this.selectedTags[item].toLocaleLowerCase());
         }
         this.dish.tags = settags;
-        this.log.info('Saving dish tags' + JSON.stringify(this.dish));
         this.dishService.saveDish(this.dish).then(objectSaved => {
-            this.toastr.success('Dish is save!', 'Hurray!');
+            this.toastr.success('Dish '+this    .dish.name + ' is save!', 'Got it!');
+        }).catch(reason => {
+            this.toastr.error(reason,"Error during save");
+        }).finally(() => {
+            this.progress.complete();
         })
-
-        //this.dishService.scanDishes().subscribe(dishes => this.dishes = dishes);
     }
 
 }

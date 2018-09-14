@@ -3,11 +3,11 @@
 
         <div class="row">
             <div class="col-md-3">
-                <img src="{{dish.imageUrl}}" *ngIf="dish.imageUrl" width="300" />
+                <img src="{{dish.imageUrl}}" *ngIf="dish.imageUrl" width="300"/>
             </div>
             <div class="col-md-9">
                 <h3>
-                    <img src="assets/flags/blank.gif" class="flag flag-{{dish.origin}}" alt="dish origin" />
+                    <img src="assets/flags/blank.gif" class="flag flag-{{dish.origin}}" alt="dish origin"/>
                     {{dish.name}}
                 </h3>
 
@@ -17,16 +17,15 @@
                             [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
 
                 <span>Served {{dish.timesServed}} times, last {{dish.lastServed|date:mediumDate}} </span>
-                <br />
+                <br/>
                 <!-- see http://getbootstrap.com/components/-->
-                <a href="{{dish.primaryUrl}}" target="_recipe"> → Open Recipe </a>
+                <a href="{{dish.primaryUrl}}" target="_recipe" *ngIf="dish.primaryUrl"> → Open Recipe </a>
             </div>
         </div>
 
-
         <div class="control-group">
             <!-- [onAdding]="onAdding" -->
-            <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true" >
+            <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true">
                 <tag-input-dropdown
                         [autocompleteItems]="selectableTags"
                         [showDropdownIfEmpty]="true"
@@ -34,14 +33,15 @@
                 >
                 </tag-input-dropdown>
             </tag-input>
-            </div>
+        </div>
         <!-- naem(s) and origin -->
         <div class="control-group">
             <label class="control-label" for="name">Name (with optional authentic name and country)</label>
             <div class="controls">
                 <input name="name" [(ngModel)]="dish.name" type="text" placeholder="Name of dish (required)" size="50"/>
-                <input name="authenticName"[(ngModel)]="dish.authenticName" type="text" placeholder="Authentic Name"  size="30"/>
-                <input name="origin"[(ngModel)]="dish.origin" type="text" placeholder="iso"  size="2"  />
+                <input name="authenticName" [(ngModel)]="dish.authenticName" type="text" placeholder="Authentic Name"
+                       size="30"/>
+                <input name="origin" [(ngModel)]="dish.origin" type="text" placeholder="iso" size="2"/>
                 <!--
                 <select name="country" ng-model="dish.country" ng-options="country.code as country.name group by country.area for country in countries">
                     <option value="">-- choose country --</option>
@@ -55,14 +55,14 @@
         <div class="control-group">
             <label class="control-label" for="url">Link to Recipe</label>
             <div class="controls">
-                <input name="url" [(ngModel)]="dish.primaryUrl" placeholder="url" type="url" size="80"  />
+                <input name="url" [(ngModel)]="dish.primaryUrl" placeholder="url" type="url" size="80"/>
             </div>
         </div>
         <!-- URL to picture -->
         <div class="control-group">
             <label class="control-label" for="url">URL to Picture</label>
             <div class="controls">
-                <input name="imageUrl" [(ngModel)]="dish.imageUrl" placeholder="url" type="url" size="80" />
+                <input name="imageUrl" [(ngModel)]="dish.imageUrl" placeholder="url" type="url" size="80"/>
             </div>
         </div>
         <!-- Notes-->
@@ -71,25 +71,30 @@
             <label class="control-label" for="url">Notes for this dish</label>
 
             <div class="controls">
-                <textarea [(ngModel)]="dish.notes" name="notes" placeholder="Recipe Notes"  cols="80" rows="5" ></textarea>
+                <textarea [(ngModel)]="dish.notes" name="notes" placeholder="Recipe Notes" cols="80"
+                          rows="5"></textarea>
             </div>
         </div>
 
         <!--https://angular.io/guide/forms-->
-        <button type="submit" class="btn btn-success">
+        <button type="submit" class="btn btn-success btn-lg">
             <span class="glyphicon glyphicon-save"></span>
             Submit Dish
         </button>&nbsp;
-        <button class="btn btn-primary">
+
+        <button type="button" class="btn btn-primary btn-lg" (click)="onJustServed()">
             <span class="glyphicon glyphicon-cutlery"></span>
             Just Served
         </button>&nbsp;
-        <button type="button" (click)="onDelete()" class="btn btn-warning">
+
+        <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
             <span class="glyphicon glyphicon-remove"></span>
             Delete Dish
         </button>
     </form>
+
     <div>
+        <br/>
         <input type="checkbox" [(ngModel)]="debug"> Debug
         <pre *ngIf="debug">{{dish|json}}{{selectableTags|json}}</pre>
     </div>

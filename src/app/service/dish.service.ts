@@ -24,7 +24,6 @@ export class DishService {
         return this.getMapper().scan({valueConstructor: Dish, projection: ['tags']});
     }
 
-
     /**
      * Save dish (PUT)
      * @param dish

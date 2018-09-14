@@ -1,6 +1,15 @@
-<h3>
-    <img src="assets/img/dish-48x48.png" alt="logo" width="24px" style="vertical-align:text-top"/> My Dishes
-</h3>
+<div class="form-group row">
+    <div class="col-xs-5">
+        <input type="text"  class="form-control input-lg" />
+    </div>
+    <div class="col-xs-2">
+
+    <button type="button" class="btn btn-primary btn-lg" (click)="onRefresh()">
+        <span class="glyphicon glyphicon-refresh"></span>
+        Refresh me
+    </button>
+    </div>
+</div>
 
 <div class="table-responsive">
     <ngx-datatable
@@ -12,20 +21,22 @@
             [selected]="selected"
             [selectionType]="'single'"
             (select)='onSelect($event)'>
-    >
-        <ngx-datatable-column name="Dish Name" prop="name" [width]="350">
-            <ng-template let-row="row" ngx-datatable-cell-template>
-                <b>{{row.name}}</b><br />{{row.authenticName}}
-            </ng-template>
-        </ngx-datatable-column>
+        >
 
-        <ngx-datatable-column name="Origin" prop="origin" [width]="40" >
+        <ngx-datatable-column name="Origin" prop="origin" [width]="60">
             <ng-template let-value="value" ngx-datatable-cell-template>
-               <img src="assets/flags/blank.gif" class="flag flag-{{value}}" alt="dish origin" />
+                <img src="assets/flags/blank.gif" class="flag flag-{{value}}" alt="dish origin"/>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Tags" prop="tags" [width]="250"  >
+        <ngx-datatable-column name="Dish Name" prop="name" [width]="300">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                <b>{{row.name}}</b><br/>{{row.authenticName}}
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <ngx-datatable-column name="Tags" prop="tags" [width]="250">
             <ng-template let-value="value" ngx-datatable-cell-template>
                 <span *ngFor="let i of value" class="badge badge-success" style="margin-right:3px">{{i}}</span>
             </ng-template>

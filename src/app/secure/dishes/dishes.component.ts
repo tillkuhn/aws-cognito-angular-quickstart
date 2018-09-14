@@ -12,6 +12,8 @@ import { CacheService} from '@ngx-cache/core';
 })
 export class DishesComponent  {
 
+    readonly cacheKeyDishes: string = 'dishes';
+
     dishes: Array<Dish> = [];
     selected: Array<Dish> = [];
     debug: false;
@@ -27,24 +29,24 @@ export class DishesComponent  {
     }
 
     getDishes(): void  {
-        const CACHE_KEY_DISHES: string = 'dishes';
 
-        if (this.cache.has(CACHE_KEY_DISHES)) {
-            this.log.info("dishes coming from cache ", CACHE_KEY_DISHES);
-            this.dishes=this.cache.get(CACHE_KEY_DISHES);
+        if (this.cache.has(this.cacheKeyDishes)) {
+            this.log.info("dishes coming from cache ", this.cacheKeyDishes);
+            this.dishes=this.cache.get(this.cacheKeyDishes);
         } else {
             this.progress.start();
             this.log.info("dished not cached loading start");
             this.loadDishes().then((resolve) => {
                 this.log.info("Loading resolved");
                 this.dishes = resolve;
-                this.cache.set(CACHE_KEY_DISHES, resolve);
+                this.cache.set(this.cacheKeyDishes, resolve);
             }).finally(() => {
                 this.log.info("Loading complete");
                 this.progress.complete();
             });
         }
     }
+
     async loadDishes(): Promise<Array<Dish>> {
         // Async functions always return a promise, whether you use await or not. That promise resolves with whatever the async
         // function returns, or rejects with whatever the async function throws. So with:
@@ -53,6 +55,11 @@ export class DishesComponent  {
             newDishes.push(item);
         };
         return newDishes;
+    }
+
+    onRefresh() {
+        this.cache.remove(this.cacheKeyDishes); // evict
+        this.getDishes();
     }
 
     onSelect({ selected }) {
