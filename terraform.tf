@@ -26,6 +26,7 @@ provider "aws" {
 #####################################################################
 ## create and configure S3 bucket where we deploy our web application
 #####################################################################
+## see https://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html
 resource "aws_s3_bucket" "webapp" {
   bucket = "${var.bucket_name}"
   region = "${var.aws_region}"
@@ -50,6 +51,17 @@ EOF
   website {
     index_document = "index.html"
     error_document = "404.html"
+    routing_rules = <<EOF
+[{
+    "Condition": {
+        "HttpErrorCodeReturnedEquals": "404"
+    },
+    "Redirect": {
+        "HostName": "yummy.timafe.net",
+        "ReplaceKeyPrefixWith": "#!/"
+    }
+}]
+EOF
   }
   force_destroy = true
   tags {
