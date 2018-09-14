@@ -27,20 +27,20 @@
 
         <ngx-datatable-column name="Tags" prop="tags" [width]="250"  >
             <ng-template let-value="value" ngx-datatable-cell-template>
-                <span *ngFor="let i of value">{{i}} </span>
+                <span *ngFor="let i of value" class="badge badge-success" style="margin-right:3px">{{i}}</span>
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="serve" prop="timesServed" [width]="40">
+        <ngx-datatable-column name="serve" prop="timesServed" [width]="45">
             <ng-template let-value="value" ngx-datatable-cell-template>
-                <span style="background: darkblue; color: white;  padding: 3px">{{value}}</span>
+                <span class="badge badge-pill badge-dark">{{value}}</span>
             </ng-template>
 
         </ngx-datatable-column>
 
         <ngx-datatable-column name="rank" prop="rating" [width]="40">
             <ng-template let-value="value" ngx-datatable-cell-template>
-                <span style="background: yellowgreen; padding: 3px">{{value}}</span>
+                <span class="badge badge-pill badge-info">{{value}}</span>
             </ng-template>
 
         </ngx-datatable-column>
