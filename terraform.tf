@@ -145,6 +145,10 @@ resource "aws_dynamodb_table" "logintrail" {
 resource "aws_cognito_user_pool" "main" {
   name = "${var.user_pool_name}"
   auto_verified_attributes = ["email"]
+  admin_create_user_config {
+    ## set to false so user can register themselves, we still need more authorization to allow this :-)
+    allow_admin_create_user_only = true
+  }
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
