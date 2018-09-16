@@ -17,6 +17,7 @@ export class DishesComponent  {
     dishes: Array<Dish> = [];
     selected: Array<Dish> = [];
     debug: false;
+    query: string;
 
     constructor(
         private dishService: DishService,
@@ -51,12 +52,14 @@ export class DishesComponent  {
         // Async functions always return a promise, whether you use await or not. That promise resolves with whatever the async
         // function returns, or rejects with whatever the async function throws. So with:
         let newDishes = new Array<Dish>();
-        for await (const item of this.dishService.getDishes()) {
+        for await (const item of this.dishService.getDishes(this.query)) {
             newDishes.push(item);
         };
+        this.dishService.getDishes2(this.query);
         return newDishes;
     }
 
+    // refresh button always invalidates cache
     onRefresh() {
         this.cache.remove(this.cacheKeyDishes); // evict
         this.getDishes();
