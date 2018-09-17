@@ -1,15 +1,17 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {Dish} from '../../model/dish';
-import {DishService} from '../../service/dish.service';
 import {HttpClient} from '@angular/common/http';
 import {TagModel} from 'ngx-chips/core/accessor';
 import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
-import {DishTag} from '../../model/DishTag';
 import {NgProgress} from '@ngx-progressbar/core';
 import {CacheService} from '@ngx-cache/core';
-import {error} from 'selenium-webdriver';
+
+import {Dish} from '../../model/dish';
+import {DishService} from '../../service/dish.service';
+import {DishTag} from '../../model/DishTag';
+import {LOCATIONS} from '../../model/mock-locations';
+import {Location} from '../../model/location';
 
 @Component({
     selector: 'app-dish-detail',
@@ -19,9 +21,10 @@ import {error} from 'selenium-webdriver';
 export class DishDetailComponent implements OnInit {
 
     @Input() dish: Dish;
+
     selectableTags: Array<DishTag> = [];
     selectedTags: Array<string> = [];
-
+    origins: Array<Location> = LOCATIONS;
     error: any;
     debug: false;
     navigated = false; // true if navigated here
@@ -79,7 +82,7 @@ export class DishDetailComponent implements OnInit {
             this.initTagMap().then((tagmap) => {
                 tagmap.forEach((val: number, key: string) => {
                     this.selectableTags.push({
-                        display: key.charAt(0).toUpperCase() + key.slice(1) + ' (' + val + ')',
+                        display: key + ' (' + val + ')',
                         value: key.toLocaleLowerCase(),
                         rank: val
                     })

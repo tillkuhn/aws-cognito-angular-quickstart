@@ -1,11 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Dish} from '../../model/dish';
-import {DishService} from '../../service/dish.service';
 import {NgProgress} from '@ngx-progressbar/core';
 import {NGXLogger} from 'ngx-logger';
 import {CacheService} from '@ngx-cache/core';
 import {ToastrService} from 'ngx-toastr';
+
+import {Dish} from '../../model/dish';
+import {DishService} from '../../service/dish.service';
 
 // Async functions always return a promise, whether you use await or not. That promise resolves with whatever the async
 // function returns, or rejects with whatever the async function throws. So with:
@@ -15,7 +16,7 @@ import {ToastrService} from 'ngx-toastr';
     templateUrl: './dishes.component.html',
     styleUrls: ['./dishes.component.css']
 })
-export class DishesComponent {
+export class DishesComponent  implements OnInit {
 
     readonly cacheKeyDishes: string = 'dishes';
     readonly cacheKeyDishQeury: string = 'dishes-query';
@@ -33,13 +34,17 @@ export class DishesComponent {
         private toastr: ToastrService,
         private log: NGXLogger
     ) {
+    }
+
+    // The ngOnInit is a lifecycle hook. Angular calls ngOnInit shortly after creating a component.
+    // It's a good place to put initialization logic.
+    ngOnInit() {
         if (this.cache.has(this.cacheKeyDishes)) {
-            this.log.info('dishes coming from cache ', this.cacheKeyDishes);
+            this.log.info('dishes served from cache', this.cacheKeyDishes);
             this.dishes = this.cache.get(this.cacheKeyDishes); // restore from previous visit
         }
         this.query = this.cache.get(this.cacheKeyDishQeury); // restore from previous visit, or null
     }
-
 
     onRefresh(): void {
         this.progress.start(); // let's see some progress
@@ -55,13 +60,10 @@ export class DishesComponent {
                     data.Items.forEach((ddbDish: Dish) => {
                         //mapArray.push({type: logitem.type, date: logitem.activityDate});
                         let dish : Dish = new Dish();
-                        // need to convert, internal format
-                        // {"wrapperName":"Set","values":["auflauf","fisch","lachs","tomaten"],"type":"String"}
+                        // need to convert, internal format {"wrapperName":"Set","values":["auflauf","fisch","lachs","tomaten"],"type":"String"}
                         if (ddbDish.tags) {
-                            // https://github.com/Microsoft/TypeScript/issues/9030
                             let tagSet: Set<string> = new Set<string>();
-                            //let tags = ddbDish.tags.values as IterableIterator<string>;
-                            //for (let val of ddbDish.tags.values) {
+                            // https://github.com/Microsoft/TypeScript/issues/9030
                             for (let i=0;i<ddbDish.tags.values.length;i++) {
                                 tagSet.add(ddbDish.tags.values[i]);
                             }
@@ -74,7 +76,6 @@ export class DishesComponent {
                     this.progress.complete();
                 }
             });
-        // https://github.com/swimlane/ngx-datatable/issues/934
     }
 
     onSelect({selected}) {

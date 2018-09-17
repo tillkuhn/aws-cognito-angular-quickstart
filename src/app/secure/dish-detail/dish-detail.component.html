@@ -35,44 +35,62 @@
             </tag-input>
         </div>
         <!-- naem(s) and origin -->
-        <div class="control-group">
-            <label class="control-label" for="name">Name (with optional authentic name and country)</label>
-            <div class="controls">
-                <input name="name" [(ngModel)]="dish.name" type="text" placeholder="Name of dish (required)" size="50"/>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label" for="name">Dish Name</label>
+                <div class="controls">
+                    <input name="name" [(ngModel)]="dish.name" type="text" placeholder="Name of dish (required)"
+                           class="form-control input-lg" style="font-weight: bold"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="control-label" for="authenticName">Authentic Name</label>
                 <input name="authenticName" [(ngModel)]="dish.authenticName" type="text" placeholder="Authentic Name"
-                       size="30"/>
-                <input name="origin" [(ngModel)]="dish.origin" type="text" placeholder="iso" size="2"/>
-                <!--
-                <select name="country" ng-model="dish.country" ng-options="country.code as country.name group by country.area for country in countries">
-                    <option value="">-- choose country --</option>
+                       class="form-control input-lg"/>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label" for="authenticName">Origin</label>
+                <select name="origin" class="form-control" [(ngModel)]="dish.origin" class="form-control input-lg">
+                    <option *ngFor="let origin of origins" [value]="origin.code">{{ origin.name}}</option>
                 </select>
-                -->
 
             </div>
         </div>
 
         <!-- URL to recipe -->
-        <div class="control-group">
-            <label class="control-label" for="url">Link to Recipe</label>
-            <div class="controls">
-                <input name="url" [(ngModel)]="dish.primaryUrl" placeholder="url" type="url" size="80"/>
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label" for="url">Link to main recipe</label>
+                <div class="controls">
+                    <input name="url" [(ngModel)]="dish.primaryUrl" placeholder="Enter url to recipe" type="url"
+                           class="form-control input-sm"/>
+                </div>
             </div>
         </div>
-        <!-- URL to picture -->
-        <div class="control-group">
-            <label class="control-label" for="url">URL to Picture</label>
-            <div class="controls">
-                <input name="imageUrl" [(ngModel)]="dish.imageUrl" placeholder="url" type="url" size="80"/>
-            </div>
-        </div>
-        <!-- Notes-->
 
-        <div class="control-group">
+        <!-- URL to picture -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label" for="url">Link to Picture of dish</label>
+                <div class="controls">
+                    <input name="imageUrl" [(ngModel)]="dish.imageUrl" placeholder="Enter url to dish photo" type="url"
+                           class="form-control input-sm"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes-->
+        <div class="row">
+            <div class="col-md-6">
             <label class="control-label" for="url">Notes for this dish</label>
 
             <div class="controls">
-                <textarea [(ngModel)]="dish.notes" name="notes" placeholder="Recipe Notes" cols="80"
-                          rows="5"></textarea>
+                <textarea [(ngModel)]="dish.notes" name="notes" placeholder="Recipe Notes"
+                          rows="5"  class="form-control input-sm"></textarea>
+            </div>
             </div>
         </div>
 

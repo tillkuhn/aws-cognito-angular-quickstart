@@ -1,6 +1,6 @@
-import { Origin } from './origin';
+import { Location } from './location';
 
-export const ORIGINS: Origin[] = [
+export const LOCATIONS: Location[] = [
     {
         "code": "at",
         "name": "Österreich",
