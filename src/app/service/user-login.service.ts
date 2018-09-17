@@ -5,6 +5,7 @@ import { CognitoCallback, CognitoUtil, LoggedInCallback } from "./cognito.servic
 import { AuthenticationDetails, CognitoUser, CognitoUserSession } from "amazon-cognito-identity-js";
 import * as AWS from "aws-sdk/global";
 import * as STS from "aws-sdk/clients/sts";
+import {NGXLogger} from 'ngx-logger';
 
 @Injectable()
 export class UserLoginService {
@@ -37,7 +38,11 @@ export class UserLoginService {
         callback.cognitoCallback(err.message, null);
     }
 
-    constructor(public ddb: DynamoDBService, public cognitoUtil: CognitoUtil) {
+    constructor(
+        public ddb: DynamoDBService,
+        public cognitoUtil: CognitoUtil,
+        private log: NGXLogger
+    ) {
     }
 
     authenticate(username: string, password: string, callback: CognitoCallback) {
@@ -56,7 +61,7 @@ export class UserLoginService {
 
         console.log("UserLoginService: Params set...Authenticating the user");
         let cognitoUser =  new CognitoUser(userData);
-        console.log("UserLoginService: config is " + username + ":" + password + " " + AWS.config);
+        this.log.info("UserLoginService: config is " + username + ":" + password + " " + AWS.config);
         cognitoUser.setAuthenticationFlowType('USER_PASSWORD_AUTH');
         cognitoUser.authenticateUser(authenticationDetails, {
             newPasswordRequired: (userAttributes, requiredAttributes) => callback.cognitoCallback(`User needs to set password.`, null),
@@ -113,7 +118,7 @@ export class UserLoginService {
     }
 
     logout() {
-        console.log("UserLoginService: Logging out");
+        this.log.info("UserLoginService: Logging out");
         this.ddb.writeLogEntry("logout");
         this.cognitoUtil.getCurrentUser().signOut();
 
@@ -126,18 +131,18 @@ export class UserLoginService {
         let cognitoUser = this.cognitoUtil.getCurrentUser();
 
         if (cognitoUser != null) {
-            cognitoUser.getSession(function (err, session) {
+            cognitoUser.getSession( (err, session) =>  {
                 if (err) {
-                    console.log("UserLoginService: Couldn't get the session: " + err, err.stack);
+                    this.log.warn("UserLoginService: Couldn't get the session: " + err, err.stack);
                     callback.isLoggedIn(err, false);
                 }
                 else {
-                    console.log("UserLoginService: Session is " + session.isValid());
+                    this.log.info("UserLoginService: Session valid: " + session.isValid());
                     callback.isLoggedIn(err, session.isValid());
                 }
             });
         } else {
-            console.log("UserLoginService: can't retrieve the current user");
+            this.log.warn("UserLoginService: can't retrieve the current user");
             callback.isLoggedIn("Can't retrieve the CurrentUser", false);
         }
     }

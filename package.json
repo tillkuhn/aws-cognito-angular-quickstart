@@ -38,6 +38,7 @@
     "@angular/router": "^6.1.0",
     "@aws/dynamodb-data-mapper": "^0.7.3",
     "@aws/dynamodb-data-mapper-annotations": "^0.7.3",
+    "@aws/dynamodb-expressions": "^0.7.3",
     "@ngx-cache/core": "^6.0.0",
     "@ngx-cache/platform-browser": "^6.0.0",
     "@ngx-progressbar/core": "^5.1.2",
