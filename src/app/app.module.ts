@@ -25,6 +25,7 @@ import {MFAComponent} from './public/auth/mfa/mfa.component';
 import {DishesComponent} from './secure/dishes/dishes.component';
 import {DishService} from './service/dish.service';
 import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
+import {LocationService} from './service/location.service';
 import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BarRatingModule} from 'ngx-bar-rating';
@@ -96,6 +97,7 @@ import { LocationsComponent } from './secure/locations/locations.component';
         UserRegistrationService,
         UserLoginService,
         DishService,
+        LocationService,
         TransferState,
         UserParametersService],
     bootstrap: [AppComponent]

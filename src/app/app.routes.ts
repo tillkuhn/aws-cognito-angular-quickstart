@@ -13,6 +13,7 @@ import {ResendCodeComponent} from './public/auth/resend/resendCode.component';
 import {NewPasswordComponent} from './public/auth/newpassword/newpassword.component';
 import {DishesComponent} from './secure/dishes/dishes.component';
 import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
+import {LocationsComponent} from './secure/locations/locations.component';
 
 const homeRoutes: Routes = [
     {
@@ -52,6 +53,7 @@ const secureHomeRoutes: Routes = [
             {path: 'dishes', component: DishesComponent},
             {path: 'dish-details/:id', component: DishDetailComponent },
             {path: 'dish-details', component: DishDetailComponent },
+            {path: 'locations', component: LocationsComponent},
             {path: '', component: MyProfileComponent}]
     }
 ];

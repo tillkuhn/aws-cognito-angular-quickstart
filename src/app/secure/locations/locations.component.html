@@ -1,3 +1,19 @@
-<p>
-  locations works!
-</p>
+<h1>Locations</h1>
+<!--
+<div *ngFor="let marker of markers | async">
+  <button (click)="flyTo(marker)">{{ marker.properties.message }}</button>
+  <button (click)="removeMarker(marker)">Delete</button>
+</div>
+-->
+
+<div class="map" id="map"></div>
+<!--
+https://www.mapbox.com/mapbox-gl-js/api/-->
+<div id='map' style='width: 400px; height: 300px;'></div>
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidGltYWZlIiwiYSI6ImNqbGgyZ242dDFkdTEza28zbHF0aWJoOGkifQ.eIyqMBT0VS0yFTExaJDaXQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v9'
+    });
+</script>
