@@ -55,13 +55,15 @@ export class DishesComponent {
                     data.Items.forEach((ddbDish: Dish) => {
                         //mapArray.push({type: logitem.type, date: logitem.activityDate});
                         let dish : Dish = new Dish();
-                        this.log.info(JSON.stringify(ddbDish.tags));
                         // need to convert, internal format
                         // {"wrapperName":"Set","values":["auflauf","fisch","lachs","tomaten"],"type":"String"}
                         if (ddbDish.tags) {
+                            // https://github.com/Microsoft/TypeScript/issues/9030
                             let tagSet: Set<string> = new Set<string>();
-                            for (let val of ddbDish.tags.values) {
-                                tagSet.add(val);
+                            //let tags = ddbDish.tags.values as IterableIterator<string>;
+                            //for (let val of ddbDish.tags.values) {
+                            for (let i=0;i<ddbDish.tags.values.length;i++) {
+                                tagSet.add(ddbDish.tags.values[i]);
                             }
                             ddbDish.tags = tagSet;
                         }
