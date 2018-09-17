@@ -35,6 +35,7 @@ import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CacheModule,CACHE} from '@ngx-cache/core';
 import { BrowserCacheModule, MemoryCacheService } from '@ngx-cache/platform-browser';
+import { LocationsComponent } from './secure/locations/locations.component';
 //import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
 @NgModule({
@@ -57,7 +58,8 @@ import { BrowserCacheModule, MemoryCacheService } from '@ngx-cache/platform-brow
         JwtComponent,
         AppComponent,
         DishesComponent,
-        DishDetailComponent
+        DishDetailComponent,
+        LocationsComponent
     ],
     imports: [
         BrowserModule,

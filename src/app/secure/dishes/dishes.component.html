@@ -1,14 +1,16 @@
 <div class="form-group row">
-    <div class="col-xs-5">
-        <input type="text"  class="form-control input-lg"  [(ngModel)]="query" />
-    </div>
-    <div class="col-xs-2">
+    <form (ngSubmit)="onRefresh()" #dishesForm="ngForm" >
+        <div class="col-xs-5">
+            <input type="text" class="form-control input-lg" [(ngModel)]="query" name="query"/>
+        </div>
+        <div class="col-xs-2">
 
-    <button type="button" class="btn btn-primary btn-lg" (click)="onRefresh()">
-        <span class="glyphicon glyphicon-refresh"></span>
-        Refresh me
-    </button>
-    </div>
+            <button type="submit" class="btn btn-primary btn-lg">
+                <span class="glyphicon glyphicon-refresh"></span>
+                Serve Up
+            </button>
+        </div>
+    </form>
 </div>
 
 <div class="table-responsive">
