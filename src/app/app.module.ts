@@ -37,7 +37,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CacheModule,CACHE} from '@ngx-cache/core';
 import { BrowserCacheModule, MemoryCacheService } from '@ngx-cache/platform-browser';
 import { LocationsComponent } from './secure/locations/locations.component';
-//import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
+import { LocationMapComponent } from './secure/location-map/location-map.component';
+// import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
 @NgModule({
     declarations: [
@@ -60,13 +61,13 @@ import { LocationsComponent } from './secure/locations/locations.component';
         AppComponent,
         DishesComponent,
         DishDetailComponent,
-        LocationsComponent
+        LocationsComponent,
+        LocationMapComponent
     ],
     imports: [
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        // HttpModule,
         HttpClientModule,
         TagInputModule,
         BarRatingModule,
