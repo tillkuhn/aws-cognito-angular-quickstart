@@ -8,6 +8,7 @@ variable "identity_pool_name" {}
 variable "user_pool_name" {}
 variable "bucket_name" {}
 variable "role_name_prefix" {}
+variable "table_name_prefix" {}
 variable "env" {
   default = "dev"
 }
@@ -99,7 +100,7 @@ resource "aws_route53_record" "domain" {
 #####################################################################
 ## main table for dishes
 resource "aws_dynamodb_table" "dish" {
-  name           = "${var.app_id}-dish"
+  name           = "${var.table_name_prefix}-dish"
   read_capacity  = 3
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
@@ -116,7 +117,7 @@ resource "aws_dynamodb_table" "dish" {
 
 ## for login / logout events
 resource "aws_dynamodb_table" "logintrail" {
-  name           = "${var.app_id}-logintrail"
+  name           = "${var.table_name_prefix}-logintrail"
   read_capacity  = 3
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
@@ -347,6 +348,7 @@ data "template_file" "environment" {
     ddbTableName = "${aws_dynamodb_table.logintrail.name}"
     region = "${var.aws_region}"
     bucketRegion = "${var.aws_region}"
+    ddbTableNamePrefix = "${var.table_name_prefix}"
     userPoolId = "${aws_cognito_user_pool.main.id}"
     clientId = "${aws_cognito_user_pool_client.main.id}"
   }
