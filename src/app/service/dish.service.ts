@@ -24,7 +24,7 @@ export class DishService {
     getDishes(query,callback?: (err: AWSError, data: DocumentClient.ScanOutput) => void) : void {
         // ConditionExpressionPredicate does not support contains
         this.log.info("DynamoDBService: reading from DDB matching",query);
-        let params : ScanInput  = {
+        let params: ScanInput  = {
             TableName: this.ddbUtil.getTableName('dish'),
             ProjectionExpression: 'id,#dishname,authenticName,rating,origin,createdAt,timesServed,tags',
             ExpressionAttributeNames: {"#dishname":"name"}
@@ -33,7 +33,7 @@ export class DishService {
             params.FilterExpression= 'contains (#dishname, :query) or contains (authenticName, :query) or contains (tags, :query)';
             params.ExpressionAttributeValues= {":query": query};
         }
-        var docClient = new DynamoDB.DocumentClient(this.ddbUtil.getClientParams());
+        let docClient = new DynamoDB.DocumentClient(this.ddbUtil.getClientParams());
         docClient.scan(params, callback);
         // does not support contains queries
         // return this.getMapper().scan({valueConstructor: Dish, projection: this.summaryReturnFields});

@@ -9,6 +9,7 @@ variable "user_pool_name" {}
 variable "bucket_name" {}
 variable "role_name_prefix" {}
 variable "table_name_prefix" {}
+variable "mapbox_access_token" {}
 variable "env" {
   default = "dev"
 }
@@ -19,7 +20,10 @@ variable "route53_subdomain" {}
 variable "route53_zone" {}
 variable "route53_alias_zone_id" {}
 
-## you can also use key and secret here, we prefer a profile in ~/.aws/credentials
+#####################################################################
+## configure AWS Provide, you can use key secret here,
+## but we prefer a profile in ~/.aws/credentials
+#####################################################################
 provider "aws" {
   region     = "${var.aws_region}"
   profile    = "${var.aws_profile}"
@@ -351,6 +355,7 @@ data "template_file" "environment" {
     ddbTableNamePrefix = "${var.table_name_prefix}"
     userPoolId = "${aws_cognito_user_pool.main.id}"
     clientId = "${aws_cognito_user_pool_client.main.id}"
+    mapboxAccessToken = "${var.mapbox_access_token}"
   }
 }
 
