@@ -47,16 +47,14 @@ export class LocationMapComponent implements OnInit {
         // wait until map is fully initialized
         map.on('load',  () => {
             // load image once
-            this.log.info("looooafinhg map");
-            map.loadImage('assets/marker.png',  (error, image)  => {
+            map.loadImage('assets/icons8-marker-48.png',  (error, image)  => {
                 if (error) throw error;
                 // add image to the map with a given name so that we can reference it later
                 map.addImage('my-icon', image);
                 // https://www.mapbox.com/mapbox-gl-js/example/flyto/
-                //map.flyTo({
-                //    center: this.center
-                //});
-                this.log.info("goooo");
+                map.flyTo({
+                    center: this.center
+                });
 
                 map.addLayer({
                     'id': 'images',
