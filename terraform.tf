@@ -81,7 +81,7 @@ resource "local_file" "deployment" {
   filename = "${path.module}/deploy.sh"
 }
 
-## register bucket as alias in route53
+## register bucket as alias in route53, get zone first for id
 data "aws_route53_zone" "selected" {
   name         = "${var.route53_zone}"
   private_zone = false
@@ -119,7 +119,24 @@ resource "aws_dynamodb_table" "dish" {
   }
 }
 
-## for login / logout events
+## main table for locations
+resource "aws_dynamodb_table" "location" {
+  name           = "${var.table_name_prefix}-location"
+  read_capacity  = 3
+  write_capacity = 1
+  # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
+  hash_key       = "code"
+  attribute {
+    name = "code"
+    type = "S"
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+  }
+}
+
+## for login / logout and other audi events
 resource "aws_dynamodb_table" "logintrail" {
   name           = "${var.table_name_prefix}-logintrail"
   read_capacity  = 3
@@ -324,7 +341,8 @@ resource "aws_iam_role_policy" "authenticated" {
         "dynamodb:DeleteItem"
       ],
       "Resource": [
-        "${aws_dynamodb_table.dish.arn}"
+        "${aws_dynamodb_table.dish.arn}",
+        "${aws_dynamodb_table.location.arn}"
       ]
     }
   ]
