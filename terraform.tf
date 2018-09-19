@@ -8,6 +8,8 @@ variable "identity_pool_name" {}
 variable "user_pool_name" {}
 variable "bucket_name" {}
 variable "role_name_prefix" {}
+variable "table_name_prefix" {}
+variable "mapbox_access_token" {}
 variable "env" {
   default = "dev"
 }
@@ -18,7 +20,10 @@ variable "route53_subdomain" {}
 variable "route53_zone" {}
 variable "route53_alias_zone_id" {}
 
-## you can also use key and secret here, we prefer a profile in ~/.aws/credentials
+#####################################################################
+## configure AWS Provide, you can use key secret here,
+## but we prefer a profile in ~/.aws/credentials
+#####################################################################
 provider "aws" {
   region     = "${var.aws_region}"
   profile    = "${var.aws_profile}"
@@ -76,7 +81,7 @@ resource "local_file" "deployment" {
   filename = "${path.module}/deploy.sh"
 }
 
-## register bucket as alias in route53
+## register bucket as alias in route53, get zone first for id
 data "aws_route53_zone" "selected" {
   name         = "${var.route53_zone}"
   private_zone = false
@@ -99,7 +104,7 @@ resource "aws_route53_record" "domain" {
 #####################################################################
 ## main table for dishes
 resource "aws_dynamodb_table" "dish" {
-  name           = "${var.app_id}-dish"
+  name           = "${var.table_name_prefix}-dish"
   read_capacity  = 3
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
@@ -114,9 +119,26 @@ resource "aws_dynamodb_table" "dish" {
   }
 }
 
-## for login / logout events
+## main table for locations
+resource "aws_dynamodb_table" "location" {
+  name           = "${var.table_name_prefix}-location"
+  read_capacity  = 3
+  write_capacity = 1
+  # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
+  hash_key       = "code"
+  attribute {
+    name = "code"
+    type = "S"
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+  }
+}
+
+## for login / logout and other audi events
 resource "aws_dynamodb_table" "logintrail" {
-  name           = "${var.app_id}-logintrail"
+  name           = "${var.table_name_prefix}-logintrail"
   read_capacity  = 3
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
@@ -319,7 +341,8 @@ resource "aws_iam_role_policy" "authenticated" {
         "dynamodb:DeleteItem"
       ],
       "Resource": [
-        "${aws_dynamodb_table.dish.arn}"
+        "${aws_dynamodb_table.dish.arn}",
+        "${aws_dynamodb_table.location.arn}"
       ]
     }
   ]
@@ -347,8 +370,10 @@ data "template_file" "environment" {
     ddbTableName = "${aws_dynamodb_table.logintrail.name}"
     region = "${var.aws_region}"
     bucketRegion = "${var.aws_region}"
+    ddbTableNamePrefix = "${var.table_name_prefix}"
     userPoolId = "${aws_cognito_user_pool.main.id}"
     clientId = "${aws_cognito_user_pool_client.main.id}"
+    mapboxAccessToken = "${var.mapbox_access_token}"
   }
 }
 

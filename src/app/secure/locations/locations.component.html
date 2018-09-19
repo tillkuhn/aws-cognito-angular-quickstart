@@ -1,3 +1,42 @@
-<p>
-  locations works!
-</p>
+<div class="table-responsive">
+    <ngx-datatable
+            class='material striped'
+            [rows]='locations'
+            [headerHeight]='50'
+            [footerHeight]='50'
+            [rowHeight]='"auto"'
+            [selected]="selected"
+            [selectionType]="'single'"
+            (select)='onSelect($event)'>
+        >
+
+        <ngx-datatable-column name="Flag" prop="code" [width]="60">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <img src="assets/flags/blank.gif" class="flag flag-{{value}}" alt="locationcode"/>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Code" prop="code" [width]="50"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Location Name" prop="name" [width]="200">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                <b>{{row.name}}</b>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Region" prop="region" [width]="100"></ngx-datatable-column>
+
+        <ngx-datatable-column name="Coordinates" prop="coordinates" [width]="150">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                {{value[0]}} {{value[1]}}
+            </ng-template>
+        </ngx-datatable-column>
+
+
+    </ngx-datatable>
+
+</div>
+<div>
+    <input type="checkbox" [(ngModel)]="debug"> Debug
+    <pre *ngIf="debug">{{locations|json}}</pre>
+</div>

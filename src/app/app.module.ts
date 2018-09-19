@@ -1,4 +1,4 @@
-import {BrowserModule,BrowserTransferStateModule,TransferState} from '@angular/platform-browser';
+import {BrowserModule, BrowserTransferStateModule, TransferState} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
@@ -14,7 +14,7 @@ import {UseractivityComponent} from './secure/useractivity/useractivity.componen
 import {MyProfileComponent} from './secure/profile/myprofile.component';
 import {SecureHomeComponent} from './secure/landing/securehome.component';
 import {JwtComponent} from './secure/jwttokens/jwt.component';
-import {DynamoDBService} from './service/ddb.service';
+import {DynamoDBService, DynamoDBUtil} from './service/ddb.service';
 import {LoginComponent} from './public/auth/login/login.component';
 import {RegisterComponent} from './public/auth/register/registration.component';
 import {ForgotPassword2Component, ForgotPasswordStep1Component} from './public/auth/forgot/forgotPassword.component';
@@ -25,6 +25,7 @@ import {MFAComponent} from './public/auth/mfa/mfa.component';
 import {DishesComponent} from './secure/dishes/dishes.component';
 import {DishService} from './service/dish.service';
 import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
+import {LocationService} from './service/location.service';
 import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BarRatingModule} from 'ngx-bar-rating';
@@ -36,7 +37,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { CacheModule,CACHE} from '@ngx-cache/core';
 import { BrowserCacheModule, MemoryCacheService } from '@ngx-cache/platform-browser';
 import { LocationsComponent } from './secure/locations/locations.component';
-//import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
+import { LocationMapComponent } from './secure/location-map/location-map.component';
+// import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
 @NgModule({
     declarations: [
@@ -59,13 +61,13 @@ import { LocationsComponent } from './secure/locations/locations.component';
         AppComponent,
         DishesComponent,
         DishDetailComponent,
-        LocationsComponent
+        LocationsComponent,
+        LocationMapComponent
     ],
     imports: [
         BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        // HttpModule,
         HttpClientModule,
         TagInputModule,
         BarRatingModule,
@@ -91,11 +93,13 @@ import { LocationsComponent } from './secure/locations/locations.component';
     ],
     providers: [
         CognitoUtil,
+        DynamoDBUtil,
         AwsUtil,
         DynamoDBService,
         UserRegistrationService,
         UserLoginService,
         DishService,
+        LocationService,
         TransferState,
         UserParametersService],
     bootstrap: [AppComponent]
