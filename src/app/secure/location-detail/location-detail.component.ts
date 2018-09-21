@@ -22,9 +22,10 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
     //selectableTags: Array<LocationTag> = [];
     //selectedTags: Array<string> = [];
     countries: Array<Location> = LOCATIONS;
-    lotypes =  LocationType;
 
-    lotypeKeys: number[];
+    lotypes =  LocationType;
+    lotypeKeys: string[];
+
     error: any;
     debug: false;
     navigated = false; // true if navigated here
@@ -42,6 +43,7 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
 
     ngOnInit(): void {
         this.lotypeKeys =  Object.keys(LocationType).filter(k => !isNaN(Number(k)));
+        this.log.info(JSON.stringify( this.lotypeKeys ));
         this.route.params.forEach((params: Params) => {
             if (params['id'] !== undefined) {
                 const id = params['id'];
@@ -50,6 +52,9 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
                 this.locationService.get(id)
                     .then(locationItem => {
                         this.location = locationItem;
+                        if (! this.location.coordinates) {
+                            this.location.coordinates = new Array<number>(2);
+                        }
                         // the item was found
                     }).catch(err => {
                     this.log.error(err);

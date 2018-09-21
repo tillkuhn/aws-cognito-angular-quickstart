@@ -44,23 +44,23 @@
       </div>
     </div>
 
-    <!--
     <div class="row">
-      <div class="col-md-4">
-        <label class="control-label" for="authenticName">Authentic Name</label>
-        <input name="authenticName" [(ngModel)]="location.authenticName" type="text" placeholder="Authentic Name"
-               class="form-control input-lg"/>
+      <div class="col-md-2">
+        <label class="control-label" for="coordinates_lon">Longitude (-)</label>
+        <input name="" [(ngModel)]="location.coordinates[0]" type="text" placeholder="d.dddddd"  class="form-control input-lg" name="lon"/>
       </div>
 
       <div class="col-md-2">
-        <label class="control-label" for="country">Origin</label>
-        <select name="country" class="form-control" [(ngModel)]="location.country" class="form-control input-lg">
-          <option *ngFor="let country of countries" [value]="country.code">{{ country.name}}</option>
+        <label class="control-label" for="coordinates_lat">Latitude (|)</label>
+        <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"  class="form-control input-lg" name="lat"/>
+      </div>
+      <div class="col-md-2">
+        <label class="control-label" for="lotype">Location Type</label>
+        <select [(ngModel)]="location.lotype"  class="form-control input-lg" name="lotype" >
+          <option   *ngFor="let key of lotypeKeys" [value]="key" >{{lotypes[key]}}</option>
         </select>
-
       </div>
     </div>
-   -->
 
     <!-- URL to recipe -->
     <div class="row">
@@ -94,12 +94,6 @@
                           rows="5"  class="form-control input-sm"></textarea>
         </div>
       </div>
-    </div>
-
-    <div>
-      <select [(ngModel)]="location.lotype"  class="form-control input-lg" name="lotype" >
-        <option    *ngFor="let key of lotypeKeys" [value]="key" >{{lotypes[key]}}</option>
-      </select>
     </div>
 
     <!--https://angular.io/guide/forms-->
