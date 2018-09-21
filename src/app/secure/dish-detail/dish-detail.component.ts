@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {TagModel} from 'ngx-chips/core/accessor';
 import {ToastrService} from 'ngx-toastr';
@@ -9,16 +9,17 @@ import {CacheService} from '@ngx-cache/core';
 
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
-import {DishTag} from '../../model/DishTag';
+import {DishTag} from '../../model/dish-tag';
 import {LOCATIONS} from '../../model/mock-locations';
 import {Location} from '../../model/location';
+import {LoggedInCallback} from '../../service/cognito.service';
 
 @Component({
     selector: 'app-dish-detail',
     templateUrl: './dish-detail.component.html',
     styleUrls: ['./dish-detail.component.css']
 })
-export class DishDetailComponent implements OnInit {
+export class DishDetailComponent implements OnInit,LoggedInCallback {
 
     @Input() dish: Dish;
 
@@ -36,9 +37,9 @@ export class DishDetailComponent implements OnInit {
         private toastr: ToastrService,
         private progress: NgProgress,
         private readonly cache: CacheService,
-        private log: NGXLogger
-    ) {
-    }
+        private log: NGXLogger,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
@@ -160,4 +161,11 @@ export class DishDetailComponent implements OnInit {
         })
     }
 
+    isLoggedIn(message: string, isLoggedIn: boolean) {
+        if (!isLoggedIn) {
+            this.router.navigate(['/home/login']);
+        } else {
+            this.log.debug("authenticated");
+        }
+    }
 }

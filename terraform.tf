@@ -125,9 +125,9 @@ resource "aws_dynamodb_table" "location" {
   read_capacity  = 3
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
-  hash_key       = "code"
+  hash_key       = "id"
   attribute {
-    name = "code"
+    name = "id"
     type = "S"
   }
   tags {

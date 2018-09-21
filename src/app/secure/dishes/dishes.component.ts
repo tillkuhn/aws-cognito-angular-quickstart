@@ -7,6 +7,8 @@ import {ToastrService} from 'ngx-toastr';
 
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
+import {CognitoUtil, LoggedInCallback} from '../../service/cognito.service';
+import {AccessTokenCallback, IdTokenCallback} from '../jwttokens/jwt.component';
 
 // Async functions always return a promise, whether you use await or not. That promise resolves with whatever the async
 // function returns, or rejects with whatever the async function throws. So with:
@@ -16,7 +18,7 @@ import {DishService} from '../../service/dish.service';
     templateUrl: './dishes.component.html',
     styleUrls: ['./dishes.component.css']
 })
-export class DishesComponent  implements OnInit {
+export class DishesComponent implements OnInit, LoggedInCallback {
 
     readonly cacheKeyDishes: string = 'dishes';
     readonly cacheKeyDishQeury: string = 'dishes-query';
@@ -39,11 +41,14 @@ export class DishesComponent  implements OnInit {
     // The ngOnInit is a lifecycle hook. Angular calls ngOnInit shortly after creating a component.
     // It's a good place to put initialization logic.
     ngOnInit() {
+        this.query = this.cache.get(this.cacheKeyDishQeury); // restore query from previous visit, or null
         if (this.cache.has(this.cacheKeyDishes)) {
             this.log.info('dishes served from cache', this.cacheKeyDishes);
             this.dishes = this.cache.get(this.cacheKeyDishes); // restore from previous visit
+        } else {
+            //load whole list eagerly by default
+            this.onRefresh();
         }
-        this.query = this.cache.get(this.cacheKeyDishQeury); // restore from previous visit, or null
     }
 
     onRefresh(): void {
@@ -87,4 +92,11 @@ export class DishesComponent  implements OnInit {
         this.router.navigate(['/securehome/dish-details', dish.id]);
     }
 
+    isLoggedIn(message: string, isLoggedIn: boolean) {
+        if (!isLoggedIn) {
+            this.router.navigate(['/home/login']);
+        } else {
+            this.log.debug("authenticated");
+        }
+    }
 }

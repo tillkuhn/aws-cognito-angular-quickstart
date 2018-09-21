@@ -10,6 +10,7 @@ import {environment} from '../../environments/environment';
 
 // import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { GeoJson } from '../model/location';
+import {Dish} from '../model/dish';
 // import * as mapboxgl from 'mapbox-gl';
 
 @Injectable()
@@ -19,14 +20,27 @@ export class LocationService {
         private cognitoUtil: CognitoUtil,
         private ddbUtil: DynamoDBUtil,
         private log: NGXLogger
-    ) {
-        // mapboxgl.accessToken = environment.mapboxAccessToken
-    }
+    ) {}
 
     getAll() {
-        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['code', 'name', 'region', 'coordinates']});
+        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id','code', 'name', 'region', 'coordinates']});
     }
 
+
+    get(id: string) {
+        return this.ddbUtil.getMapper().get(Object.assign(new Location(), {id: id}));
+    }
+    save(item) { // put
+        // const toSave = Object.assign(new MyDomainObject, {id: 'foo'});
+        // update stamp
+        item.updatedAt = new Date().toISOString();
+        item.updatedBy = this.cognitoUtil.getCurrentUser().getUsername();
+        return this.ddbUtil.getMapper().put(item);
+    }
+
+    delete(location: Location) {
+        return this.ddbUtil.getMapper().delete(Object.assign(new Location(), {id: location.id}));
+    }
     getMarkers(): any {
         // return this.db.list('/markers')
         return {};
