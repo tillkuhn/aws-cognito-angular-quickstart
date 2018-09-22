@@ -45,7 +45,7 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
         this.lotypeKeys =  Object.keys(LocationType).filter(k => !isNaN(Number(k)));
         this.log.info(JSON.stringify( this.lotypeKeys ));
         this.route.params.forEach((params: Params) => {
-            if (params['id'] !== undefined) {
+            if (params['id'] !== undefined) {  // RESTful URL to existing ID?
                 const id = params['id'];
                 this.navigated = true;
                 this.progress.start();
@@ -66,6 +66,7 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
             } else {
                 this.navigated = false;
                 this.location = new Location();
+                this.location.coordinates = new Array<number>(2);
             }
         });
         //this.getTags();
@@ -93,6 +94,7 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
             this.progress.start();
             this.locationService.delete(this.location).then(value => {
                 this.toastr.info("Location successfully deleted");
+                this.router.navigate(['/securehome/locations']);
             }).catch(reason => {
                 this.toastr.error(reason,"Error during location deletion");
             }).finally(() => {

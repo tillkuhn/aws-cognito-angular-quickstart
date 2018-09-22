@@ -43,6 +43,7 @@ export class DishDetailComponent implements OnInit,LoggedInCallback {
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
+            // RESTful URL to existing ID?
             if (params['id'] !== undefined) {
                 const id = params['id'];
                 this.navigated = true;

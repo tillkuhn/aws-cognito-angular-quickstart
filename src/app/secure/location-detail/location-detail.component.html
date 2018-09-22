@@ -35,23 +35,31 @@
     -->
     <!-- naem(s) and origin -->
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <label class="control-label" for="name">Place Name</label>
         <div class="controls">
           <input name="name" [(ngModel)]="location.name" type="text" placeholder="Name of location (required)"
                  class="form-control input-lg" style="font-weight: bold"/>
         </div>
       </div>
+
+      <div class="col-md-2">
+        <label class="control-label" for="country">Country</label>
+        <select name="country" class="form-control" [(ngModel)]="location.country" class="form-control input-lg">
+          <option *ngFor="let country of countries" [value]="country.code">{{ country.name}}</option>
+        </select>
+      </div>
+
     </div>
 
     <div class="row">
       <div class="col-md-2">
-        <label class="control-label" for="coordinates_lon">Longitude (-)</label>
+        <label class="control-label" for="coordinates_lon">Longitude / Längengrad ||| </label>
         <input name="" [(ngModel)]="location.coordinates[0]" type="text" placeholder="d.dddddd"  class="form-control input-lg" name="lon"/>
       </div>
 
       <div class="col-md-2">
-        <label class="control-label" for="coordinates_lat">Latitude (|)</label>
+        <label class="control-label" for="coordinates_lat">Latitude / Breitengrad --- </label>
         <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"  class="form-control input-lg" name="lat"/>
       </div>
       <div class="col-md-2">
@@ -65,7 +73,7 @@
     <!-- URL to recipe -->
     <div class="row">
       <div class="col-md-6">
-        <label class="control-label" for="url">Link to main </label>
+        <label class="control-label" for="url">Primary Link for this place</label>
         <div class="controls">
           <input name="url" [(ngModel)]="location.primaryUrl" placeholder="Enter url to recipe" type="url"
                  class="form-control input-sm"/>
@@ -113,6 +121,6 @@
     <br/>
     <input type="checkbox" [(ngModel)]="debug"> Debug
     <pre *ngIf="debug">{{location|json}}}</pre>
-    <pre *ngIf="debug">{{lotypeKeys|json}}}</pre>
+    <!--<pre *ngIf="debug">{{lotypeKeys|json}}}</pre> -->
   </div>
 </div>

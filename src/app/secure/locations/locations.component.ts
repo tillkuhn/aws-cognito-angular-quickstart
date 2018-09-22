@@ -77,6 +77,8 @@ export class LocationsComponent implements OnInit {
         return result;
     }
 
+    onRefresh(): void {
+    }
     onSelect({selected}) {
         this.log.debug('Select Event', selected, this.selected);
         this.gotoDetail(selected[0]);
