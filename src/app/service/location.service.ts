@@ -23,7 +23,7 @@ export class LocationService {
     ) {}
 
     getAll() {
-        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id','code', 'name', 'region', 'coordinates']});
+        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id','country','code', 'name', 'region', 'coordinates','rating']});
     }
 
 
@@ -33,6 +33,9 @@ export class LocationService {
     save(item) { // put
         // const toSave = Object.assign(new MyDomainObject, {id: 'foo'});
         // update stamp
+        if (!item.createdBy) {
+            item.createdBy = this.cognitoUtil.getCurrentUser().getUsername();
+        }
         item.updatedAt = new Date().toISOString();
         item.updatedBy = this.cognitoUtil.getCurrentUser().getUsername();
         return this.ddbUtil.getMapper().put(item);

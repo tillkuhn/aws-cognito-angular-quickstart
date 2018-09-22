@@ -57,6 +57,7 @@ const secureHomeRoutes: Routes = [
             {path: 'dish-details', component: DishDetailComponent },
             {path: 'locations', component: LocationsComponent},
             {path: 'location-details', component: LocationDetailComponent},
+            {path: 'location-details/:id', component: LocationDetailComponent },
             {path: 'map', component: LocationMapComponent},
             {path: '', component: MyProfileComponent}]
     }

@@ -37,7 +37,7 @@ export class Location {
     tags?: Set<string>;
 
     @attribute()
-    coordinates?: number[];
+    coordinates?: number[]; //// lon lat
 
     @attribute({defaultProvider: () => new Date().toISOString()})
     createdAt?: string;
@@ -53,11 +53,16 @@ export class Location {
 }
 
 export enum Region {
-    ASIA,EUROPE,AMERICAS
+    Asia,
+    Europa,
+    Americas,
+    Africa
 }
 
 export enum LocationType {
-    PLACE,COUNTRY,REGION
+    Place,
+    Country,
+    Region
 }
 
 

@@ -7,8 +7,14 @@
             [rowHeight]='"auto"'
             [selected]="selected"
             [selectionType]="'single'"
-            (select)='onSelect($event)'>
+            (select)='onSelect($event)'
         >
+
+        <ngx-datatable-column name="Country" prop="country" [width]="60">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+                <img src="assets/flags/blank.gif" class="flag flag-{{value}}" alt="country"/>
+            </ng-template>
+        </ngx-datatable-column>
 
         <ngx-datatable-column name="Flag" prop="code" [width]="60">
             <ng-template let-value="value" ngx-datatable-cell-template>

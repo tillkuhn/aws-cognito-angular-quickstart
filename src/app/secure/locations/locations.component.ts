@@ -37,6 +37,7 @@ export class LocationsComponent implements OnInit {
         private locationService: LocationService,
         private progress: NgProgress,
         private readonly cache: CacheService,
+        private router: Router,
         private toastr: ToastrService,
         private log: NGXLogger
     ) {
@@ -76,10 +77,18 @@ export class LocationsComponent implements OnInit {
         return result;
     }
 
+    onRefresh(): void {
+    }
     onSelect({selected}) {
-        this.log.debug('Select Event', selected);
+        this.log.debug('Select Event', selected, this.selected);
+        this.gotoDetail(selected[0]);
     }
 
+    gotoDetail(item: Location): void {
+        this.router.navigate(['/securehome/location-details', item.id]);
+    }
+
+    /*
     private initializeMap() {
         /// locate the user
         if (navigator.geolocation) {
@@ -133,12 +142,11 @@ export class LocationsComponent implements OnInit {
             this.source = this.map.getSource('firebase')
 
             /// subscribe to realtime database and set data source
-            /*
-            this.markers.subscribe(markers => {
-                let data = new FeatureCollection(markers)
-                this.source.setData(data)
-            })
-            */
+
+            //this.markers.subscribe(markers => {
+            //    let data = new FeatureCollection(markers)
+            //    this.source.setData(data)
+            //})
 
             /// create map layers with realtime data
             this.map.addLayer({
@@ -176,4 +184,5 @@ export class LocationsComponent implements OnInit {
             center: data.geometry.coordinates
         })
     }
+    */
 }
