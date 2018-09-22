@@ -56,16 +56,17 @@
         <!-- coordinates -->
         <div class="row">
             <div class="col-md-2">
+                <label class="control-label" for="coordinates_lat">Latitude / Breitengrad --- </label>
+                <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"
+                       class="form-control input-lg" name="lat"/>
+            </div>
+
+            <div class="col-md-2">
                 <label class="control-label" for="coordinates_lon">Longitude / Längengrad ||| </label>
                 <input name="" [(ngModel)]="location.coordinates[0]" type="text" placeholder="d.dddddd"
                        class="form-control input-lg" name="lon"/>
             </div>
 
-            <div class="col-md-2">
-                <label class="control-label" for="coordinates_lat">Latitude / Breitengrad --- </label>
-                <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"
-                       class="form-control input-lg" name="lat"/>
-            </div>
             <div class="col-md-1">
                 <label class="control-label" for="laton">Enter lat,lon</label>
                 <button type="button" class="btn btn-info btn-lg" name="latlon">

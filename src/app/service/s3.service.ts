@@ -10,9 +10,9 @@ import * as S3 from "aws-sdk/clients/s3";
 
 export class S3Service {
 
-    constructor(public cognitoUtil: CognitoUtil) {
-
-    }
+    constructor(
+        public cognitoUtil: CognitoUtil
+    ) {}
 
     private getS3(): any {
         AWS.config.update({

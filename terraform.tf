@@ -5,10 +5,10 @@ variable "app_id" {}
 variable "app_name" {}
 variable "aws_profile" {}
 variable "identity_pool_name" {}
-variable "user_pool_name" {}
 variable "bucket_name" {}
 variable "role_name_prefix" {}
 variable "table_name_prefix" {}
+variable "bucket_name_prefix" {}
 variable "mapbox_access_token" {}
 variable "env" {
   default = "dev"
@@ -69,6 +69,16 @@ EOF
 EOF
   }
   force_destroy = true
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+  }
+}
+
+resource "aws_s3_bucket" "docs" {
+  bucket = "${var.bucket_name_prefix}-docs"
+  region = "${var.aws_region}"
+  force_destroy = false
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
@@ -165,7 +175,7 @@ resource "aws_dynamodb_table" "logintrail" {
 #####################################################################
 ## Create a cognito user pool see https://www.terraform.io/docs/providers/aws/r/cognito_user_pool.html
 resource "aws_cognito_user_pool" "main" {
-  name = "${var.user_pool_name}"
+  name = "${var.app_id}"
   auto_verified_attributes = ["email"]
   admin_create_user_config {
     ## set to false so user can register themselves, we still need more authorization to allow this :-)
