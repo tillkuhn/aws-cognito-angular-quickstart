@@ -1,126 +1,144 @@
 <div *ngIf="location">
-  <form (ngSubmit)="onSubmit()" #locationForm="ngForm">
+    <form (ngSubmit)="onSubmit()" #locationForm="ngForm">
 
-    <div class="row">
-      <div class="col-md-3">
-        <img src="{{location.imageUrl}}" *ngIf="location.imageUrl" width="300"/>
-      </div>
-      <div class="col-md-9">
-        <h3>
-          <img src="assets/flags/blank.gif" class="flag flag-{{location.country}}" alt="location country"/>
-          {{location.name}}
-        </h3>
+        <div class="row">
+            <div class="col-md-3">
+                <img src="{{location.imageUrl}}" *ngIf="location.imageUrl" width="300"/>
+            </div>
+            <div class="col-md-9">
+                <h3>
+                    <img src="assets/flags/blank.gif" class="flag flag-{{location.country}}" alt="location country"/>
+                    {{location.name}}
+                </h3>
 
 
-        <h4>{{location.authenticName}}</h4>
-        <bar-rating [(rate)]="location.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
-                    [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
+                <h4>{{location.authenticName}}</h4>
+                <bar-rating [(rate)]="location.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
+                            [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
 
-        <br/>
-        <!-- see http://getbootstrap.com/components/-->
-        <a href="{{location.primaryUrl}}" target="_location" *ngIf="location.primaryUrl"> → Open Location </a>
-      </div>
-    </div>
-<!--
-    <div class="control-group">
-      <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true">
-        <tag-input-dropdown
-                [autocompleteItems]="selectableTags"
-                [showDropdownIfEmpty]="true"
-                [dynamicUpdate]="false"
-        >
-        </tag-input-dropdown>
-      </tag-input>
-    </div>
-    -->
-    <!-- naem(s) and origin -->
-    <div class="row">
-      <div class="col-md-4">
-        <label class="control-label" for="name">Place Name</label>
-        <div class="controls">
-          <input name="name" [(ngModel)]="location.name" type="text" placeholder="Name of location (required)"
-                 class="form-control input-lg" style="font-weight: bold"/>
+                <br/>
+                <!-- see http://getbootstrap.com/components/-->
+                <a href="{{location.primaryUrl}}" target="_location" *ngIf="location.primaryUrl"> → Open Location </a>
+            </div>
         </div>
-      </div>
+        <!--
+            <div class="control-group">
+              <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true">
+                <tag-input-dropdown
+                        [autocompleteItems]="selectableTags"
+                        [showDropdownIfEmpty]="true"
+                        [dynamicUpdate]="false"
+                >
+                </tag-input-dropdown>
+              </tag-input>
+            </div>
+            -->
+        <!-- naem(s) and origin -->
+        <div class="row">
+            <div class="col-md-4">
+                <label class="control-label" for="name">Place Name</label>
+                <div class="controls">
+                    <input name="name" [(ngModel)]="location.name" type="text" placeholder="Name of location (required)"
+                           class="form-control input-lg" style="font-weight: bold"/>
+                </div>
+            </div>
 
-      <div class="col-md-2">
-        <label class="control-label" for="country">Country</label>
-        <select name="country" class="form-control" [(ngModel)]="location.country" class="form-control input-lg">
-          <option *ngFor="let country of countries" [value]="country.code">{{ country.name}}</option>
-        </select>
-      </div>
+            <div class="col-md-2">
+                <label class="control-label" for="country">Country</label>
+                <select name="country" class="form-control" [(ngModel)]="location.country"
+                        class="form-control input-lg">
+                    <option *ngFor="let country of countries" [value]="country.code">{{ country.name}}</option>
+                </select>
+            </div>
 
-    </div>
-
-    <div class="row">
-      <div class="col-md-2">
-        <label class="control-label" for="coordinates_lon">Longitude / Längengrad ||| </label>
-        <input name="" [(ngModel)]="location.coordinates[0]" type="text" placeholder="d.dddddd"  class="form-control input-lg" name="lon"/>
-      </div>
-
-      <div class="col-md-2">
-        <label class="control-label" for="coordinates_lat">Latitude / Breitengrad --- </label>
-        <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"  class="form-control input-lg" name="lat"/>
-      </div>
-      <div class="col-md-2">
-        <label class="control-label" for="lotype">Location Type</label>
-        <select [(ngModel)]="location.lotype"  class="form-control input-lg" name="lotype" >
-          <option   *ngFor="let key of lotypeKeys" [value]="key" >{{lotypes[key]}}</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- URL to recipe -->
-    <div class="row">
-      <div class="col-md-6">
-        <label class="control-label" for="url">Primary Link for this place</label>
-        <div class="controls">
-          <input name="url" [(ngModel)]="location.primaryUrl" placeholder="Enter url to recipe" type="url"
-                 class="form-control input-sm"/>
         </div>
-      </div>
-    </div>
 
-    <!-- URL to picture -->
-    <div class="row">
-      <div class="col-md-6">
-        <label class="control-label" for="url">Link to Picture of location</label>
-        <div class="controls">
-          <input name="imageUrl" [(ngModel)]="location.imageUrl" placeholder="Enter url to location photo" type="url"
-                 class="form-control input-sm"/>
+        <!-- coordinates -->
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="coordinates_lon">Longitude / Längengrad ||| </label>
+                <input name="" [(ngModel)]="location.coordinates[0]" type="text" placeholder="d.dddddd"
+                       class="form-control input-lg" name="lon"/>
+            </div>
+
+            <div class="col-md-2">
+                <label class="control-label" for="coordinates_lat">Latitude / Breitengrad --- </label>
+                <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"
+                       class="form-control input-lg" name="lat"/>
+            </div>
+            <div class="col-md-1">
+                <label class="control-label" for="laton">Enter lat,lon</label>
+                <button type="button" class="btn btn-info btn-lg" name="latlon">
+                    <span class="glyphicon glyphicon-map">Lat,Lon</span>
+                </button>
+            </div>
+            <div class="col-md-1">
+                <label class="control-label" for="searchlatlon">Search</label>
+                <button type="button" class="btn btn-info btn-lg" name="searchlatlon"
+                        onclick="window.open('https://latitude.to/', '_latlong');">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Notes-->
-    <div class="row">
-      <div class="col-md-6">
-        <label class="control-label" for="url">Notes for this location</label>
+        <!-- URL to place -->
+        <div class="row">
+            <div class="col-md-4">
+                <label class="control-label" for="url">Primary Link for this place</label>
+                <div class="controls">
+                    <input name="url" [(ngModel)]="location.primaryUrl" placeholder="Enter some interesting URL" type="url"
+                           class="form-control input-sm"/>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <label class="control-label" for="lotype">Location Type</label>
+                <select [(ngModel)]="location.lotype" class="form-control input-sm" name="lotype">
+                    <option *ngFor="let key of lotypeKeys" [value]="key">{{lotypes[key]}}</option>
+                </select>
+            </div>
+        </div>
 
-        <div class="controls">
+        <!-- URL to picture -->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label" for="url">Link to Picture of location</label>
+                <div class="controls">
+                    <input name="imageUrl" [(ngModel)]="location.imageUrl" placeholder="Enter url to location photo"
+                           type="url"
+                           class="form-control input-sm"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes-->
+        <div class="row">
+            <div class="col-md-6">
+                <label class="control-label" for="url">Notes for this location</label>
+
+                <div class="controls">
                 <textarea [(ngModel)]="location.notes" name="notes" placeholder="Recipe Notes"
-                          rows="5"  class="form-control input-sm"></textarea>
+                          rows="5" class="form-control input-sm"></textarea>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <!--https://angular.io/guide/forms-->
+        <button type="submit" class="btn btn-success btn-lg">
+            <span class="glyphicon glyphicon-save"></span>
+            Submit Place
+        </button>&nbsp;
+
+
+        <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
+            <span class="glyphicon glyphicon-remove"></span>
+            Delete Place
+        </button>
+    </form>
+
+    <div>
+        <br/>
+        <input type="checkbox" [(ngModel)]="debug"> Debug
+        <pre *ngIf="debug">{{location|json}}}</pre>
+        <!--<pre *ngIf="debug">{{lotypeKeys|json}}}</pre> -->
     </div>
-
-    <!--https://angular.io/guide/forms-->
-    <button type="submit" class="btn btn-success btn-lg">
-      <span class="glyphicon glyphicon-save"></span>
-      Submit Place
-    </button>&nbsp;
-
-
-    <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
-      <span class="glyphicon glyphicon-remove"></span>
-      Delete Place
-    </button>
-  </form>
-
-  <div>
-    <br/>
-    <input type="checkbox" [(ngModel)]="debug"> Debug
-    <pre *ngIf="debug">{{location|json}}}</pre>
-    <!--<pre *ngIf="debug">{{lotypeKeys|json}}}</pre> -->
-  </div>
 </div>
