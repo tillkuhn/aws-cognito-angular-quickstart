@@ -4,7 +4,6 @@
 variable "app_id" {}
 variable "app_name" {}
 variable "aws_profile" {}
-variable "identity_pool_name" {}
 variable "bucket_name" {}
 variable "role_name_prefix" {}
 variable "table_name_prefix" {}
@@ -69,16 +68,6 @@ EOF
 EOF
   }
   force_destroy = true
-  tags {
-    Name = "${var.app_name}"
-    Environment = "${var.env}"
-  }
-}
-
-resource "aws_s3_bucket" "docs" {
-  bucket = "${var.bucket_name_prefix}-docs"
-  region = "${var.aws_region}"
-  force_destroy = false
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
@@ -197,7 +186,7 @@ resource "aws_cognito_user_pool_client" "main" {
 
 # create an id pool and attach the user pool and user pool client id to the identity pool
 resource "aws_cognito_identity_pool" "main" {
-  identity_pool_name = "${var.identity_pool_name}"
+  identity_pool_name = "${var.app_id}"
   allow_unauthenticated_identities = true
   cognito_identity_providers {
     client_id               = "${aws_cognito_user_pool_client.main.id}"
@@ -354,6 +343,18 @@ resource "aws_iam_role_policy" "authenticated" {
         "${aws_dynamodb_table.dish.arn}",
         "${aws_dynamodb_table.location.arn}"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.docs.arn}/*"
+      ]
     }
   ]
 }
@@ -370,6 +371,27 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 }
 
 #####################################################################
+## upload bucket for dish and places docs
+## https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_s3_cognito-bucket.html
+#####################################################################
+resource "aws_s3_bucket" "docs" {
+  bucket = "${var.bucket_name_prefix}-docs"
+  region = "${var.aws_region}"
+  force_destroy = false
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT","POST","GET","DELETE"]
+    allowed_origins = ["http://localhost:3333","http://${var.route53_subdomain}.${data.aws_route53_zone.selected.name}"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+  }
+}
+
+#####################################################################
 # update environment.ts template with actual IDs used
 # by the application, create local env specific scripts
 #####################################################################
@@ -380,6 +402,7 @@ data "template_file" "environment" {
     ddbTableName = "${aws_dynamodb_table.logintrail.name}"
     region = "${var.aws_region}"
     bucketRegion = "${var.aws_region}"
+    bucketNamePrefix = "${var.bucket_name_prefix}"
     ddbTableNamePrefix = "${var.table_name_prefix}"
     userPoolId = "${aws_cognito_user_pool.main.id}"
     clientId = "${aws_cognito_user_pool_client.main.id}"

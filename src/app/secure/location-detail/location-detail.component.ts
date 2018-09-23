@@ -9,6 +9,7 @@ import {NgProgress} from '@ngx-progressbar/core';
 import {CacheService} from '@ngx-cache/core';
 import {NGXLogger} from 'ngx-logger';
 import {LoggedInCallback} from '../../service/cognito.service';
+import {S3Service} from '../../service/s3.service';
 
 @Component({
   selector: 'app-location-detail',
@@ -19,8 +20,8 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
 
     @Input() location: Location;
 
-    //selectableTags: Array<LocationTag> = [];
-    //selectedTags: Array<string> = [];
+    // selectableTags: Array<LocationTag> = [];
+    // selectedTags: Array<string> = [];
     countries: Array<Location> = LOCATIONS;
 
     lotypes =  LocationType;
@@ -38,7 +39,8 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
         private progress: NgProgress,
         private readonly cache: CacheService,
         private log: NGXLogger,
-        private router: Router
+        private router: Router,
+        private s3: S3Service
     ) {}
 
     ngOnInit(): void {
@@ -77,8 +79,8 @@ export class LocationDetailComponent implements OnInit,LoggedInCallback {
         this.log.info('Saving location',this.location.name);
         this.progress.start();
         // convert ngx-chips array list to ddb optimized set
-        //this.location.lotype = LocationType.PLACE;
-
+        // this.location.lotype = LocationType.PLACE;
+        // this.s3.addDoc("hase777.txt");
         this.locationService.save(this.location).then(objectSaved => {
             this.toastr.success('Location '+this    .location.name + ' is save!', 'Got it!');
         }).catch(reason => {

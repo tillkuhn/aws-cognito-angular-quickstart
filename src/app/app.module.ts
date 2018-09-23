@@ -33,12 +33,14 @@ import {NgProgressModule} from '@ngx-progressbar/core';
 import {NgProgressHttpModule} from '@ngx-progressbar/http';
 import {ToastrModule} from 'ngx-toastr';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { CacheModule,CACHE} from '@ngx-cache/core';
-import { BrowserCacheModule, MemoryCacheService } from '@ngx-cache/platform-browser';
-import { LocationsComponent } from './secure/locations/locations.component';
-import { LocationMapComponent } from './secure/location-map/location-map.component';
-import { LocationDetailComponent } from './secure/location-detail/location-detail.component';
+import {NgxDatatableModule} from '@swimlane/ngx-datatable';
+import {CacheModule, CACHE} from '@ngx-cache/core';
+import {BrowserCacheModule, MemoryCacheService} from '@ngx-cache/platform-browser';
+import {LocationsComponent} from './secure/locations/locations.component';
+import {LocationMapComponent} from './secure/location-map/location-map.component';
+import {LocationDetailComponent} from './secure/location-detail/location-detail.component';
+import {S3Service} from './service/s3.service';
+
 // import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
 @NgModule({
@@ -101,6 +103,7 @@ import { LocationDetailComponent } from './secure/location-detail/location-detai
         UserRegistrationService,
         UserLoginService,
         DishService,
+        S3Service,
         LocationService,
         TransferState,
         UserParametersService],
