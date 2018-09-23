@@ -87,7 +87,8 @@
             <div class="col-md-4">
                 <label class="control-label" for="url">Primary Link for this place</label>
                 <div class="controls">
-                    <input name="url" [(ngModel)]="location.primaryUrl" placeholder="Enter some interesting URL" type="url"
+                    <input name="url" [(ngModel)]="location.primaryUrl" placeholder="Enter some interesting URL"
+                           type="url"
                            class="form-control input-sm"/>
                 </div>
             </div>
@@ -123,23 +124,47 @@
             </div>
         </div>
 
-        <!--https://angular.io/guide/forms-->
-        <button type="submit" class="btn btn-success btn-lg">
-            <span class="glyphicon glyphicon-save"></span>
-            Submit Place
-        </button>&nbsp;
+        <div class="row">
+            <!--
+            <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
+                 [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+                <h1>Drag &amp; Drop</h1>
+            </div>
+            -->
+
+            <label class="btn btn-default">
+                <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)"
+                       [uploadInput]="uploadInput" multiple>
+            </label>
+
+            <button type="button" class="btn btn-success" (click)="startUpload()">
+                <span class="glyphicon glyphicon-upload"></span>
+                Start Upload
+            </button>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="row">
+            <!--https://angular.io/guide/forms-->
+            <button type="submit" class="btn btn-success btn-lg">
+                <span class="glyphicon glyphicon-save"></span>
+                Submit Place
+            </button>&nbsp;
 
 
-        <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
-            <span class="glyphicon glyphicon-remove"></span>
-            Delete Place
-        </button>
+            <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
+                <span class="glyphicon glyphicon-remove"></span>
+                Delete Place
+            </button>
+        </div>
     </form>
 
+    <!-- Deee Bug -->
     <div>
         <br/>
         <input type="checkbox" [(ngModel)]="debug"> Debug
         <pre *ngIf="debug">{{location|json}}}</pre>
-        <!--<pre *ngIf="debug">{{lotypeKeys|json}}}</pre> -->
+        <pre *ngIf="debug">{{files|json}}}</pre>
     </div>
+
 </div>

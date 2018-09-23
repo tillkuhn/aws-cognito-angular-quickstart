@@ -4,7 +4,7 @@ import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 import {Injectable} from '@angular/core';
 import {NGXLogger} from 'ngx-logger';
-
+import {UploadFile} from 'ngx-uploader';
 /**
  * Created by Vladimir Budilov
  */
@@ -17,40 +17,32 @@ export class S3Service {
     ) {}
 
     private getS3(): any {
-        /*
-        AWS.config.update({
-            region: environment.bucketRegion,
-            credentials: new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: environment.identityPoolId
-            })
-        });
-        */
-
         let clientParams:any = {
             region: environment.bucketRegion,
             apiVersion: '2006-03-01',
-            params: {Bucket: environment.bucketNamePrefix + '-docs'}
+            params: {
+                Bucket: environment.bucketNamePrefix + '-docs'}
         };
         if (environment.s3_endpoint) {
             clientParams.endpoint = environment.s3_endpoint;
         }
-        var s3 = new S3(clientParams);
+        let s3 = new S3(clientParams);
 
         return s3
     }
 
-    public addDoc(selectedFile): boolean {
+    public addDoc(selectedFile: UploadFile, content): boolean {
         if (!selectedFile) {
             console.log('Please choose a file to upload first.');
             return;
         }
-        let fileName = selectedFile; //selectedFile.name;
+        let fileName = selectedFile.name; //selectedFile.name;
         let docKey = 'location/' + fileName;
 
         this.getS3().upload({
             Key: docKey,
-            ContentType: 'text/plain', //selectedFile.type,
-            Body: 'hase',// selectedFile,
+            ContentType: selectedFile.type,
+            Body: content,
             StorageClass: 'STANDARD',
             ACL: 'private'
         },  (err, data) => {
@@ -59,7 +51,7 @@ export class S3Service {
                 return false;
             }
             // data looks like {"ETag":"\"50b401b8605ee77ada5e87135f57156a\"","Location":"https://yummy-docs.s3.eu-central-1.amazonaws.com/location/hase777.txt","key":"location/hase777.txt","Key":"location/hase777.txt","Bucket":"yummy-docs"}
-            this.log.info('Successfully uploaded doc.');
+            this.log.info('Successfully uploaded doc of type' + selectedFile.type + " size " );
             return true;
         });
     }
