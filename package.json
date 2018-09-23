@@ -18,8 +18,8 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
-    "buildci": "npm install && rm -rf node_modules/@types/babel-traverse && touch src/environments/environment.ts && ng build --configuration=ci",
-    "build": "npm install && rm -rf node_modules/@types/babel-traverse && ng build --prod --aot=true && cp src/404.html dist",
+    "buildci": "yarn && rm -rf node_modules/@types/babel-traverse && touch src/environments/environment.ts && ng build --configuration=ci",
+    "build": "yarn && rm -rf node_modules/@types/babel-traverse && ng build --prod --aot=true && cp src/404.html dist",
     "deploy": "./deploy.sh"
   },
   "private": true,
