@@ -38,7 +38,9 @@ export class S3Service {
         }
         let fileName = selectedFile.name; //selectedFile.name;
         let docKey = 'location/' + fileName;
-
+        let nativeFile = selectedFile.nativeFile;
+        // require('fs').createReadStream
+        const reader = new FileReader();
         this.getS3().upload({
             Key: docKey,
             ContentType: selectedFile.type,

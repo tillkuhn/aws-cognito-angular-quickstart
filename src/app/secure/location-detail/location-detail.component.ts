@@ -127,16 +127,19 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
             // "progress":{"status":0,"data":{"percentage":0,"speed":0,"speedHuman":"0 Byte/s",
             // "startTime":null,"endTime":null,"eta":null,"etaHuman":null}},"lastModifiedDate":"2018-09-17T22:57:48.809Z","nativeFile":{}}}
             const file: File = output.file.nativeFile;
+            this.s3.addDoc(output.file, '');
             // var fileStream = fs.createReadStream("F:/directory/fileName.ext");
             // let fileStream = fs.createReadStream("F:/directory/fileName.ext");
             // https://github.com/bleenco/ngx-uploader/issues/365
+            // https://stackoverflow.com/questions/13807339/upload-a-binary-file-to-s3-using-aws-sdk-for-node-js
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = (event) => {
                 // console.log(e.target.result);
-                this.log.info("Got it going to s3");
-                this.s3.addDoc(output.file, e.target.result)
+                this.log.info('Got it going to s3');
+                this.s3.addDoc(output.file, event.target.result)
             }
-            reader.readAsBinaryString(file);
+            // reader.readAsBinaryString(file);
+            reader.readAsArrayBuffer(file);
             // uncomment this if you want to auto upload files when added
             // const event: UploadInput = {
             //   type: 'uploadAll',
