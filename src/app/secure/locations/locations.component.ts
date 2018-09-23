@@ -54,17 +54,21 @@ export class LocationsComponent implements OnInit {
             this.log.info('locations coming from cache ', this.cacheKeyLocations);
             this.locations = this.cache.get(this.cacheKeyLocations);
         } else {
-            this.progress.start();
-            this.log.info('locations not cached loading start');
-            this.load().then((resolve) => {
-                this.log.info('Loading resolved');
-                this.locations = resolve;
-                this.cache.set(this.cacheKeyLocations, resolve);
-            }).finally(() => {
-                this.log.info('Loading complete');
-                this.progress.complete();
-            });
+            this.onRefresh();
         }
+    }
+
+    onRefresh(): void {
+        this.progress.start();
+        this.log.info('locations not cached loading start');
+        this.load().then((resolve) => {
+            this.log.info('Loading resolved');
+            this.locations = resolve;
+            this.cache.set(this.cacheKeyLocations, resolve);
+        }).finally(() => {
+            this.log.info('Loading complete');
+            this.progress.complete();
+        });
     }
 
     async load(): Promise<Array<Location>> {
@@ -77,15 +81,14 @@ export class LocationsComponent implements OnInit {
         return result;
     }
 
-    onRefresh(): void {
-    }
+
     onSelect({selected}) {
         this.log.debug('Select Event', selected, this.selected);
         this.gotoDetail(selected[0]);
     }
 
     gotoDetail(item: Location): void {
-        this.router.navigate(['/securehome/location-details', item.id]);
+        this.router.navigate(['/securehome/places', item.id]);
     }
 
     /*

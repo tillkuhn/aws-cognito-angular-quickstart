@@ -55,7 +55,6 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
 
     ngOnInit(): void {
         this.lotypeKeys = Object.keys(LocationType).filter(k => !isNaN(Number(k)));
-        this.log.info(JSON.stringify(this.lotypeKeys));
         this.route.params.forEach((params: Params) => {
             if (params['id'] !== undefined) {  // RESTful URL to existing ID?
                 const id = params['id'];
@@ -96,6 +95,7 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
         // this.location.lotype = LocationType.PLACE;
         // this.s3.addDoc("hase777.txt");
         this.locationService.save(this.location).then(objectSaved => {
+            this.location = objectSaved; // update with values resulting from db insert e.g. id or updateDate
             this.toastr.success('Location ' + this.location.name + ' is save!', 'Got it!');
         }).catch(reason => {
             this.toastr.error(reason, 'Error during save');
@@ -127,19 +127,19 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
             // "progress":{"status":0,"data":{"percentage":0,"speed":0,"speedHuman":"0 Byte/s",
             // "startTime":null,"endTime":null,"eta":null,"etaHuman":null}},"lastModifiedDate":"2018-09-17T22:57:48.809Z","nativeFile":{}}}
             const file: File = output.file.nativeFile;
-            this.s3.addDoc(output.file, '');
             // var fileStream = fs.createReadStream("F:/directory/fileName.ext");
             // let fileStream = fs.createReadStream("F:/directory/fileName.ext");
             // https://github.com/bleenco/ngx-uploader/issues/365
             // https://stackoverflow.com/questions/13807339/upload-a-binary-file-to-s3-using-aws-sdk-for-node-js
             const reader = new FileReader();
-            reader.onload = (event) => {
+            reader.onload = (e) => {
                 // console.log(e.target.result);
-                this.log.info('Got it going to s3');
-                this.s3.addDoc(output.file, event.target.result)
+                this.log.info('Got it adding content of ' + output.file.name + ' to s3');
+                this.s3.addDoc(output.file, reader.result, this.location.id);
+                this.toastr.success( output.file.name + ' stored in S3', 'Upload successful');
             }
-            // reader.readAsBinaryString(file);
             reader.readAsArrayBuffer(file);
+            // reader.readAsBinaryString(file);
             // uncomment this if you want to auto upload files when added
             // const event: UploadInput = {
             //   type: 'uploadAll',

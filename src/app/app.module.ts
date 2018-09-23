@@ -38,7 +38,7 @@ import {CacheModule, CACHE} from '@ngx-cache/core';
 import {BrowserCacheModule, MemoryCacheService} from '@ngx-cache/platform-browser';
 import {LocationsComponent} from './secure/locations/locations.component';
 import {LocationMapComponent} from './secure/location-map/location-map.component';
-import {LocationDetailComponent} from './secure/location-detail/location-detail.component';
+import {LocationDetailComponent} from './secure/place/location-detail.component';
 import {S3Service} from './service/s3.service';
 import { NgxUploaderModule } from 'ngx-uploader';
 
