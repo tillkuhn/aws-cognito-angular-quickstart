@@ -4,7 +4,7 @@
 variable "app_id" {}
 variable "app_name" {}
 variable "aws_profile" {}
-variable "bucket_name" {}
+variable "bucket_name_webapp" {}
 variable "role_name_prefix" {}
 variable "table_name_prefix" {}
 variable "bucket_name_prefix" {}
@@ -32,7 +32,7 @@ provider "aws" {
 #####################################################################
 ## see https://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html
 resource "aws_s3_bucket" "webapp" {
-  bucket = "${var.bucket_name}"
+  bucket = "${var.bucket_name_webapp}"
   region = "${var.aws_region}"
   #acl    = "private"
   policy = <<EOF
@@ -46,7 +46,7 @@ resource "aws_s3_bucket" "webapp" {
         "s3:GetObject"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Resource": "arn:aws:s3:::${var.bucket_name_webapp}/*",
       "Principal": "*"
     }
   ]
@@ -76,7 +76,7 @@ EOF
 
 ## create sync script to upload app distribution into S3 bucket
 resource "local_file" "deployment" {
-  content     = "#!/usr/bin/env bash\nnpm run build\naws s3 sync ./dist/ s3://${var.bucket_name} --region ${var.aws_region} --delete --profile ${var.aws_profile}\n"
+  content     = "#!/usr/bin/env bash\nnpm run build\naws s3 sync ./dist/ s3://${var.bucket_name_webapp} --region ${var.aws_region} --delete --profile ${var.aws_profile}\n"
   filename = "${path.module}/deploy.sh"
 }
 
@@ -104,7 +104,7 @@ resource "aws_route53_record" "domain" {
 ## main table for dishes
 resource "aws_dynamodb_table" "dish" {
   name           = "${var.table_name_prefix}-dish"
-  read_capacity  = 3
+  read_capacity  = 2
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "id"
@@ -118,10 +118,10 @@ resource "aws_dynamodb_table" "dish" {
   }
 }
 
-## main table for locations
-resource "aws_dynamodb_table" "location" {
-  name           = "${var.table_name_prefix}-location"
-  read_capacity  = 3
+## main table for places
+resource "aws_dynamodb_table" "place" {
+  name           = "${var.table_name_prefix}-place"
+  read_capacity  = 2
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "id"
@@ -138,7 +138,7 @@ resource "aws_dynamodb_table" "location" {
 ## for login / logout and other audi events
 resource "aws_dynamodb_table" "logintrail" {
   name           = "${var.table_name_prefix}-logintrail"
-  read_capacity  = 3
+  read_capacity  = 2
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "userId"
@@ -341,7 +341,7 @@ resource "aws_iam_role_policy" "authenticated" {
       ],
       "Resource": [
         "${aws_dynamodb_table.dish.arn}",
-        "${aws_dynamodb_table.location.arn}"
+        "${aws_dynamodb_table.place.arn}"
       ]
     },
     {
@@ -353,7 +353,8 @@ resource "aws_iam_role_policy" "authenticated" {
         "s3:DeleteObject"
       ],
       "Resource": [
-        "${aws_s3_bucket.docs.arn}/*"
+        "${aws_s3_bucket.docs.arn}/places/*",
+        "${aws_s3_bucket.docs.arn}/dishes/*"
       ]
     }
   ]
@@ -381,7 +382,9 @@ resource "aws_s3_bucket" "docs" {
   cors_rule {
     allowed_headers = ["*"]
     allowed_methods = ["PUT","POST","GET","DELETE"]
-    allowed_origins = ["http://localhost:3333","http://${var.route53_subdomain}.${data.aws_route53_zone.selected.name}"]
+    allowed_origins = ["http://localhost:3333",
+      "http://${var.route53_subdomain}.${data.aws_route53_zone.selected.name}",
+      "https://${var.route53_subdomain}.${data.aws_route53_zone.selected.name}"]
     expose_headers  = ["ETag"]
     max_age_seconds = 3000
   }
@@ -420,7 +423,3 @@ resource "local_file" "environment_prod" {
   filename = "${path.module}/src/environments/environment.prod.ts"
 }
 
-## dump output
-#output "generated_ids" {
-#  value = "${data.template_file.environment.rendered}"
-#}

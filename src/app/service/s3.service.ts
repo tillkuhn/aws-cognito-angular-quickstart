@@ -18,13 +18,13 @@ export class S3Service {
     ) {
     }
 
-    private getS3(): any {
+    private getS3(): S3 {
         let clientParams: any = {
             region: environment.bucketRegion,
             apiVersion: '2006-03-01',
-            params: {
-                Bucket: environment.bucketNamePrefix + '-docs'
-            }
+            //params: {
+            //    Bucket: environment.bucketNamePrefix + '-docs'
+            // }
         };
         if (environment.s3_endpoint) {
             clientParams.endpoint = environment.s3_endpoint;
@@ -40,7 +40,7 @@ export class S3Service {
             return;
         }
         let fileName = selectedFile.name; //selectedFile.name;
-        let docKey = 'location/' + id + '/' + fileName;
+        let docKey = 'places/' + id + '/' + fileName;
         let nativeFile = selectedFile.nativeFile;
         // require('fs').createReadStream
         const reader = new FileReader();
@@ -49,13 +49,16 @@ export class S3Service {
             ContentType: selectedFile.type,
             Body: content,
             StorageClass: 'STANDARD',
-            ACL: 'private'
+            ACL: 'private',
+            Bucket: environment.bucketNamePrefix + '-docs'
         }, (err, data) => {
             if (err) {
                 this.log.error('There was an error uploading your doc: ', err);
                 return false;
             }
-            // data looks like {"ETag":"\"50b401b8605ee77ada5e87135f57156a\"","Location":"https://yummy-docs.s3.eu-central-1.amazonaws.com/location/hase777.txt","key":"location/hase777.txt","Key":"location/hase777.txt","Bucket":"yummy-docs"}
+            // data looks like {"ETag":"\"50b401b8605ee77ada5e87135f57156a\"","Location":
+            // "https://yummy-docs.s3.eu-central-1.amazonaws.com/location/hase777.txt","key":
+            // "location/hase777.txt","Key":"location/hase777.txt","Bucket":"yummy-docs"}
             this.log.info('Successfully uploaded doc of type' + selectedFile.type + ' key ' + docKey);
             return true;
         });
@@ -65,6 +68,7 @@ export class S3Service {
         // this.getS3().deleteObjectStore('').promise().then(function () {
         //
         // }
+        /*
         this.getS3().deleteObject({Key: photoKey}, function (err, data) {
             if (err) {
                 this.log.error('There was an error deleting your photo: ', err.message);
@@ -72,16 +76,19 @@ export class S3Service {
             }
             console.log('Successfully deleted photo.');
         });
+        */
     }
 
     public viewAlbum(albumName) {
         var albumPhotosKey = encodeURIComponent('hase') + '//';
+        /*
         this.getS3().listObjects({Prefix: albumPhotosKey}, function (err, data) {
             if (err) {
                 console.log('There was an error viewing your album: ' + err);
             }
 
         });
+        */
     }
 
 }

@@ -15,7 +15,7 @@ import {DishesComponent} from './secure/dishes/dishes.component';
 import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
 import {LocationsComponent} from './secure/locations/locations.component';
 import {LocationMapComponent} from './secure/location-map/location-map.component';
-import {LocationDetailComponent} from './secure/place/location-detail.component';
+import {LocationDetailComponent} from './secure/places/location-detail.component';
 
 const homeRoutes: Routes = [
     {
