@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {Location, LocationType} from '../../model/location';
 import {LOCATIONS} from '../../model/mock-locations';
 import {LocationService} from '../../service/location.service';
@@ -10,7 +10,8 @@ import {CacheService} from '@ngx-cache/core';
 import {NGXLogger} from 'ngx-logger';
 import {LoggedInCallback} from '../../service/cognito.service';
 import {S3Service} from '../../service/s3.service';
-import {UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions} from 'ngx-uploader';
+import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
+import {IMyDpOptions} from 'mydatepicker';
 
 @Component({
     selector: 'app-location-detail',
@@ -34,11 +35,18 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
 
     // for uploader
     options: UploaderOptions;
-    formData: FormData;
     files: UploadFile[];
     uploadInput: EventEmitter<UploadInput>;
     humanizeBytes: Function;
     dragOver: boolean;
+
+
+    public myDatePickerOptions: IMyDpOptions = {
+        // other options...
+        dateFormat: 'yyyy-mm-dd',
+        inline: false,
+        width: "300px",
+    };
 
     constructor(
         private locationService: LocationService,
@@ -75,9 +83,12 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
                     this.progress.complete();
                 });
             } else {
+                // new Entity
                 this.navigated = false;
                 this.location = new Location();
                 this.location.coordinates = new Array<number>(2);
+                this.location.lotype = LocationType.Place;
+                this.location.imageUrl = '/assets/unknown.jpg';
             }
         });
 

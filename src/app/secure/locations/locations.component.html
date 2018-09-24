@@ -35,13 +35,13 @@
 
 
 
-        <ngx-datatable-column name="Location Name" prop="name" [width]="250">
+        <ngx-datatable-column name="Location Name" prop="name" [width]="300">
             <ng-template let-row="row" ngx-datatable-cell-template>
-                <b>{{row.name}}</b>
+                <b>{{row.name}}</b><br />{{row.summary}}
             </ng-template>
         </ngx-datatable-column>
 
-        <ngx-datatable-column name="Region" prop="region" [width]="100"></ngx-datatable-column>
+        <!--<ngx-datatable-column name="Region" prop="region" [width]="100"></ngx-datatable-column> -->
 
         <ngx-datatable-column name="Coordinates" prop="coordinates" [width]="150">
             <ng-template let-value="value" ngx-datatable-cell-template>

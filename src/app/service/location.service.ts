@@ -18,7 +18,7 @@ export class LocationService {
     ) {}
 
     getAll() {
-        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id', 'country', 'code', 'name', 'region', 'coordinates', 'rating']});
+        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id', 'country', 'summary', 'name', 'region', 'coordinates', 'rating']});
     }
 
 

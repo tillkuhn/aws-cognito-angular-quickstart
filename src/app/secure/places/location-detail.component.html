@@ -1,7 +1,7 @@
 <div *ngIf="location">
     <form (ngSubmit)="onSubmit()" #locationForm="ngForm">
 
-        <div class="row">
+        <div class="form-group row">
             <div class="col-md-3">
                 <img src="{{location.imageUrl}}" *ngIf="location.imageUrl" width="300"/>
             </div>
@@ -9,34 +9,21 @@
                 <h3>
                     <img src="assets/flags/blank.gif" class="flag flag-{{location.country}}" alt="location country"/>
                     {{location.name}}
+                    <span class="badge badge-pill badge-warning" *ngIf="location.isNew()" >NEW</span>
                 </h3>
-
-
-                <h4>{{location.authenticName}}</h4>
+                <i>{{location.summary}}</i>
+                <!--https://github.com/kekeh/mydatepicker -->
+                <br />
+                <my-date-picker name="mydate" [options]="myDatePickerOptions"
+                                [(ngModel)]="location.beenThere" required></my-date-picker>
                 <bar-rating [(rate)]="location.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
-                            [titles]="['Bad', 'Mediocre' , 'Good', 'Awesome']"></bar-rating>
-
-                <br/>
-                <!-- see http://getbootstrap.com/components/-->
+                            [titles]="['Find out', 'Lousy','Potential','Nice', 'Yo','Hossa','OK','Good','Great','Awesome']"></bar-rating>
                 <a href="{{location.primaryUrl}}" target="_location" *ngIf="location.primaryUrl"> → Open Location </a>
             </div>
         </div>
-        <!--
-            <div class="control-group">
-              <tag-input [(ngModel)]="selectedTags" name="tags" [modelAsStrings]="true">
-                <tag-input-dropdown
-                        [autocompleteItems]="selectableTags"
-                        [showDropdownIfEmpty]="true"
-                        [dynamicUpdate]="false"
-                >
-                </tag-input-dropdown>
-              </tag-input>
-            </div>
-            -->
         <!-- naem(s) and origin -->
         <div class="form-group row">
             <div class="col-md-4">
-                <label class="control-label" for="name">Place Name</label>
                 <div class="controls">
                     <input name="name" [(ngModel)]="location.name" type="text" placeholder="Name of location (required)"
                            class="form-control input-lg" style="font-weight: bold"/>
@@ -44,13 +31,20 @@
             </div>
 
             <div class="col-md-2">
-                <label class="control-label" for="country">Country</label>
                 <select name="country" class="form-control" [(ngModel)]="location.country"
                         class="form-control input-lg">
                     <option *ngFor="let country of countries" [value]="country.code">{{ country.name}}</option>
                 </select>
             </div>
-
+        </div>
+        <!-- summary -->
+        <div class="form-group row">
+            <div class="col-md-6">
+                <div class="controls">
+                    <input name="summary" [(ngModel)]="location.summary" placeholder="A brief summary why this place is so exciting"
+                           class="form-control input-sm"/>
+                </div>
+            </div>
         </div>
 
         <!-- coordinates -->
@@ -109,8 +103,7 @@
                 <label class="control-label" for="url">Link to Picture of location</label>
                 <div class="controls">
                     <input name="imageUrl" [(ngModel)]="location.imageUrl" placeholder="Enter url to location photo"
-                           type="url"
-                           class="form-control input-sm"/>
+                           type="url" class="form-control input-sm"/>
                 </div>
             </div>
         </div>

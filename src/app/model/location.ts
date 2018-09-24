@@ -7,10 +7,13 @@ export class Location {
     id: string;
 
     @attribute()
-    code: string;
+    name: string;
 
     @attribute()
-    name: string;
+    summary?: string;
+
+    @attribute()
+    code?: String;
 
     @attribute()
     country?: String;
@@ -39,6 +42,10 @@ export class Location {
     @attribute()
     coordinates?: number[]; //// lon lat
 
+    @attribute()
+    beenThere?: string;
+
+    // Audit
     @attribute({defaultProvider: () => new Date().toISOString()})
     createdAt?: string;
 
@@ -50,6 +57,11 @@ export class Location {
 
     @attribute()
     updatedBy?: string;
+
+    // Helpa
+    isNew?(): boolean {
+        return (! this.id);
+    }
 }
 
 export enum Region {

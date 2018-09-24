@@ -41,6 +41,7 @@ import {LocationMapComponent} from './secure/location-map/location-map.component
 import {LocationDetailComponent} from './secure/places/location-detail.component';
 import {S3Service} from './service/s3.service';
 import { NgxUploaderModule } from 'ngx-uploader';
+import { MyDatePickerModule } from 'mydatepicker';
 
 // import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
@@ -94,6 +95,7 @@ import { NgxUploaderModule } from 'ngx-uploader';
         }),
        // NgProgressHttpModule.forRoot(),
         NgxUploaderModule,
+        MyDatePickerModule,
         routing
     ],
     providers: [
