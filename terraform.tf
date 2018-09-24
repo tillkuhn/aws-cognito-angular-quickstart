@@ -4,8 +4,7 @@
 variable "app_id" {}
 variable "app_name" {}
 variable "aws_profile" {}
-variable "identity_pool_name" {}
-variable "bucket_name" {}
+variable "bucket_name_webapp" {}
 variable "role_name_prefix" {}
 variable "table_name_prefix" {}
 variable "bucket_name_prefix" {}
@@ -33,7 +32,7 @@ provider "aws" {
 #####################################################################
 ## see https://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html
 resource "aws_s3_bucket" "webapp" {
-  bucket = "${var.bucket_name}"
+  bucket = "${var.bucket_name_webapp}"
   region = "${var.aws_region}"
   #acl    = "private"
   policy = <<EOF
@@ -47,7 +46,7 @@ resource "aws_s3_bucket" "webapp" {
         "s3:GetObject"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.bucket_name}/*",
+      "Resource": "arn:aws:s3:::${var.bucket_name_webapp}/*",
       "Principal": "*"
     }
   ]
@@ -75,19 +74,9 @@ EOF
   }
 }
 
-resource "aws_s3_bucket" "docs" {
-  bucket = "${var.bucket_name_prefix}-docs"
-  region = "${var.aws_region}"
-  force_destroy = false
-  tags {
-    Name = "${var.app_name}"
-    Environment = "${var.env}"
-  }
-}
-
 ## create sync script to upload app distribution into S3 bucket
 resource "local_file" "deployment" {
-  content     = "#!/usr/bin/env bash\nnpm run build\naws s3 sync ./dist/ s3://${var.bucket_name} --region ${var.aws_region} --delete --profile ${var.aws_profile}\n"
+  content     = "#!/usr/bin/env bash\nyarn build\naws s3 sync ./dist/ s3://${var.bucket_name_webapp} --region ${var.aws_region} --delete --size-only --profile ${var.aws_profile}\n"
   filename = "${path.module}/deploy.sh"
 }
 
@@ -115,7 +104,7 @@ resource "aws_route53_record" "domain" {
 ## main table for dishes
 resource "aws_dynamodb_table" "dish" {
   name           = "${var.table_name_prefix}-dish"
-  read_capacity  = 3
+  read_capacity  = 2
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "id"
@@ -129,10 +118,10 @@ resource "aws_dynamodb_table" "dish" {
   }
 }
 
-## main table for locations
-resource "aws_dynamodb_table" "location" {
-  name           = "${var.table_name_prefix}-location"
-  read_capacity  = 3
+## main table for places
+resource "aws_dynamodb_table" "place" {
+  name           = "${var.table_name_prefix}-place"
+  read_capacity  = 2
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "id"
@@ -149,7 +138,7 @@ resource "aws_dynamodb_table" "location" {
 ## for login / logout and other audi events
 resource "aws_dynamodb_table" "logintrail" {
   name           = "${var.table_name_prefix}-logintrail"
-  read_capacity  = 3
+  read_capacity  = 2
   write_capacity = 1
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "userId"
@@ -197,7 +186,7 @@ resource "aws_cognito_user_pool_client" "main" {
 
 # create an id pool and attach the user pool and user pool client id to the identity pool
 resource "aws_cognito_identity_pool" "main" {
-  identity_pool_name = "${var.identity_pool_name}"
+  identity_pool_name = "${var.app_id}"
   allow_unauthenticated_identities = true
   cognito_identity_providers {
     client_id               = "${aws_cognito_user_pool_client.main.id}"
@@ -352,7 +341,20 @@ resource "aws_iam_role_policy" "authenticated" {
       ],
       "Resource": [
         "${aws_dynamodb_table.dish.arn}",
-        "${aws_dynamodb_table.location.arn}"
+        "${aws_dynamodb_table.place.arn}"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket",
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.docs.arn}/places/*",
+        "${aws_s3_bucket.docs.arn}/dishes/*"
       ]
     }
   ]
@@ -370,6 +372,32 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 }
 
 #####################################################################
+## Create S3 upload bucket for dish and places docs
+## https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_s3_cognito-bucket.html
+## We use ${var.bucket_name_webapp} for CORS since that's the domain
+## name under which the deployed application will be reachable
+#####################################################################
+resource "aws_s3_bucket" "docs" {
+  bucket = "${var.bucket_name_prefix}-docs"
+  region = "${var.aws_region}"
+  force_destroy = false
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT","POST","GET","DELETE"]
+    allowed_origins = [
+      "http://localhost:3333",
+      "http://${var.bucket_name_webapp}",
+      "https://${var.bucket_name_webapp}"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+  }
+}
+
+#####################################################################
 # update environment.ts template with actual IDs used
 # by the application, create local env specific scripts
 #####################################################################
@@ -380,6 +408,7 @@ data "template_file" "environment" {
     ddbTableName = "${aws_dynamodb_table.logintrail.name}"
     region = "${var.aws_region}"
     bucketRegion = "${var.aws_region}"
+    bucketNamePrefix = "${var.bucket_name_prefix}"
     ddbTableNamePrefix = "${var.table_name_prefix}"
     userPoolId = "${aws_cognito_user_pool.main.id}"
     clientId = "${aws_cognito_user_pool_client.main.id}"
@@ -397,7 +426,3 @@ resource "local_file" "environment_prod" {
   filename = "${path.module}/src/environments/environment.prod.ts"
 }
 
-## dump output
-#output "generated_ids" {
-#  value = "${data.template_file.environment.rendered}"
-#}

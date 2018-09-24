@@ -30,15 +30,18 @@ import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BarRatingModule} from 'ngx-bar-rating';
 import {NgProgressModule} from '@ngx-progressbar/core';
-import {NgProgressHttpModule} from '@ngx-progressbar/http';
+// import {NgProgressHttpModule} from '@ngx-progressbar/http';
 import {ToastrModule} from 'ngx-toastr';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { CacheModule,CACHE} from '@ngx-cache/core';
-import { BrowserCacheModule, MemoryCacheService } from '@ngx-cache/platform-browser';
-import { LocationsComponent } from './secure/locations/locations.component';
-import { LocationMapComponent } from './secure/location-map/location-map.component';
-import { LocationDetailComponent } from './secure/location-detail/location-detail.component';
+import {NgxDatatableModule} from '@swimlane/ngx-datatable';
+import {CacheModule, CACHE} from '@ngx-cache/core';
+import {BrowserCacheModule, MemoryCacheService} from '@ngx-cache/platform-browser';
+import {LocationsComponent} from './secure/locations/locations.component';
+import {LocationMapComponent} from './secure/location-map/location-map.component';
+import {LocationDetailComponent} from './secure/places/location-detail.component';
+import {S3Service} from './service/s3.service';
+import { NgxUploaderModule } from 'ngx-uploader';
+
 // import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
 @NgModule({
@@ -89,8 +92,8 @@ import { LocationDetailComponent } from './secure/location-detail/location-detai
             color: '#f71cff',
             thick: true
         }),
-        NgProgressHttpModule.forRoot(),
-
+       // NgProgressHttpModule.forRoot(),
+        NgxUploaderModule,
         routing
     ],
     providers: [
@@ -101,6 +104,7 @@ import { LocationDetailComponent } from './secure/location-detail/location-detai
         UserRegistrationService,
         UserLoginService,
         DishService,
+        S3Service,
         LocationService,
         TransferState,
         UserParametersService],

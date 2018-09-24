@@ -1,14 +1,9 @@
 import {Injectable} from '@angular/core';
-import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 import {NGXLogger} from 'ngx-logger';
-import {DocumentClient, ScanInput} from 'aws-sdk/clients/dynamodb';
-import {AWSError} from 'aws-sdk/global';
 import {CognitoUtil} from './cognito.service';
 import {DynamoDBUtil} from './ddb.service';
 import { Location } from '../model/location';
 import {environment} from '../../environments/environment';
-
-// import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { GeoJson } from '../model/location';
 import {Dish} from '../model/dish';
 // import * as mapboxgl from 'mapbox-gl';
@@ -23,7 +18,7 @@ export class LocationService {
     ) {}
 
     getAll() {
-        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id','country','code', 'name', 'region', 'coordinates','rating']});
+        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id', 'country', 'code', 'name', 'region', 'coordinates', 'rating']});
     }
 
 

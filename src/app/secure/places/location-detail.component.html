@@ -34,7 +34,7 @@
             </div>
             -->
         <!-- naem(s) and origin -->
-        <div class="row">
+        <div class="form-group row">
             <div class="col-md-4">
                 <label class="control-label" for="name">Place Name</label>
                 <div class="controls">
@@ -54,7 +54,7 @@
         </div>
 
         <!-- coordinates -->
-        <div class="row">
+        <div class="form-group row">
             <div class="col-md-2">
                 <label class="control-label" for="coordinates_lat">Latitude / Breitengrad --- </label>
                 <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"
@@ -67,27 +67,31 @@
                        class="form-control input-lg" name="lon"/>
             </div>
 
+            <!--
             <div class="col-md-1">
                 <label class="control-label" for="laton">Enter lat,lon</label>
                 <button type="button" class="btn btn-info btn-lg" name="latlon">
                     <span class="glyphicon glyphicon-map">Lat,Lon</span>
                 </button>
             </div>
+            -->
             <div class="col-md-1">
                 <label class="control-label" for="searchlatlon">Search</label>
                 <button type="button" class="btn btn-info btn-lg" name="searchlatlon"
                         onclick="window.open('https://latitude.to/', '_latlong');">
-                    <span class="glyphicon glyphicon-search"></span>
+                    <span class="glyphicon glyphicon-map"></span>
+                    latitude.to
                 </button>
             </div>
         </div>
 
         <!-- URL to place -->
-        <div class="row">
+        <div class="form-group row">
             <div class="col-md-4">
                 <label class="control-label" for="url">Primary Link for this place</label>
                 <div class="controls">
-                    <input name="url" [(ngModel)]="location.primaryUrl" placeholder="Enter some interesting URL" type="url"
+                    <input name="url" [(ngModel)]="location.primaryUrl" placeholder="Enter some interesting URL"
+                           type="url"
                            class="form-control input-sm"/>
                 </div>
             </div>
@@ -100,7 +104,7 @@
         </div>
 
         <!-- URL to picture -->
-        <div class="row">
+        <div class="form-group row">
             <div class="col-md-6">
                 <label class="control-label" for="url">Link to Picture of location</label>
                 <div class="controls">
@@ -112,7 +116,7 @@
         </div>
 
         <!-- Notes-->
-        <div class="row">
+        <div class="form-group row">
             <div class="col-md-6">
                 <label class="control-label" for="url">Notes for this location</label>
 
@@ -123,23 +127,36 @@
             </div>
         </div>
 
-        <!--https://angular.io/guide/forms-->
-        <button type="submit" class="btn btn-success btn-lg">
-            <span class="glyphicon glyphicon-save"></span>
-            Submit Place
-        </button>&nbsp;
+        <!-- file upload -->
 
 
-        <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
-            <span class="glyphicon glyphicon-remove"></span>
-            Delete Place
-        </button>
+        <!-- Action buttons -->
+        <div class="form-group row">
+            <!--https://angular.io/guide/forms-->
+            <button type="submit" class="btn btn-success btn-lg">
+                <span class="glyphicon glyphicon-save"></span>
+                Submit Place
+            </button>&nbsp;
+
+            <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
+                <span class="glyphicon glyphicon-remove"></span>
+                Delete Place
+            </button>&nbsp;
+
+            <label class="btn btn-default">
+                <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)"
+                       [uploadInput]="uploadInput" multiple>
+            </label>
+
+        </div>
     </form>
 
+    <!-- Deee Bug -->
     <div>
         <br/>
         <input type="checkbox" [(ngModel)]="debug"> Debug
         <pre *ngIf="debug">{{location|json}}}</pre>
-        <!--<pre *ngIf="debug">{{lotypeKeys|json}}}</pre> -->
+        <pre *ngIf="debug">{{files|json}}}</pre>
     </div>
+
 </div>

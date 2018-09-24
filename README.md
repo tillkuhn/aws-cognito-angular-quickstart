@@ -96,3 +96,4 @@ pip install awscli-local
 * Admin and beyond, check out [Authorization and Cognito groups](ttps://stackoverflow.com/questions/41828359/how-do-i-access-the-group-for-a-cognito-user-account)
 * Try [In place edit module](https://github.com/qontu/ngx-inline-editor)
 * [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
+* Finish S3 Integration [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
