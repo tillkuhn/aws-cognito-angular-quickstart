@@ -117,8 +117,7 @@ export class CognitoUtil {
                     }
                 }
             });
-        }
-        else {
+        } else {
             callback.callbackWithParam(null);
         }
     }
@@ -132,8 +131,7 @@ export class CognitoUtil {
                 if (err) {
                     console.log('CognitoUtil: Can\'t set the credentials:' + err);
                     callback.callbackWithParam(null);
-                }
-                else {
+                } else {
                     if (session.isValid()) {
                         callback.callbackWithParam(session.getIdToken().getJwtToken());
                     } else {
@@ -169,14 +167,12 @@ export class CognitoUtil {
     refresh(): void {
         this.getCurrentUser().getSession(function (err, session) {
             if (err) {
-                console.log('CognitoUtil: Can\'t set the credentials:' + err);
-            }
-
-            else {
+                this.log.error('CognitoUtil: Can\'t set the credentials:' + err);
+            } else {
                 if (session.isValid()) {
-                    console.log('CognitoUtil: refreshed successfully');
+                    this.log.info('CognitoUtil: refreshed successfully');
                 } else {
-                    console.log('CognitoUtil: refreshed but session is still not valid');
+                    this.log.warn('CognitoUtil: refreshed but session is still not valid');
                 }
             }
         });

@@ -9,6 +9,7 @@ import {Component, OnInit} from "@angular/core";
 import {AwsUtil} from "./service/aws.service";
 import {UserLoginService} from "./service/user-login.service";
 import {CognitoUtil, LoggedInCallback} from "./service/cognito.service";
+import {NGXLogger} from 'ngx-logger';
 
 @Component({
     selector: 'app-root',
@@ -16,21 +17,25 @@ import {CognitoUtil, LoggedInCallback} from "./service/cognito.service";
 })
 export class AppComponent implements OnInit, LoggedInCallback {
 
-    constructor(public awsUtil: AwsUtil, public userService: UserLoginService, public cognito: CognitoUtil) {
+    constructor(
+        private awsUtil: AwsUtil,
+        private userService: UserLoginService,
+        private cognito: CognitoUtil,
+        private log: NGXLogger
+    ) {
         console.log("AppComponent: constructor");
     }
 
     ngOnInit() {
-        console.log("AppComponent: Checking if the user is already authenticated");
+        this.log.debug("AppComponent: Checking if the user is already authenticated");
         this.userService.isAuthenticated(this);
     }
 
     isLoggedIn(message: string, isLoggedIn: boolean) {
-        console.log("AppComponent: the user is authenticated: " + isLoggedIn);
+        this.log.info("AppComponent: the user is authenticated: " + isLoggedIn);
         let mythis = this;
         this.cognito.getIdToken({
             callback() {
-
             },
             callbackWithParam(token: any) {
                 // Include the passed-in callback here as well so that it's executed downstream
