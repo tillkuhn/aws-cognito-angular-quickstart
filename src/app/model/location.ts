@@ -65,7 +65,6 @@ export enum LocationType {
     Region
 }
 
-
 export interface IGeometry {
     type: string;
     coordinates: number[];
