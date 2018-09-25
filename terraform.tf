@@ -1,20 +1,20 @@
 ################################################################
 ## declare vars, see terraform.tfvars for actual settings
 ################################################################
-variable "app_id" { default = "yummy" }
-variable "app_name" { default = "Yummy Dishes + PLaces" }
 variable "aws_profile" {}
+variable "aws_region" { default = "eu-central-1" }
+variable "app_id" { default = "yummy" }
+variable "app_name" { default = "Yummy Dishes + Places" }
 variable "role_name_prefix" { default = "yummy" }
 variable "table_name_prefix" { default = "yummy" }
 variable "bucket_name_prefix" { default = "yummy" }
 variable "env"{ default = "prod" }
-variable "aws_region" { default = "eu-central-1" }
 variable "bucket_name_webapp" {}
 variable "route53_subdomain" {}
 variable "route53_zone" {}
 variable "route53_alias_zone_id" {}
 variable "mapbox_access_token" {}
-
+variable "admin_mail" {}
 #####################################################################
 ## configure AWS Provide, you can use key secret here,
 ## but we prefer a profile in ~/.aws/credentials
@@ -394,6 +394,19 @@ resource "aws_s3_bucket" "docs" {
     Environment = "${var.env}"
     ManagedBy = "Terraform"
   }
+}
+
+#####################################################################
+## Create SNS Topic for important events, subscribe admin mail
+#####################################################################
+resource "aws_sns_topic" "events" {
+  name = "${var.app_id}-events"
+}
+
+resource "aws_sns_topic_subscription" "events_email_target" {
+  topic_arn = "${aws_sns_topic.events.arn}"
+  protocol  = "email"
+  endpoint  = "${var.admin_mail}"
 }
 
 #####################################################################
