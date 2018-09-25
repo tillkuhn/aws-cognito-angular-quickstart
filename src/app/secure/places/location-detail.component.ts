@@ -12,7 +12,7 @@ import {LoggedInCallback} from '../../service/cognito.service';
 import {S3Service} from '../../service/s3.service';
 import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
 import {IMyDpOptions} from 'mydatepicker';
-
+import {GeoPoint} from '../../model/geopoint'
 @Component({
     selector: 'app-location-detail',
     templateUrl: './location-detail.component.html',
@@ -116,9 +116,13 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
     }
 
     onChangeCoordinates(event: any) {
+        // https://github.com/perfectline/geopoint
         if (event.target.value) {
             this.location.coordinates[0] =  event.target.value.split(/[\s]+/)[1];
             this.location.coordinates[1] =  event.target.value.split(/[\s]+/)[0];
+            const point = new GeoPoint(Number(this.location.coordinates[0]),Number(this.location.coordinates[1]));
+            this.log.info(point.getLonDeg()+ " latte "+ point.getLatDeg());
+            this.log.info("KLAUUU");
         } else {
             // clean
         }
