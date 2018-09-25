@@ -14,7 +14,7 @@
                 <i>{{location.summary}}</i>
                 <!--https://github.com/kekeh/mydatepicker -->
                 <br />
-                Lon: {{location.coordinates[0]}} Lat: {{location.coordinates[1]}}
+                <h4>{{ getDegrees() }}</h4>
                 <!--
                 <my-date-picker name="mydate" [options]="myDatePickerOptions"
                                 [(ngModel)]="location.beenThere" required></my-date-picker>
@@ -52,37 +52,15 @@
 
         <!-- coordinates -->
         <div class="form-group row">
-            <div class="col-md-3">
-                <input (change)="onChangeCoordinates($event)" placeholder="d.dddddd d.dddddd" class="form-control input-lg" name="latlon" >
+            <div class="col-md-4">
+                <input (change)="onChangeCoordinates($event)" placeholder="d.dddddd (lat) d.dddddd (lon)"
+                       class="form-control input-lg" name="latlon" >
             </div>
-                <!--
             <div class="col-md-2">
-                <label class="control-label" for="coordinates_lat">Latitude / Breitengrad --- </label>
-                <input name="" [(ngModel)]="location.coordinates[1]" type="text" placeholder="d.dddddd"
-                       class="form-control input-lg" name="lat"/>
-            </div>
-
-            <div class="col-md-2">
-                <label class="control-label" for="coordinates_lon">Longitude / Längengrad ||| </label>
-                <input name="" [(ngModel)]="location.coordinates[0]" type="text" placeholder="d.dddddd"
-                       class="form-control input-lg" name="lon"/>
-            </div>
-            -->
-
-            <!--
-            <div class="col-md-1">
-                <label class="control-label" for="laton">Enter lat,lon</label>
-                <button type="button" class="btn btn-info btn-lg" name="latlon">
-                    <span class="glyphicon glyphicon-map">Lat,Lon</span>
-                </button>
-            </div>
-            -->
-            <div class="col-md-1">
-                <button type="button" class="btn btn-info btn-lg" name="searchlatlon"
-                        onclick="window.open('https://latitude.to/', '_latlong');">
+                <a href="https://latitude.to/" target="_latitude">
                     <span class="glyphicon glyphicon-map"></span>
-                    latitude.to
-                </button>
+                    → Open latitude.to
+                </a>
             </div>
         </div>
 

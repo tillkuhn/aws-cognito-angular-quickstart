@@ -4,65 +4,39 @@
  */
 export class GeoPoint {
 
-    constructor(lon, lat) {
-        //super(props);
-
-        switch (typeof(lon)) {
-            case 'number':
-                this.lonDeg = this.dec2deg(lon, this.MAX_LON);
-                this.lonDec = lon;
-                break;
-
-            case 'string':
-                if (this.decode(lon)) {
-                    this.lonDeg = lon;
-                }
-                this.lonDec = this.deg2dec(lon);
-                console.log(this.lonDec);
-
-                break;
-        }
-
-        switch (typeof(lat)) {
-            case 'number':
-                this.latDeg = this.dec2deg(lat, this.MAX_LAT);
-                this.latDec = lat;
-                break;
-            case 'string':
-                if (this.decode(lat)) {
-                    this.latDeg = lat;
-                }
-                this.latDec = this.deg2dec(lat);
-                break;
-        }
-
-    }
-
-
-    CHAR_DEG : "\u00B0";
-    CHAR_MIN : "\u0027";
-    CHAR_SEC : "\u0022";
-    CHAR_SEP : "\u0020";
+    CHAR_DEG = '\u00B0';
+    CHAR_MIN = '\u0027';
+    CHAR_SEC = '\u0022';
+    CHAR_SEP = '\u0020';
 
     MAX_LON: 180;
     MAX_LAT: 90;
 
     // decimal
-    lonDec: any;
-    latDec: any;
+    lonDec: number;
+    latDec: number;
 
     // degrees
-    lonDeg: any;
-    latDeg: any;
+    lonDeg: string;
+    latDeg: string;
 
-    dec2deg(value, max) {
+    constructor(lon: number, lat: number) {
+
+        this.lonDeg = this.dec2deg(lon, this.MAX_LON);
+        this.lonDec = lon;
+
+        this.latDeg = this.dec2deg(lat, this.MAX_LAT);
+        this.latDec = lat;
+    }
+
+    dec2deg(value, max): string {
 
         let sign = value < 0 ? -1 : 1;
 
         let abs = Math.abs(Math.round(value * 1000000));
 
         if (abs > (max * 1000000)) {
-            return NaN;
+            return 'NaN';
         }
 
         let dec = abs % 1000000 / 1000000;
@@ -70,7 +44,7 @@ export class GeoPoint {
         let min = Math.floor(dec * 60);
         let sec = (dec - min / 60) * 3600;
 
-        let result = "";
+        let result = '';
 
         result += deg;
         result += this.CHAR_DEG;
@@ -105,20 +79,20 @@ export class GeoPoint {
     }
 
     decode(value) {
-        let pattern = "";
+        let pattern = '';
 
         // deg
-        pattern += "(-?\\d+)";
+        pattern += '(-?\\d+)';
         pattern += this.CHAR_DEG;
-        pattern += "\\s*";
+        pattern += '\\s*';
 
         // min
-        pattern += "(\\d+)";
+        pattern += '(\\d+)';
         pattern += this.CHAR_MIN;
-        pattern += "\\s*";
+        pattern += '\\s*';
 
         // sec
-        pattern += "(\\d+(?:\\.\\d+)?)";
+        pattern += '(\\d+(?:\\.\\d+)?)';
         pattern += this.CHAR_SEC;
 
         return value.match(new RegExp(pattern));
@@ -138,6 +112,10 @@ export class GeoPoint {
 
     getLatDeg() {
         return this.latDeg;
+    }
+
+    getLatLonDeg() {
+        return this.latDeg + ' N ' + this.lonDeg + ' E';
     }
 
 }

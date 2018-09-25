@@ -118,16 +118,21 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
     onChangeCoordinates(event: any) {
         // https://github.com/perfectline/geopoint
         if (event.target.value) {
-            this.location.coordinates[0] =  event.target.value.split(/[\s]+/)[1];
-            this.location.coordinates[1] =  event.target.value.split(/[\s]+/)[0];
-            const point = new GeoPoint(Number(this.location.coordinates[0]),Number(this.location.coordinates[1]));
-            this.log.info(point.getLonDeg()+ " latte "+ point.getLatDeg());
-            this.log.info("KLAUUU");
+            this.location.coordinates[0] =  Number(event.target.value.split(/[\s]+/)[1]);
+            this.location.coordinates[1] =  Number(event.target.value.split(/[\s]+/)[0]);
         } else {
             // clean
         }
     }
 
+    getDegrees(): string {
+        if (this.location.coordinates[0] && this.location.coordinates[1]) {
+            const point = new GeoPoint(this.location.coordinates[0],this.location.coordinates[1]);
+            return point.getLatLonDeg();
+        } else {
+            return "No coordinates defined";
+        }
+    }
     onDelete() {
         const confirm = window.confirm('Do you really want to delete this location?');
         if (confirm) {

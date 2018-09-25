@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, LoggedInCallback {
         private cognito: CognitoUtil,
         private log: NGXLogger
     ) {
-        console.log("AppComponent: constructor");
+        this.log.debug("AppComponent: constructor");
     }
 
     ngOnInit() {
@@ -39,7 +39,7 @@ export class AppComponent implements OnInit, LoggedInCallback {
             },
             callbackWithParam(token: any) {
                 // Include the passed-in callback here as well so that it's executed downstream
-                console.log("AppComponent: calling initAwsService in callback")
+                mythis.log.debug("AppComponent: calling initAwsService in callback")
                 mythis.awsUtil.initAwsService(null, isLoggedIn, token);
             }
         });
