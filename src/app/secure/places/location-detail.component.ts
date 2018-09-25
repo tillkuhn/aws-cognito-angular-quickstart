@@ -115,6 +115,15 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
         })
     }
 
+    onChangeCoordinates(event: any) {
+        if (event.target.value) {
+            this.location.coordinates[0] =  event.target.value.split(/[\s]+/)[1];
+            this.location.coordinates[1] =  event.target.value.split(/[\s]+/)[0];
+        } else {
+            // clean
+        }
+    }
+
     onDelete() {
         const confirm = window.confirm('Do you really want to delete this location?');
         if (confirm) {
