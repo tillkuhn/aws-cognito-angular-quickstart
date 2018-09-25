@@ -1,23 +1,19 @@
 ################################################################
 ## declare vars, see terraform.tfvars for actual settings
 ################################################################
-variable "app_id" {}
-variable "app_name" {}
+variable "app_id" { default = "yummy" }
+variable "app_name" { default = "Yummy Dishes + PLaces" }
 variable "aws_profile" {}
+variable "role_name_prefix" { default = "yummy" }
+variable "table_name_prefix" { default = "yummy" }
+variable "bucket_name_prefix" { default = "yummy" }
+variable "env"{ default = "prod" }
+variable "aws_region" { default = "eu-central-1" }
 variable "bucket_name_webapp" {}
-variable "role_name_prefix" {}
-variable "table_name_prefix" {}
-variable "bucket_name_prefix" {}
-variable "mapbox_access_token" {}
-variable "env" {
-  default = "dev"
-}
-variable "aws_region" {
-  default = "eu-central-1"
-}
 variable "route53_subdomain" {}
 variable "route53_zone" {}
 variable "route53_alias_zone_id" {}
+variable "mapbox_access_token" {}
 
 #####################################################################
 ## configure AWS Provide, you can use key secret here,
@@ -34,7 +30,6 @@ provider "aws" {
 resource "aws_s3_bucket" "webapp" {
   bucket = "${var.bucket_name_webapp}"
   region = "${var.aws_region}"
-  #acl    = "private"
   policy = <<EOF
 {
   "Id": "bucket_policy_site",
@@ -71,6 +66,7 @@ EOF
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
+    ManagedBy = "Terraform"
   }
 }
 
@@ -115,6 +111,7 @@ resource "aws_dynamodb_table" "dish" {
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
+    ManagedBy = "Terraform"
   }
 }
 
@@ -132,6 +129,7 @@ resource "aws_dynamodb_table" "place" {
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
+    ManagedBy = "Terraform"
   }
 }
 
@@ -155,6 +153,7 @@ resource "aws_dynamodb_table" "logintrail" {
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
+    ManagedBy = "Terraform"
   }
 }
 
@@ -173,6 +172,7 @@ resource "aws_cognito_user_pool" "main" {
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
+    ManagedBy = "Terraform"
   }
 }
 
@@ -195,7 +195,7 @@ resource "aws_cognito_identity_pool" "main" {
   }
 }
 
-# create UNAuthenticated role
+# create IAM UNAuthenticated role
 resource "aws_iam_role" "unauthenticated" {
   name = "${var.role_name_prefix}-unauthenticated"
   assume_role_policy = <<EOF
@@ -222,12 +222,11 @@ resource "aws_iam_role" "unauthenticated" {
 EOF
 }
 
-# create policy for UNauth role
+# create policy for IAM UNAuthenticated role
 #$aws_cmd iam put-role-policy --role-name $ROLE_NAME_PREFIX-unauthenticated --policy-name CognitoPolicy --policy-document file://unauthrole.json
 resource "aws_iam_role_policy" "unauthenticated" {
   name = "CognitoPolicy"
   role = "${aws_iam_role.unauthenticated.id}"
-
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -247,8 +246,7 @@ resource "aws_iam_role_policy" "unauthenticated" {
 EOF
 }
 
-
-# Create IAM role for AUTHenticated users
+# Create IAM AUTHenticated role
 resource "aws_iam_role" "authenticated" {
   name = "${var.role_name_prefix}-authenticated"
 
@@ -276,7 +274,7 @@ resource "aws_iam_role" "authenticated" {
 EOF
 }
 
-# Grant access to dynamo db table(s) for authenticated role
+# create policy for IAM Authenticated role, Grant access to dynamo db table(s) and S3
 resource "aws_iam_role_policy" "authenticated" {
   name = "CognitoPolicy"
   role = "${aws_iam_role.authenticated.id}"
@@ -394,6 +392,7 @@ resource "aws_s3_bucket" "docs" {
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
+    ManagedBy = "Terraform"
   }
 }
 
@@ -425,4 +424,3 @@ resource "local_file" "environment_prod" {
   content     = "${data.template_file.environment.rendered}"
   filename = "${path.module}/src/environments/environment.prod.ts"
 }
-
