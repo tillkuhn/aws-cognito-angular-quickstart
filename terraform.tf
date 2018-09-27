@@ -3,8 +3,8 @@
 ################################################################
 variable "aws_profile" {}
 variable "aws_region" { default = "eu-central-1" }
-variable "app_id" { default = "yummy" }
 variable "app_name" { default = "Yummy Dishes + Places" }
+variable "app_id" { default = "yummy" }
 variable "role_name_prefix" { default = "yummy" }
 variable "table_name_prefix" { default = "yummy" }
 variable "bucket_name_prefix" { default = "yummy" }
@@ -14,7 +14,7 @@ variable "route53_subdomain" {}
 variable "route53_zone" {}
 variable "route53_alias_zone_id" {}
 variable "mapbox_access_token" {}
-variable "admin_mail" {}
+
 #####################################################################
 ## configure AWS Provide, you can use key secret here,
 ## but we prefer a profile in ~/.aws/credentials
@@ -198,6 +198,7 @@ resource "aws_cognito_identity_pool" "main" {
 # create IAM UNAuthenticated role
 resource "aws_iam_role" "unauthenticated" {
   name = "${var.role_name_prefix}-unauthenticated"
+  description = "Managed by Terraform"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -249,7 +250,7 @@ EOF
 # Create IAM AUTHenticated role
 resource "aws_iam_role" "authenticated" {
   name = "${var.role_name_prefix}-authenticated"
-
+  description = "Managed by Terraform"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -273,6 +274,7 @@ resource "aws_iam_role" "authenticated" {
 }
 EOF
 }
+
 
 # create policy for IAM Authenticated role, Grant access to dynamo db table(s) and S3
 resource "aws_iam_role_policy" "authenticated" {
@@ -369,6 +371,13 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
   }
 }
 
+
+# Create IAM EDITOR role
+#resource "aws_iam_role" "editor" {
+#  name = "${var.role_name_prefix}-editor"
+#  description = "Managed by Terraform"
+#}
+
 #####################################################################
 ## Create S3 upload bucket for dish and places docs
 ## https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_s3_cognito-bucket.html
@@ -398,15 +407,10 @@ resource "aws_s3_bucket" "docs" {
 
 #####################################################################
 ## Create SNS Topic for important events, subscribe admin mail
+## email event subscription is not supported so we skip subscriptions
 #####################################################################
 resource "aws_sns_topic" "events" {
   name = "${var.app_id}-events"
-}
-
-resource "aws_sns_topic_subscription" "events_email_target" {
-  topic_arn = "${aws_sns_topic.events.arn}"
-  protocol  = "email"
-  endpoint  = "${var.admin_mail}"
 }
 
 #####################################################################
