@@ -51,4 +51,5 @@ src/environments/environment.prod.ts
 /tk
 .vaultpass
 terraform.tfvars
+terraform-backend.tf
 *.backup
