@@ -52,7 +52,7 @@ export class DishDetailComponent implements OnInit,LoggedInCallback {
                     .then(dishItem => {
                         if (dishItem.tags) {
                             this.log.info('found item' + dishItem.tags.entries());
-                            for (var it = dishItem.tags.values(), val = null; val = it.next().value;) {
+                            for (let it = dishItem.tags.values(), val = null; val = it.next().value;) {
                                 this.selectedTags.push(val);
                             }
                         }
@@ -60,7 +60,7 @@ export class DishDetailComponent implements OnInit,LoggedInCallback {
                         // the item was found
                     }).catch(err => {
                     this.log.error(err);
-                    this.toastr.error(err, 'Error loading dish!');
+                    this.toastr.error(err, 'Error loading dish details!');
                     // the item was not found
                 }).finally(() => {
                     this.progress.complete();
