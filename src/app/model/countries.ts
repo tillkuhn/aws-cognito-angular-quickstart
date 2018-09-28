@@ -1,6 +1,6 @@
 import { Location } from './location';
 
-export const LOCATIONS: Location[] = [
+export const COUNTRIES: Location[] = [
     {
         'id': 'a',
         'code': 'at',

@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
-import {Router} from "@angular/router";
-import {UserLoginService} from "../../service/user-login.service";
-import {LoggedInCallback} from "../../service/cognito.service";
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {UserLoginService} from '../../service/user-login.service';
+import {LoggedInCallback} from '../../service/cognito.service';
 import {NGXLogger} from 'ngx-logger';
 
 @Component({
@@ -11,12 +11,14 @@ import {NGXLogger} from 'ngx-logger';
 })
 export class SecureHomeComponent implements OnInit, LoggedInCallback {
 
+    title = 'Yummy Dishes & Places';
+
     constructor(public router: Router,
                 public userService: UserLoginService,
                 private log: NGXLogger,
-     ) {
+    ) {
         this.userService.isAuthenticated(this);
-        this.log.info("SecureHomeComponent: constructor");
+        this.log.info('SecureHomeComponent: constructor');
     }
 
     ngOnInit() {

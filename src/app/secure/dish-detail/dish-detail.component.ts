@@ -9,8 +9,8 @@ import {CacheService} from '@ngx-cache/core';
 
 import {Dish} from '../../model/dish';
 import {DishService} from '../../service/dish.service';
+import {LocationService} from '../../service/location.service';
 import {DishTag} from '../../model/dish-tag';
-import {LOCATIONS} from '../../model/mock-locations';
 import {Location} from '../../model/location';
 import {LoggedInCallback} from '../../service/cognito.service';
 
@@ -19,13 +19,13 @@ import {LoggedInCallback} from '../../service/cognito.service';
     templateUrl: './dish-detail.component.html',
     styleUrls: ['./dish-detail.component.css']
 })
-export class DishDetailComponent implements OnInit,LoggedInCallback {
+export class DishDetailComponent implements OnInit, LoggedInCallback {
 
     @Input() dish: Dish;
 
     selectableTags: Array<DishTag> = [];
     selectedTags: Array<string> = [];
-    origins: Array<Location> = LOCATIONS;
+    origins: Array<Location>;
     error: any;
     debug: false;
     navigated = false; // true if navigated here
@@ -38,7 +38,8 @@ export class DishDetailComponent implements OnInit,LoggedInCallback {
         private progress: NgProgress,
         private readonly cache: CacheService,
         private log: NGXLogger,
-        private router: Router
+        private router: Router,
+        private locationService: LocationService
     ) {}
 
     ngOnInit(): void {
@@ -71,8 +72,7 @@ export class DishDetailComponent implements OnInit,LoggedInCallback {
             }
         });
         this.getTags();
-        // sort countries by name
-        this.origins.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+        this.origins = this.locationService.getCountries();
     }
 
     getTags(): void {

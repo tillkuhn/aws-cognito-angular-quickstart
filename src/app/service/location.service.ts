@@ -2,10 +2,11 @@ import {Injectable} from '@angular/core';
 import {NGXLogger} from 'ngx-logger';
 import {CognitoUtil} from './cognito.service';
 import {DynamoDBUtil} from './ddb.service';
-import { Location } from '../model/location';
+import {Location} from '../model/location';
 import {environment} from '../../environments/environment';
-import { GeoJson } from '../model/location';
-import {Dish} from '../model/dish';
+import {GeoJson} from '../model/location';
+import {COUNTRIES} from '../model/countries';
+
 // import * as mapboxgl from 'mapbox-gl';
 
 @Injectable()
@@ -15,16 +16,21 @@ export class LocationService {
         private cognitoUtil: CognitoUtil,
         private ddbUtil: DynamoDBUtil,
         private log: NGXLogger
-    ) {}
+    ) {
+    }
 
     getAll() {
-        return this.ddbUtil.getMapper().scan({valueConstructor: Location, projection: ['id', 'country', 'summary', 'name', 'region', 'coordinates', 'rating']});
+        return this.ddbUtil.getMapper().scan({
+            valueConstructor: Location,
+            projection: ['id', 'country', 'summary', 'name', 'region', 'coordinates', 'rating']
+        });
     }
 
 
     get(id: string) {
         return this.ddbUtil.getMapper().get(Object.assign(new Location(), {id: id}));
     }
+
     save(item) { // put
         // const toSave = Object.assign(new MyDomainObject, {id: 'foo'});
         // update stamp
@@ -39,9 +45,14 @@ export class LocationService {
     delete(location: Location) {
         return this.ddbUtil.getMapper().delete(Object.assign(new Location(), {id: location.id}));
     }
+
     getMarkers(): any {
         // return this.db.list('/markers')
         return {};
+    }
+
+    getCountries(): Array<Location> {
+        return COUNTRIES.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     }
 
     createMarker(data: GeoJson) {
@@ -50,7 +61,7 @@ export class LocationService {
     }
 
     removeMarker($key: string) {
-       // return this.db.object('/markers/' + $key).remove()
+        // return this.db.object('/markers/' + $key).remove()
     }
 
 }

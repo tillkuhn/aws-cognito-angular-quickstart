@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, OnInit} from '@angular/core';
 import {Location, LocationType} from '../../model/location';
-import {LOCATIONS} from '../../model/mock-locations';
 import {LocationService} from '../../service/location.service';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -13,6 +12,7 @@ import {S3Service} from '../../service/s3.service';
 import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
 import {IMyDpOptions} from 'mydatepicker';
 import {GeoPoint} from '../../model/geopoint'
+
 @Component({
     selector: 'app-location-detail',
     templateUrl: './location-detail.component.html',
@@ -24,7 +24,7 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
 
     // selectableTags: Array<LocationTag> = [];
     // selectedTags: Array<string> = [];
-    countries: Array<Location> = LOCATIONS;
+    countries: Array<Location>;
 
     lotypes = LocationType;
     lotypeKeys: string[];
@@ -63,6 +63,8 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
 
     ngOnInit(): void {
         this.lotypeKeys = Object.keys(LocationType).filter(k => !isNaN(Number(k)));
+        this.countries = this.locationService.getCountries();
+
         this.route.params.forEach((params: Params) => {
             if (params['id'] !== undefined) {  // RESTful URL to existing ID?
                 const id = params['id'];
