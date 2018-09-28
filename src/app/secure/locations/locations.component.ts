@@ -22,8 +22,7 @@ export class LocationsComponent implements OnInit {
     /// default settings
     map: mapboxgl.Map;
     style = 'mapbox://styles/mapbox/outdoors-v9';
-    lat = 37.75;
-    lng = -122.41;
+    // lat = 37.75;lng = -122.41;
     message = 'Hello World!';
 
     locations: Array<Location> = [];
@@ -51,7 +50,7 @@ export class LocationsComponent implements OnInit {
     get(): void {
 
         if (this.cache.has(this.cacheKeyLocations)) {
-            this.log.info('locations coming from cache ', this.cacheKeyLocations);
+            this.log.info('LocationsComponent: locations coming from cache ', this.cacheKeyLocations);
             this.locations = this.cache.get(this.cacheKeyLocations);
         } else {
             this.onRefresh();
@@ -62,11 +61,10 @@ export class LocationsComponent implements OnInit {
         this.progress.start();
         this.log.info('locations not cached loading start');
         this.load().then((resolve) => {
-            this.log.info('Loading resolved');
             this.locations = resolve;
             this.cache.set(this.cacheKeyLocations, resolve);
         }).finally(() => {
-            this.log.info('Loading complete');
+            this.log.info('LocationsComponent: Loading complete');
             this.progress.complete();
         });
     }

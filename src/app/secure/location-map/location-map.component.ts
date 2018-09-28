@@ -1,6 +1,10 @@
-import {Component, Input, OnInit} from '@angular/core';
 import {environment} from '../../../environments/environment';
+import {Component, Input, OnInit} from '@angular/core';
 import {NGXLogger} from 'ngx-logger';
+import {ToastrService} from 'ngx-toastr';
+import {NgProgress} from '@ngx-progressbar/core';
+import {LocationService} from '../../service/location.service';
+import {Location} from '../../model/location';
 
 declare var mapboxgl: any;
 declare var MapboxDraw: any;
@@ -8,31 +12,45 @@ declare var MapboxDraw: any;
 @Component({
     selector: 'app-location-map',
     templateUrl: './location-map.component.html',
-    styleUrls: ['./location-map.component.css']
+    styleUrls: []
 })
 export class LocationMapComponent implements OnInit {
-    @Input() center: number[] = [102.630867, 17.974855]; // lon lat
-    @Input() zoom = 4; //  10.61041 104.18145
-    @Input() pois: number[][] = [[100.523186, 13.736717], [104.18145, 10.61041],[105.804817, 21.028511]];
+    @Input() center: number[] = [100.50177, 13.75633 ]; // lon lat BKK
+    @Input() zoom = 3; //  10.61041 104.18145
+    @Input() pois: Array<Location> = [];
     @Input() allowDraw = false;
     @Input() geoference: number[][];
 
     private draw;
 
     constructor(
+        private locationService: LocationService,
+        private toastr: ToastrService,
+        private progress: NgProgress,
         private log: NGXLogger
-    ) {}
+    ) {
+        mapboxgl.accessToken = environment.mapboxAccessToken;
+    }
 
     ngOnInit() {
-        mapboxgl.accessToken = environment.mapboxAccessToken;
+        this.progress.start();
+        this.locationService.getPois((err, data) => {
+            if (err) {
+                this.toastr.error('DynamoDBService: Unable to query location table.', JSON.stringify(err, null, 2));
+                this.progress.complete();
+            } else {
+                // print all the movies
+                this.log.info('DynamoDBService: Query succeeded.');
+                data.Items.forEach((poi: Location) => {
+                    this.log.info(poi.name, poi.coordinates)
+                    this.pois.push(poi);
+                });
+                this.progress.complete();
+            }
+        });
+
         let map = new mapboxgl.Map({
             container: 'map',
-            /*
-            dev url, only available internall style: "https://dis-openstreetmap.schenker.sh/styles/osm-bright/style.json",
-            prod url, also available externally, but restricted to the following hosts: dbschenker.com, schenker.sh,
-             schenker.pro, localhost, 127.0.0.1, dev.tsc.sh
-            style: 'https://openstreetmap.essential-prod.acdc.dbschenker.com/styles/osm-bright/style.json',
-            */
             style: 'mapbox://styles/mapbox/streets-v9',
             zoom: this.zoom,
             center: this.center
@@ -45,9 +63,9 @@ export class LocationMapComponent implements OnInit {
         }
 
         // wait until map is fully initialized
-        map.on('load',  () => {
-            // load image once
-            map.loadImage('assets/icons8-marker-48.png',  (error, image)  => {
+        map.on('load', () => {
+            // load image once, see also https://www.mapbox.com/mapbox-gl-js/example/geojson-markers/
+            map.loadImage('assets/marker32.png', (error, image) => {
                 if (error) throw error;
                 // add image to the map with a given name so that we can reference it later
                 map.addImage('my-icon', image);
@@ -67,14 +85,22 @@ export class LocationMapComponent implements OnInit {
                                 'type': 'Feature',
                                 'geometry': {
                                     'type': 'Point',
-                                    'coordinates': poi,
+                                    'coordinates': poi.coordinates,
+                                },
+                                'properties': {
+                                    'title': poi.name
                                 }
                             }))
                         }
                     },
                     'layout': {
                         'icon-image': 'my-icon',
-                        'icon-size': 0.75
+                        'icon-size': 0.75,
+                        'text-field': '{title}',
+                        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                        'text-offset': [0, 0.6],
+                        'text-size': 10,
+                        'text-anchor': 'top'
                     }
                 });
             });
@@ -114,7 +140,7 @@ export class LocationMapComponent implements OnInit {
                     },
                     'paint': {
                         'line-color': '#000000',
-                        // "line-dasharray": [0.2, 2],
+                        // 'line-dasharray': [0.2, 2],
                         'line-width': 2
                     }
                 },
@@ -141,7 +167,7 @@ export class LocationMapComponent implements OnInit {
                     },
                     'paint': {
                         'line-color': '#000000',
-                        //"line-dasharray": [0.2, 2],
+                        //'line-dasharray': [0.2, 2],
                         'line-width': 2
                     }
                 },

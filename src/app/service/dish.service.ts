@@ -27,7 +27,7 @@ export class DishService {
         let params: ScanInput  = {
             TableName: this.ddbUtil.getTableName('dish'),
             ProjectionExpression: 'id,#dishname,authenticName,rating,origin,createdAt,timesServed,tags',
-            ExpressionAttributeNames: {"#dishname":"name"}
+            ExpressionAttributeNames: {'#dishname': 'name'}
         };
         if (query) {
             params.FilterExpression= 'contains (#dishname, :query) or contains (authenticName, :query) or contains (tags, :query)';

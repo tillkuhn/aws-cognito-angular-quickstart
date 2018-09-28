@@ -6,6 +6,9 @@ import {Location} from '../model/location';
 import {environment} from '../../environments/environment';
 import {GeoJson} from '../model/location';
 import {COUNTRIES} from '../model/countries';
+import {AWSError} from 'aws-sdk';
+import {DocumentClient, ScanInput} from 'aws-sdk/clients/dynamodb';
+import * as DynamoDB from 'aws-sdk/clients/dynamodb';
 
 // import * as mapboxgl from 'mapbox-gl';
 
@@ -26,9 +29,18 @@ export class LocationService {
         });
     }
 
-
     get(id: string) {
         return this.ddbUtil.getMapper().get(Object.assign(new Location(), {id: id}));
+    }
+
+    getPois(callback: (err: AWSError, data: DocumentClient.ScanOutput) => void): void {
+        let params: ScanInput  = {
+            TableName: this.ddbUtil.getTableName('place'),
+            ProjectionExpression: 'id,coordinates,#locationname',
+            ExpressionAttributeNames: {'#locationname': 'name'}
+        };
+        let docClient = new DynamoDB.DocumentClient(this.ddbUtil.getClientParams());
+        docClient.scan(params, callback);
     }
 
     save(item) { // put
