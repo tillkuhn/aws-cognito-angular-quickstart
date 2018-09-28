@@ -12,7 +12,8 @@ export const environment = {
     cognito_identity_endpoint: 'http://localhost:4591',
     sts_endpoint: 'http://localhost:4592',
     dynamodb_endpoint: 'http://localhost:4569',
-    s3_endpoint: 'http://localhost:4572'
+    s3_endpoint: 'http://localhost:4572',
+    mapboxAccessToken: 'dummy'
 
 };
 
