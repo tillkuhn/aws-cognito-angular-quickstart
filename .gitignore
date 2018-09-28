@@ -46,8 +46,8 @@ terraform.tfstate*
 ## generated from templates / terraform
 src/environments/environment.ts
 src/environments/environment.prod.ts
-/deploy.sh
-## :-)
+
+## custom
 /tk
 .vaultpass
 terraform.tfvars
