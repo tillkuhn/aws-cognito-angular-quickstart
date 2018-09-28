@@ -53,3 +53,4 @@ src/environments/environment.prod.ts
 terraform.tfvars
 terraform-backend.tf
 *.backup
+bin/setenv.sh

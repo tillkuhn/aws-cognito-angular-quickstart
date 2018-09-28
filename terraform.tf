@@ -8,6 +8,8 @@ variable "app_id" { default = "yummy" }
 variable "role_name_prefix" { default = "yummy" }
 variable "table_name_prefix" { default = "yummy" }
 variable "bucket_name_prefix" { default = "yummy" }
+variable "ddb_default_wcu" { default = "1" }
+variable "ddb_default_rcu" { default = "1" }
 variable "env"{ default = "prod" }
 variable "bucket_name_webapp" {}
 variable "route53_subdomain" {}
@@ -100,8 +102,8 @@ resource "aws_route53_record" "domain" {
 ## main table for dishes
 resource "aws_dynamodb_table" "dish" {
   name           = "${var.table_name_prefix}-dish"
-  read_capacity  = 2
-  write_capacity = 1
+  read_capacity  = "${var.ddb_default_rcu}"
+  write_capacity = "${var.ddb_default_wcu}"
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "id"
   attribute {
@@ -118,8 +120,8 @@ resource "aws_dynamodb_table" "dish" {
 ## main table for places
 resource "aws_dynamodb_table" "place" {
   name           = "${var.table_name_prefix}-place"
-  read_capacity  = 2
-  write_capacity = 1
+  read_capacity  = "${var.ddb_default_rcu}"
+  write_capacity = "${var.ddb_default_wcu}"
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "id"
   attribute {
@@ -136,8 +138,8 @@ resource "aws_dynamodb_table" "place" {
 ## for login / logout and other audi events
 resource "aws_dynamodb_table" "logintrail" {
   name           = "${var.table_name_prefix}-logintrail"
-  read_capacity  = 2
-  write_capacity = 1
+  read_capacity  = "${var.ddb_default_rcu}"
+  write_capacity = "${var.ddb_default_wcu}"
   # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
   hash_key       = "userId"
   # (Optional, Forces new resource) The attribute to use as the range (sort) key. Must also be defined as an attribute
@@ -370,7 +372,6 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
     "unauthenticated" = "${aws_iam_role.unauthenticated.arn}"
   }
 }
-
 
 # Create IAM EDITOR role
 #resource "aws_iam_role" "editor" {
