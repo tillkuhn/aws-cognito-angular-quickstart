@@ -7,12 +7,12 @@ Yummy AWS Quickstart
 ## Get the Code and get running quickly
 ```
 git clone https://github.com/tillkuhn/yummy-aws.git yummy
-cd yummy
-npm i
+cd yummy-aws
+yarn
 ```
 ```
 # Run the app in dev mode
-npm start
+yarn start
 ```
 
 ## What does this app do?
@@ -26,12 +26,12 @@ None technically it's an app that lets me managed recipes for my favourite dishe
 ## Tech Stack
 ### Required Tools
 * [aws cli](http://docs.aws.amazon.com/cli/latest/userguide/installing.html)
-* [npm](https://www.npmjs.com/)
+* [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com)
 * [angular-cli](https://github.com/angular/angular-cli)
 
 ### Frameworks
 * [AWS JavaScript SDK](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/browser-intro.html)
-* [Angular 2](https://angular.io/docs/ts/latest/quickstart.html)
+* [Angular 6](https://angular.io/guide/quickstart)
 * [TypeScript](https://www.typescriptlang.org/docs/tutorial.html)
 * [Bootstrap](http://getbootstrap.com/)
 
@@ -54,7 +54,7 @@ This sample application can be deployed S3. S3 will host this application as a s
 ```
 terraform init
 terraform plan
-terraform apply -auto-approve
+terraform apply [-auto-approve]
 ```
 
 *Caution:* You might incur AWS charges after running the setup script
@@ -90,7 +90,6 @@ To test this application using [LocalStack](https://github.com/localstack/locals
 ```
 pip install awscli-local
 ```
-
 
 ## Todos
 * Admin and Editor, check out [Authorization and Cognito groups](ttps://stackoverflow.com/questions/41828359/how-do-i-access-the-group-for-a-cognito-user-account) and [fine grained access](https://aws.amazon.com/de/blogs/mobile/building-fine-grained-authorization-using-amazon-cognito-user-pools-groups/) 
