@@ -95,17 +95,17 @@ export class S3Service {
             }
             // this.log.info(JSON.stringify(data));
             const fileData = data.Contents;
-            fileData.forEach(function (file) {
+            fileData.forEach( (file) => {
                 // fileUploads appends file...
                 doclist.push( {
                     'name': file.Key.substr(prefix.length),
                     'size': Math.round(file.Size / 1024) + 'kb',
-                    'updatedAt': file.LastModified.toISOString()
+                    'updatedAt': file.LastModified.toISOString(),
+                    'url': this.getS3().getSignedUrl('getObject',{Bucket: environment.bucketNamePrefix + '-docs', Key: file.Key})
                 });
             })
         });
         return of(doclist);
-
     }
 
 }

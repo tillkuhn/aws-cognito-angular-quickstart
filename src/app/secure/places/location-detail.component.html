@@ -131,7 +131,7 @@
 
 
     <ul *ngFor="let file of doclist | async">
-        <li>{{file.name}} {{file.size}} {{file.updatedAt}}</li>
+        <li><a href="{{file.url}}" target="_placedoc">{{file.name}}</a> {{file.size}} {{file.updatedAt}}</li>
     </ul>
 
     <!-- Deee Bug -->
