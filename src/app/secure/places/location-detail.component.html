@@ -129,6 +129,11 @@
         </div>
     </form>
 
+
+    <ul *ngFor="let file of doclist | async">
+        <li>{{file.name}} {{file.size}} {{file.updatedAt}}</li>
+    </ul>
+
     <!-- Deee Bug -->
     <div>
         <br/>

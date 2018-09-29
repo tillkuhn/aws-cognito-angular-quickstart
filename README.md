@@ -97,4 +97,4 @@ pip install awscli-local
 * Try [In place edit module](https://github.com/qontu/ngx-inline-editor)
 * [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
 * Finish S3 Integration [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
-* https://github.com/aws-samples/aws-serverless-ember
+* check answer ro https://stackoverflow.com/questions/34214240/cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access

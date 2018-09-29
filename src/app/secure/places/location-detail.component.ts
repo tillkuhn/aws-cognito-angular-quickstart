@@ -12,6 +12,7 @@ import {S3Service} from '../../service/s3.service';
 import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
 import {IMyDpOptions} from 'mydatepicker';
 import {GeoPoint} from '../../model/geopoint'
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-location-detail',
@@ -25,7 +26,7 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
     // selectableTags: Array<LocationTag> = [];
     // selectedTags: Array<string> = [];
     countries: Array<Location>;
-
+    doclist: Observable<Array<any>>;
     lotypes = LocationType;
     lotypeKeys: string[];
 
@@ -70,6 +71,9 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
                 const id = params['id'];
                 this.navigated = true;
                 this.progress.start();
+
+                this.doclist = this.s3.viewDocs(id);
+
                 this.locationService.get(id)
                     .then(locationItem => {
                         this.location = locationItem;

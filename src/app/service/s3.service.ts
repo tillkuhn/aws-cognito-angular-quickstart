@@ -1,11 +1,10 @@
 import {environment} from '../../environments/environment';
 import {CognitoUtil} from './cognito.service';
-import * as AWS from 'aws-sdk/global';
 import * as S3 from 'aws-sdk/clients/s3';
 import {Injectable} from '@angular/core';
 import {NGXLogger} from 'ngx-logger';
 import {UploadFile} from 'ngx-uploader';
-
+import {Observable,of} from 'rxjs';
 /**
  * Created by Vladimir Budilov
  */
@@ -64,7 +63,7 @@ export class S3Service {
         });
     }
 
-    public deletePhoto(albumName, photoKey) {
+    public deletePhoto(id: string) {
         // this.getS3().deleteObjectStore('').promise().then(function () {
         //
         // }
@@ -79,16 +78,34 @@ export class S3Service {
         */
     }
 
-    public viewAlbum(albumName) {
-        var albumPhotosKey = encodeURIComponent('hase') + '//';
-        /*
-        this.getS3().listObjects({Prefix: albumPhotosKey}, function (err, data) {
+    // READ Angular https://grokonez.com/aws/angular-4-amazon-s3-example-get-list-files-from-s3-bucket
+    // {"IsTruncated":false,"Marker":"","Contents":[{"Key":"places/5c25517b-a351-4dbc-8fcb-f00d1f0065a4/kubernetes_linuxacademy-kubernetesadmin-archdiagrams-1_1516737832.pdf","LastModified":"2018-09-29T22:56:59.000Z","ETag":"\"9eadb0fb08d6c66f8edca48f655e7952\"","Size":189512,"StorageClass":"STANDARD"},{"Key":"places/5c25517b-a351-4dbc-8fcb-f00d1f0065a4/marker32.png","LastModified":"2018-09-29T22:44:24.000Z","ETag":"\"bc492ecc6d2d7a51fa1ff778ec34c587\"","Size":4104,"StorageClass":"STANDARD"}],"Name":"yummy-docs","Prefix":"places/5c25517b-a351-4dbc-8fcb-f00d1f0065a4/","Delimiter":"/","MaxKeys":1000,"CommonPrefixes":[]}
+    public viewDocs(id: string): Observable<Array<any>> {
+        const doclist = new Array<any>();
+        const prefix = 'places/'+id+'/';
+        //var albumPhotosKey = encodeURIComponent('hase') + '//';
+        this.log.info('Listing in bucket ' + 'places/' + id);
+        this.getS3().listObjects({
+            Prefix: prefix,
+            Delimiter: '/',
+            Bucket: environment.bucketNamePrefix + '-docs'
+            },  (err, data) => {
             if (err) {
-                console.log('There was an error viewing your album: ' + err);
+                this.log.error('There was an error viewing your album: ' + err);
             }
-
+            // this.log.info(JSON.stringify(data));
+            const fileData = data.Contents;
+            fileData.forEach(function (file) {
+                // fileUploads appends file...
+                doclist.push( {
+                    'name': file.Key.substr(prefix.length),
+                    'size': Math.round(file.Size / 1024) + 'kb',
+                    'updatedAt': file.LastModified.toISOString()
+                });
+            })
         });
-        */
+        return of(doclist);
+
     }
 
 }

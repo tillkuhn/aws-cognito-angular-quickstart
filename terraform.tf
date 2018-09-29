@@ -72,11 +72,6 @@ EOF
   }
 }
 
-## create sync script to upload app distribution into S3 bucket
-resource "local_file" "deployment" {
-  content     = "#!/usr/bin/env bash\nyarn build\naws s3 sync ./dist/ s3://${var.bucket_name_webapp} --region ${var.aws_region} --delete --size-only --profile ${var.aws_profile}\n"
-  filename = "${path.module}/deploy.sh"
-}
 
 ## register bucket as alias in route53, get zone first for id
 data "aws_route53_zone" "selected" {
@@ -349,7 +344,6 @@ resource "aws_iam_role_policy" "authenticated" {
     {
       "Effect": "Allow",
       "Action": [
-        "s3:ListBucket",
         "s3:GetObject",
         "s3:PutObject",
         "s3:DeleteObject"
@@ -357,6 +351,16 @@ resource "aws_iam_role_policy" "authenticated" {
       "Resource": [
         "${aws_s3_bucket.docs.arn}/places/*",
         "${aws_s3_bucket.docs.arn}/dishes/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "${aws_s3_bucket.docs.arn}",
+        "${aws_s3_bucket.docs.arn}"
       ]
     }
   ]
