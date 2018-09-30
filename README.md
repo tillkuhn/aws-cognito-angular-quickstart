@@ -1,5 +1,5 @@
-Yummy AWS Quickstart
-===================================================
+Yummy Dishes & Places
+===
 [![Build Status](https://travis-ci.org/tillkuhn/yummy-aws.svg?branch=master)](https://travis-ci.org/tillkuhn/yummy-aws)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![dependencies Status](https://david-dm.org/tillkuhn/yummy-aws/status.svg)](https://david-dm.org/tillkuhn/yummy-aws)
@@ -17,9 +17,9 @@ yarn start
 
 ## What does this app do?
 
-Technially this is a fork from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) based on Angular 6, AWS Cognito and Dynamo DB with a lot of additions and changes.
+Technially this is a fork from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) based on Angular 6, AWS Cognito, DynamoDB and S3 with a lot of additions and changes.
 
-None technically it's an app that lets me managed recipes for my favourite dishes 🥣 🥡
+None technically it's an app that lets me managed recipes for my favourite dishes and places I'd like to visit some day 🥣 🥡
 
 ![QuickStart Angular2 Cognito App](/docs/meta/Cognito-Angular2-QuickStart.png?raw=true)
 
@@ -70,11 +70,6 @@ terraform apply [-auto-approve]
 # Test your deployed application
 curl –I http://[BUCKET_NAME].s3-website-[REGION].amazonaws.com/
 ```
-__*NOTE: You might want to reshuffle some of the "package.json" dependencies and move the ones that belong to devDependencies 
-for a leaner deployment bundle. At this point of time, AWS Beanstalk requires all of the dependencies, 
-including the devDependencies to be under the dependencies section. But if you're not using Beanstalk then you can
-optimize as you wish.*__
-
 ## Import Data
 
 * https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html
