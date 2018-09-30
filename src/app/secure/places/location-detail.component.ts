@@ -8,7 +8,7 @@ import {NgProgress} from '@ngx-progressbar/core';
 import {CacheService} from '@ngx-cache/core';
 import {NGXLogger} from 'ngx-logger';
 import {LoggedInCallback} from '../../service/cognito.service';
-import {S3Service} from '../../service/s3.service';
+import {IdPrefix, S3Service} from '../../service/s3.service';
 import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
 import {IMyDpOptions} from 'mydatepicker';
 import {GeoPoint} from '../../model/geopoint'
@@ -72,7 +72,7 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
                 this.navigated = true;
                 this.progress.start();
 
-                this.doclist = this.s3.viewDocs(id);
+                this.doclist = this.s3.viewDocs(IdPrefix.places, id);
 
                 this.locationService.get(id)
                     .then(locationItem => {
@@ -170,7 +170,7 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
             reader.onload = (e) => {
                 // console.log(e.target.result);
                 this.log.info('Got it adding content of ' + output.file.name + ' to s3');
-                this.s3.addDoc(output.file, reader.result, this.location.id);
+                this.s3.addDoc(output.file, reader.result, IdPrefix.places, this.location.id);
                 this.toastr.success( output.file.name + ' stored in S3', 'Upload successful');
             }
             reader.readAsArrayBuffer(file);

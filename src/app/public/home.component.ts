@@ -26,7 +26,7 @@ export class HomeLandingComponent {
 })
 export class HomeComponent implements OnInit {
 
-    title = 'Yummy Dish DB';
+    title = 'Yummy Dishes & Places';
     constructor() {
     }
 

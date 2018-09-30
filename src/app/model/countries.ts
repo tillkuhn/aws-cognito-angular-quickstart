@@ -15,6 +15,12 @@ export const COUNTRIES: Location[] = [
     },
     {
         'id': 'a',
+        'code': 'cn',
+        'name': 'China',
+        'region': 'Asien'
+    },
+    {
+        'id': 'a',
         'code': 'cu',
         'name': 'Kuba',
         'region': 'Restwelt'
@@ -111,9 +117,21 @@ export const COUNTRIES: Location[] = [
     },
     {
         'id': 'a',
+        'code': 'me',
+        'name': 'Montenegro',
+        'region': 'Europa'
+    },
+    {
+        'id': 'a',
         'code': 'se',
         'name': 'Schweden',
         'region': 'Europa'
+    },
+    {
+        'id': 'a',
+        'code': 'sg',
+        'name': 'Singapur',
+        'region': 'Asien'
     },
     {
         'id': 'a',
