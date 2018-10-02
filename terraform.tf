@@ -5,12 +5,13 @@ variable "aws_profile" {}
 variable "aws_region" { default = "eu-central-1" }
 variable "app_name" { default = "Yummy Dishes + Places" }
 variable "app_id" { default = "yummy" }
+variable "env"{ default = "prod" }
 variable "role_name_prefix" { default = "yummy" }
 variable "table_name_prefix" { default = "yummy" }
 variable "bucket_name_prefix" { default = "yummy" }
 variable "ddb_default_wcu" { default = "1" }
 variable "ddb_default_rcu" { default = "1" }
-variable "env"{ default = "prod" }
+variable "allow_admin_create_user_only" { default = true }
 variable "bucket_name_webapp" {}
 variable "route53_subdomain" {}
 variable "route53_zone" {}
@@ -164,8 +165,15 @@ resource "aws_cognito_user_pool" "main" {
   auto_verified_attributes = ["email"]
   admin_create_user_config {
     ## set to false so user can register themselves, we still need more authorization to allow this :-)
-    allow_admin_create_user_only = true
+    allow_admin_create_user_only = "${var.allow_admin_create_user_only}"
+    unused_account_validity_days = 90
+    invite_message_template {
+      email_subject = "Your ${var.app_id} temporary password"
+      email_message = "Welcome to ${var.app_name}! Your username is {username} and temporary password is {####}."
+      sms_message = "Your username is {username} and temporary password is {####}."
+    }
   }
+  email_verification_subject = "Your ${var.app_id} verification code"
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"

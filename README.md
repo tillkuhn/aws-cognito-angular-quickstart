@@ -95,3 +95,5 @@ pip install awscli-local
 * Check answer [ognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access](https://stackoverflow.com/questions/34214240/cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access)
 * [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a)
 * [integrating-api-with-aws-services-s3](https://docs.aws.amazon.com/apigateway/latest/developerguide/integrating-api-with-aws-services-s3.html)
+* https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/ movies
+* https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html 
