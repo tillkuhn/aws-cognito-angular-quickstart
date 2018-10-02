@@ -1,0 +1,6 @@
+{
+  "yummy-dish":[
+    {"PutRequest":{"Item":{"id":{"S":"535c0eefe4b03920878dd6cd"},"createdAt":{"S":"20158-09-09T22:22:22.222Z"},"name":{"S":"Tom Yum Suppe"},"authenticName":{"S":"ต้มยำกุ้ง"},"primaryUrl":{"S":"http://www.eatingthaifood.com/2014/08/tom-yum-soup-recipe/"},"imageUrl":{"S":"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTvrOY_7LYt96GDXqCbT5D0qLgqbOw5XlN6Xt0wYUBoghrbhpgd"},"rating":{"N":"8"},"timesServed":{"N":"3"},"lastServed":{"S":"2015-07-06T21:29:24.706Z"},"origin":{"S":"th"},"notes":{"S":"..."},"tags":{"SS":["suppe","asia","fisch","garnelen","spicy"]}}}},
+    {"PutRequest":{"Item":{"id":{"S":"558929d3e4b034d48fbf1263"},"createdAt":{"S":"20158-09-09T22:22:22.222Z"},"name":{"S":"Nudelsalat mit Rucola"},"authenticName":{"S":"Nudelsalat mit Rucola"},"primaryUrl":{"S":"http://www.chefkoch.de/rezepte/1015461206734011/Italienischer-Nudelsalat-mit-Rucola-und-getrockneten-Tomaten.html"},"imageUrl":{"S":"http://t3.gstatic.com/images?q=tbn:ANd9GcQ2C8F6WHouyO5tC6djMXC7P6Mv-8dcn55dFnCD7o5RMbM4da6eTQTNgg"},"rating":{"N":"7"},"timesServed":{"N":"1"},"lastServed":{"S":"2015-06-23T22:49:20.403Z"},"origin":{"S":"it"},"notes":{"S":"Geröstete Pinienkerne noch obendrauf. Und natürlich getrocknete Tomaten + Parmesan"},"tags":{"SS":["pasta","salat","party","rucola"]}}}},
+]
+}
