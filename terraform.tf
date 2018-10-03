@@ -428,196 +428,6 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
   }
 }
 
-# Create IAM EDITOR role
-#resource "aws_iam_role" "editor" {
-#  name = "${var.role_name_prefix}-editor"
-#  description = "Managed by Terraform"
-#}
-
-
-#####################################################################
-## Create API Gateway + Resources for future API Calls
-## See also https://andydote.co.uk/2017/03/17/terraform-aws-lambda-api-gateway/
-## no we do it like this :-)
-## https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/
-## Using Amazon API Gateway as a proxy for DynamoDB: with integration reponse Mappings !!
-## https://aws.amazon.com/blogs/compute/using-amazon-api-gateway-as-a-proxy-for-dynamodb/
-##
-## Example for usage with cognito
-## https://www.terraform.io/docs/providers/aws/r/api_gateway_method.html
-## store https://aws.amazon.com/blogs/aws/api-gateway-update-new-features-simplify-api-development/
-## https://github.com/strofimovsky/aws-sample-intergration-dynamodb-apigw-lambda-s3/blob/master/example.tf
-#####################################################################
-resource "aws_api_gateway_rest_api" "main" {
-  name        = "${var.app_id}-api"
-  description = "Managed by Terraform"
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-}
-# Create IAM role for API Gateway
-resource "aws_iam_role" "api-gateway" {
-  name = "${var.role_name_prefix}-api-gateway"
-  description = "Managed by Terraform"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "apigateway.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-}
-
-# Create POLICY for API Gateway to access DDB table(s)
-resource "aws_iam_role_policy" "api-gateway" {
-  name = "DDBPolicy"
-  role = "${aws_iam_role.api-gateway.id}"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "dynamodb:GetItem",
-        "dynamodb:Query",
-        "dynamodb:Scan",
-        "dynamodb:PutItem",
-        "dynamodb:UpdateItem",
-        "dynamodb:DeleteItem"
-      ],
-      "Resource": [
-        "${aws_dynamodb_table.region.arn}"
-      ]
-    }
-  ]
-}
-EOF
-}
-
-# manage resouce /regions
-resource "aws_api_gateway_resource" "regions" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  parent_id = "${aws_api_gateway_rest_api.main.root_resource_id}"
-  path_part = "regions"
-}
-
-## put put put a region
-resource "aws_api_gateway_method" "put-region" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method = "PUT"
-  authorization = "NONE"
-}
-
-# https://www.terraform.io/docs/providers/aws/r/api_gateway_integration.html
-## what is the uri? open question https://stackoverflow.com/questions/52125194/uri-for-aws-api-gateway-integration-for-type-aws-integration-to-dynamodb
-resource "aws_api_gateway_integration" "put-region-integration" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method          = "${aws_api_gateway_method.put-region.http_method}"
-  type                 = "AWS"
-  integration_http_method = "POST"
-  uri = "arn:aws:apigateway:${var.aws_region}:dynamodb:action/PutItem"
-  credentials = "${aws_iam_role.api-gateway.arn}"
-  request_templates {
-    "application/json" = <<EOF
-{
-    "TableName": "${aws_dynamodb_table.region.name}",
-    "Item": {
-        "code": {
-            "S": "$input.path('$.code')"
-        },
-        "test": {
-            "S": "Huhu"
-        },
-        "name": {
-            "S": "$input.path('$.name')"
-        }
-    }
-}
-EOF
-  }
-}
-
-## reusable 200 response for resource regions
-resource "aws_api_gateway_method_response" "200" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method = "${aws_api_gateway_method.put-region.http_method}"
-  status_code = "200"
-}
-
-resource "aws_api_gateway_integration_response" "put-region-response" {
-  depends_on = ["aws_api_gateway_integration.put-region-integration"]
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method  = "${aws_api_gateway_method.put-region.http_method}"
-  status_code = "${aws_api_gateway_method_response.200.status_code}"
-}
-
-## GET all regions
-resource "aws_api_gateway_method" "get-region" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method = "GET"
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_integration" "get-region-integration" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method = "${aws_api_gateway_method.get-region.http_method}"
-  type = "AWS"
-  integration_http_method = "POST"
-  uri = "arn:aws:apigateway:${var.aws_region}:dynamodb:action/Scan"
-  credentials = "${aws_iam_role.api-gateway.arn}"
-  request_templates {
-    "application/json" = <<EOF
-{
-    "TableName": "${aws_dynamodb_table.region.name}"
-}
-EOF
-  }
-}
-## reusable 200 response for resource regions
-resource "aws_api_gateway_method_response" "get200" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method = "${aws_api_gateway_method.get-region.http_method}"
-  status_code = "200"
-}
-
-
-resource "aws_api_gateway_integration_response" "get-region-response" {
-  depends_on = ["aws_api_gateway_integration.get-region-integration"]
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method  = "${aws_api_gateway_method.get-region.http_method}"
-  status_code = "${aws_api_gateway_method_response.get200.status_code}"
-  response_templates {
-    "application/json" = <<EOF
-#set($inputRoot = $input.path('$'))
-[
-        #foreach($elem in $inputRoot.Items) {
-            "code": "$elem.code.S",
-            "name": "$elem.name.S"
-        }#if($foreach.hasNext),#end
-	#end
-]
-EOF
-  }
-}
-
 #####################################################################
 ## Create SNS Topic for important events, subscribe admin mail
 ## email event subscription is not supported so we skip subscriptions
@@ -634,7 +444,6 @@ data "template_file" "environment" {
   template = "${file("${path.module}/src/environments/environment.ts.tmpl")}"
   vars {
     identityPoolId = "${aws_cognito_identity_pool.main.id}"
-    ddbTableName = "${aws_dynamodb_table.logintrail.name}"
     region = "${var.aws_region}"
     bucketRegion = "${var.aws_region}"
     bucketNamePrefix = "${var.bucket_name_prefix}"
@@ -642,6 +451,7 @@ data "template_file" "environment" {
     userPoolId = "${aws_cognito_user_pool.main.id}"
     clientId = "${aws_cognito_user_pool_client.main.id}"
     mapboxAccessToken = "${var.mapbox_access_token}"
+    apiGatewayInvokeUrl = "${aws_api_gateway_deployment.main.invoke_url}"
   }
 }
 

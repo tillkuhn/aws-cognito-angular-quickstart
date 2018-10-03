@@ -40,6 +40,7 @@ import {LocationsComponent} from './secure/locations/locations.component';
 import {LocationMapComponent} from './secure/location-map/location-map.component';
 import {LocationDetailComponent} from './secure/places/location-detail.component';
 import {S3Service} from './service/s3.service';
+import {ApigateService} from './service/apigate.service';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { MyDatePickerModule } from 'mydatepicker';
 
@@ -107,6 +108,7 @@ import { MyDatePickerModule } from 'mydatepicker';
         UserLoginService,
         DishService,
         S3Service,
+        ApigateService,
         LocationService,
         TransferState,
         UserParametersService],

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import {LocationService} from '../../service/location.service';
 import {Location, GeoJson, FeatureCollection} from '../../model/location';
-import {DishService} from '../../service/dish.service';
+import {ApigateService} from '../../service/apigate.service';
 import {NgProgress} from '@ngx-progressbar/core';
 import {Router} from '@angular/router';
 import {CacheService} from '@ngx-cache/core';
@@ -38,6 +38,7 @@ export class LocationsComponent implements OnInit {
         private readonly cache: CacheService,
         private router: Router,
         private toastr: ToastrService,
+        private apigate: ApigateService,
         private log: NGXLogger
     ) {
     }
@@ -55,6 +56,11 @@ export class LocationsComponent implements OnInit {
         } else {
             this.onRefresh();
         }
+    }
+
+    getApi(): void {
+        this.log.info('isses soweit');
+        this.apigate.getKlaus();
     }
 
     onRefresh(): void {

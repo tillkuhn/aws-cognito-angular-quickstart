@@ -98,7 +98,7 @@ export class DynamoDBService {
         // Write the item to the table
         let itemParams =
             {
-                TableName: environment.ddbTableName,
+                TableName: this.ddbUtil.getTableName('logintrail'),
                 Item: {
                     userId: {S: data},
                     activityDate: {S: date},

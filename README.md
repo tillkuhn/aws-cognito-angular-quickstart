@@ -91,9 +91,9 @@ pip install awscli-local
 * [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
 * Finish S3 Integration [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
 
-## Checkout
-* Check answer [ognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access](https://stackoverflow.com/questions/34214240/cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access)
+## Other interesting resources
+* [Cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access](https://stackoverflow.com/questions/34214240/cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access)
 * [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a)
 * [integrating-api-with-aws-services-s3](https://docs.aws.amazon.com/apigateway/latest/developerguide/integrating-api-with-aws-services-s3.html)
-* https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/ movies
-* https://www.terraform.io/docs/providers/aws/guides/serverless-with-aws-lambda-and-api-gateway.html 
+* [simple/sample AngularV4-based web app that demonstrates different API authentication options using Amazon Cognito and API Gateway](https://github.com/aws-samples/aws-cognito-apigw-angular-auth)
+* https://www.pluralsight.com/guides/building-a-serverless-web-app-on-aws-services

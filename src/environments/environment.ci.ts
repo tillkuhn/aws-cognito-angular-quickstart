@@ -10,14 +10,16 @@ export const environment = {
     bucketRegion: 'eu-central-1',
     bucketNamePrefix: '',
 
-    ddbTableName: '',
     ddbTableNamePrefix: '',
     mapboxAccessToken: '',
+    apiGatewayInvokeUrl: '',
 
     cognito_idp_endpoint: '',
     cognito_identity_endpoint: '',
     sts_endpoint: '',
     dynamodb_endpoint: '',
     s3_endpoint: ''
+
+
 };
 
