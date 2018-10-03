@@ -12,9 +12,8 @@ variable "bucket_name_prefix" { default = "yummy" }
 variable "ddb_default_wcu" { default = "1" }
 variable "ddb_default_rcu" { default = "1" }
 variable "allow_admin_create_user_only" { default = true }
-variable "bucket_name_webapp" {}
-variable "route53_subdomain" {}
-variable "route53_zone" {}
+variable "route53_sub_domain" { default = "yummy" }
+variable "route53_zone_domain" {}
 variable "route53_alias_zone_id" {}
 variable "mapbox_access_token" {}
 
@@ -31,7 +30,7 @@ provider "aws" {
 #####################################################################
 ## see https://stackoverflow.com/questions/16267339/s3-static-website-hosting-route-all-paths-to-index-html
 resource "aws_s3_bucket" "webapp" {
-  bucket = "${var.bucket_name_webapp}"
+  bucket = "${var.route53_sub_domain}.${var.route53_zone_domain}"
   region = "${var.aws_region}"
   policy = <<EOF
 {
@@ -44,7 +43,7 @@ resource "aws_s3_bucket" "webapp" {
         "s3:GetObject"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.bucket_name_webapp}/*",
+      "Resource": "arn:aws:s3:::${var.route53_sub_domain}.${var.route53_zone_domain}/*",
       "Principal": "*"
     }
   ]
@@ -59,7 +58,7 @@ EOF
         "HttpErrorCodeReturnedEquals": "404"
     },
     "Redirect": {
-        "HostName": "yummy.timafe.net",
+        "HostName": "${var.route53_sub_domain}.${var.route53_zone_domain}",
         "ReplaceKeyPrefixWith": "#!/"
     }
 }]
@@ -76,13 +75,13 @@ EOF
 
 ## register bucket as alias in route53, get zone first for id
 data "aws_route53_zone" "selected" {
-  name         = "${var.route53_zone}"
+  name         = "${var.route53_zone_domain}."
   private_zone = false
 }
 
 resource "aws_route53_record" "domain" {
   zone_id = "${data.aws_route53_zone.selected.zone_id}"
-  name    = "${var.route53_subdomain}.${data.aws_route53_zone.selected.name}"
+  name    = "${var.route53_sub_domain}.${data.aws_route53_zone.selected.name}"
   type = "A"
   alias {
     name = "s3-website.${var.aws_region}.amazonaws.com."
@@ -91,6 +90,32 @@ resource "aws_route53_record" "domain" {
   }
 }
 
+#####################################################################
+## Create S3 upload bucket for dish and places docs
+## https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_s3_cognito-bucket.html
+## We use ${var.route53_sub_domain}.${var.route53_zone_domain} for CORS since that's the domain
+## name under which the deployed application will be reachable
+#####################################################################
+resource "aws_s3_bucket" "docs" {
+  bucket = "${var.bucket_name_prefix}-docs"
+  region = "${var.aws_region}"
+  force_destroy = false
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT","POST","GET","DELETE"]
+    allowed_origins = [
+      "http://localhost:3333",
+      "http://${var.route53_sub_domain}.${var.route53_zone_domain}",
+      "https://${var.route53_sub_domain}.${var.route53_zone_domain}"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
 
 #####################################################################
 ## create dynamodb table(s) using our app id as prefix
@@ -131,6 +156,24 @@ resource "aws_dynamodb_table" "place" {
   }
 }
 
+## main table for regions
+resource "aws_dynamodb_table" "region" {
+  name           = "${var.table_name_prefix}-region"
+  read_capacity  = "${var.ddb_default_rcu}"
+  write_capacity = "${var.ddb_default_wcu}"
+  # (Required, Forces new resource) The attribute to use as the hash (partition) key. Must also be defined as an attribute
+  hash_key       = "code"
+  attribute {
+    name = "code"
+    type = "S"
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
 ## for login / logout and other audi events
 resource "aws_dynamodb_table" "logintrail" {
   name           = "${var.table_name_prefix}-logintrail"
@@ -159,7 +202,7 @@ resource "aws_dynamodb_table" "logintrail" {
 #####################################################################
 # Configure IAM and Cognito User pools
 #####################################################################
-## Create a cognito user pool see https://www.terraform.io/docs/providers/aws/r/cognito_user_pool.html
+## Create COGNITO USER POOL see https://www.terraform.io/docs/providers/aws/r/cognito_user_pool.html
 resource "aws_cognito_user_pool" "main" {
   name = "${var.app_id}"
   auto_verified_attributes = ["email"]
@@ -181,7 +224,7 @@ resource "aws_cognito_user_pool" "main" {
   }
 }
 
-# Create a user pool client for the user pool see https://www.terraform.io/docs/providers/aws/r/cognito_user_pool_client.html
+# Create COGNITO USER POOL CLIENT for the user pool see https://www.terraform.io/docs/providers/aws/r/cognito_user_pool_client.html
 resource "aws_cognito_user_pool_client" "main" {
   name = "webapp"
   generate_secret = false
@@ -189,7 +232,7 @@ resource "aws_cognito_user_pool_client" "main" {
   user_pool_id = "${aws_cognito_user_pool.main.id}"
 }
 
-# create an id pool and attach the user pool and user pool client id to the identity pool
+# Create COGNITO IDENTITY pool and attach the user pool and user pool client id to the identity pool
 resource "aws_cognito_identity_pool" "main" {
   identity_pool_name = "${var.app_id}"
   allow_unauthenticated_identities = true
@@ -200,7 +243,7 @@ resource "aws_cognito_identity_pool" "main" {
   }
 }
 
-# create IAM UNAuthenticated role
+# Create IAM UNAuthenticated role
 resource "aws_iam_role" "unauthenticated" {
   name = "${var.role_name_prefix}-unauthenticated"
   description = "Managed by Terraform"
@@ -228,7 +271,7 @@ resource "aws_iam_role" "unauthenticated" {
 EOF
 }
 
-# create policy for IAM UNAuthenticated role
+# Create POLICY for IAM UNAuthenticated role
 #$aws_cmd iam put-role-policy --role-name $ROLE_NAME_PREFIX-unauthenticated --policy-name CognitoPolicy --policy-document file://unauthrole.json
 resource "aws_iam_role_policy" "unauthenticated" {
   name = "CognitoPolicy"
@@ -281,7 +324,7 @@ EOF
 }
 
 
-# create policy for IAM Authenticated role, Grant access to dynamo db table(s) and S3
+# Create POLICY for IAM Authenticated role, Grant access to dynamo db table(s) and S3
 resource "aws_iam_role_policy" "authenticated" {
   name = "CognitoPolicy"
   role = "${aws_iam_role.authenticated.id}"
@@ -376,7 +419,7 @@ resource "aws_iam_role_policy" "authenticated" {
 EOF
 }
 
-## Update cognito identity pool with the roles
+## Update COGNITO IDENTIY POOL with the both roles
 resource "aws_cognito_identity_pool_roles_attachment" "main" {
   identity_pool_id = "${aws_cognito_identity_pool.main.id}"
   roles {
@@ -391,31 +434,92 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 #  description = "Managed by Terraform"
 #}
 
+
 #####################################################################
-## Create S3 upload bucket for dish and places docs
-## https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_examples_s3_cognito-bucket.html
-## We use ${var.bucket_name_webapp} for CORS since that's the domain
-## name under which the deployed application will be reachable
+## Create API Gateway + Resources for future API Calls
+## See also https://andydote.co.uk/2017/03/17/terraform-aws-lambda-api-gateway/
+## no we do it like this :-)
+## https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/
+## https://aws.amazon.com/blogs/compute/using-amazon-api-gateway-as-a-proxy-for-dynamodb/
+## https://www.terraform.io/docs/providers/aws/r/api_gateway_method.html
+## above link for usage with cognito
+## store https://aws.amazon.com/blogs/aws/api-gateway-update-new-features-simplify-api-development/
 #####################################################################
-resource "aws_s3_bucket" "docs" {
-  bucket = "${var.bucket_name_prefix}-docs"
-  region = "${var.aws_region}"
-  force_destroy = false
-  cors_rule {
-    allowed_headers = ["*"]
-    allowed_methods = ["PUT","POST","GET","DELETE"]
-    allowed_origins = [
-      "http://localhost:3333",
-      "http://${var.bucket_name_webapp}",
-      "https://${var.bucket_name_webapp}"]
-    expose_headers  = ["ETag"]
-    max_age_seconds = 3000
+resource "aws_api_gateway_rest_api" "main" {
+  name        = "${var.app_id}-api"
+  description = "Managed by Terraform"
+  endpoint_configuration {
+    types = ["REGIONAL"]
   }
-  tags {
-    Name = "${var.app_name}"
-    Environment = "${var.env}"
-    ManagedBy = "Terraform"
-  }
+}
+
+resource "aws_api_gateway_resource" "regions" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  parent_id = "${aws_api_gateway_rest_api.main.root_resource_id}"
+  path_part = "regions"
+}
+
+resource "aws_api_gateway_method" "put-region" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "PUT"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method" "get-region" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "GET"
+  authorization = "NONE"
+}
+
+# Create IAM role for API Gateway
+resource "aws_iam_role" "api-gateway" {
+  name = "${var.role_name_prefix}-api-gateway"
+  description = "Managed by Terraform"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+# Create POLICY for API Gateway to access DDB table(s)
+resource "aws_iam_role_policy" "api-gateway" {
+  name = "DDBPolicy"
+  role = "${aws_iam_role.api-gateway.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:Query",
+        "dynamodb:Scan",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem"
+      ],
+      "Resource": [
+        "${aws_dynamodb_table.region.arn}"
+      ]
+    }
+  ]
+}
+EOF
 }
 
 #####################################################################
