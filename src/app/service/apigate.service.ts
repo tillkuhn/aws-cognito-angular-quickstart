@@ -27,8 +27,8 @@ export class ApigateService {
 
     getKlaus(): void {
         const headers = new HttpHeaders({
-            'Content-Type':'application/json; charset=utf-8'
-           'Authorization': 'Bearer xxx'
+            'Content-Type':'application/json; charset=utf-8',
+            'Authorization': 'Bearer xxx'
         });
         this.http.get(this.endpoint + '/regions',{headers: headers}).subscribe(data => {
          console.log(data);

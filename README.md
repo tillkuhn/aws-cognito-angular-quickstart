@@ -96,4 +96,4 @@ pip install awscli-local
 * [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a)
 * [integrating-api-with-aws-services-s3](https://docs.aws.amazon.com/apigateway/latest/developerguide/integrating-api-with-aws-services-s3.html)
 * [simple/sample AngularV4-based web app that demonstrates different API authentication options using Amazon Cognito and API Gateway](https://github.com/aws-samples/aws-cognito-apigw-angular-auth)
-* https://www.pluralsight.com/guides/building-a-serverless-web-app-on-aws-services
+* https://www.pluralsight.com/guides/building-a-serverless-web-app-on-aws-services* CORS Terraform https://medium.com/@MrPonath/terraform-and-aws-api-gateway-a137ee48a8ac
