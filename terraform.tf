@@ -440,10 +440,13 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 ## See also https://andydote.co.uk/2017/03/17/terraform-aws-lambda-api-gateway/
 ## no we do it like this :-)
 ## https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/
+## Using Amazon API Gateway as a proxy for DynamoDB: with integration reponse Mappings !!
 ## https://aws.amazon.com/blogs/compute/using-amazon-api-gateway-as-a-proxy-for-dynamodb/
+##
+## Example for usage with cognito
 ## https://www.terraform.io/docs/providers/aws/r/api_gateway_method.html
-## above link for usage with cognito
 ## store https://aws.amazon.com/blogs/aws/api-gateway-update-new-features-simplify-api-development/
+## https://github.com/strofimovsky/aws-sample-intergration-dynamodb-apigw-lambda-s3/blob/master/example.tf
 #####################################################################
 resource "aws_api_gateway_rest_api" "main" {
   name        = "${var.app_id}-api"
@@ -452,27 +455,6 @@ resource "aws_api_gateway_rest_api" "main" {
     types = ["REGIONAL"]
   }
 }
-
-resource "aws_api_gateway_resource" "regions" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  parent_id = "${aws_api_gateway_rest_api.main.root_resource_id}"
-  path_part = "regions"
-}
-
-resource "aws_api_gateway_method" "put-region" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method = "PUT"
-  authorization = "NONE"
-}
-
-resource "aws_api_gateway_method" "get-region" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method = "GET"
-  authorization = "NONE"
-}
-
 # Create IAM role for API Gateway
 resource "aws_iam_role" "api-gateway" {
   name = "${var.role_name_prefix}-api-gateway"
@@ -520,6 +502,120 @@ resource "aws_iam_role_policy" "api-gateway" {
   ]
 }
 EOF
+}
+
+# manage resouce /regions
+resource "aws_api_gateway_resource" "regions" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  parent_id = "${aws_api_gateway_rest_api.main.root_resource_id}"
+  path_part = "regions"
+}
+
+## put put put a region
+resource "aws_api_gateway_method" "put-region" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "PUT"
+  authorization = "NONE"
+}
+
+# https://www.terraform.io/docs/providers/aws/r/api_gateway_integration.html
+## what is the uri? open question https://stackoverflow.com/questions/52125194/uri-for-aws-api-gateway-integration-for-type-aws-integration-to-dynamodb
+resource "aws_api_gateway_integration" "put-region-integration" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method          = "${aws_api_gateway_method.put-region.http_method}"
+  type                 = "AWS"
+  integration_http_method = "POST"
+  uri = "arn:aws:apigateway:${var.aws_region}:dynamodb:action/PutItem"
+  credentials = "${aws_iam_role.api-gateway.arn}"
+  request_templates {
+    "application/json" = <<EOF
+{
+    "TableName": "${aws_dynamodb_table.region.name}",
+    "Item": {
+        "code": {
+            "S": "$input.path('$.code')"
+        },
+        "test": {
+            "S": "Huhu"
+        },
+        "name": {
+            "S": "$input.path('$.name')"
+        }
+    }
+}
+EOF
+  }
+}
+
+## reusable 200 response for resource regions
+resource "aws_api_gateway_method_response" "200" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "${aws_api_gateway_method.put-region.http_method}"
+  status_code = "200"
+}
+
+resource "aws_api_gateway_integration_response" "put-region-response" {
+  depends_on = ["aws_api_gateway_integration.put-region-integration"]
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method  = "${aws_api_gateway_method.put-region.http_method}"
+  status_code = "${aws_api_gateway_method_response.200.status_code}"
+}
+
+## GET all regions
+resource "aws_api_gateway_method" "get-region" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "get-region-integration" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "${aws_api_gateway_method.get-region.http_method}"
+  type = "AWS"
+  integration_http_method = "POST"
+  uri = "arn:aws:apigateway:${var.aws_region}:dynamodb:action/Scan"
+  credentials = "${aws_iam_role.api-gateway.arn}"
+  request_templates {
+    "application/json" = <<EOF
+{
+    "TableName": "${aws_dynamodb_table.region.name}"
+}
+EOF
+  }
+}
+## reusable 200 response for resource regions
+resource "aws_api_gateway_method_response" "get200" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "${aws_api_gateway_method.get-region.http_method}"
+  status_code = "200"
+}
+
+
+resource "aws_api_gateway_integration_response" "get-region-response" {
+  depends_on = ["aws_api_gateway_integration.get-region-integration"]
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method  = "${aws_api_gateway_method.get-region.http_method}"
+  status_code = "${aws_api_gateway_method_response.get200.status_code}"
+  response_templates {
+    "application/json" = <<EOF
+#set($inputRoot = $input.path('$'))
+[
+        #foreach($elem in $inputRoot.Items) {
+            "code": "$elem.code.S",
+            "name": "$elem.name.S"
+        }#if($foreach.hasNext),#end
+	#end
+]
+EOF
+  }
 }
 
 #####################################################################
