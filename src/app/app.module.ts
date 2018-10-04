@@ -39,6 +39,7 @@ import {BrowserCacheModule, MemoryCacheService} from '@ngx-cache/platform-browse
 import {LocationsComponent} from './secure/locations/locations.component';
 import {LocationMapComponent} from './secure/location-map/location-map.component';
 import {LocationDetailComponent} from './secure/places/location-detail.component';
+import {RegionsComponent} from './secure/locations/regions.component';
 import {S3Service} from './service/s3.service';
 import {ApigateService} from './service/apigate.service';
 import { NgxUploaderModule } from 'ngx-uploader';
@@ -69,7 +70,8 @@ import { MyDatePickerModule } from 'mydatepicker';
         DishDetailComponent,
         LocationsComponent,
         LocationMapComponent,
-        LocationDetailComponent
+        LocationDetailComponent,
+        RegionsComponent
     ],
     imports: [
         BrowserModule,

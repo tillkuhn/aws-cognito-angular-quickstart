@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit} from '@angular/core';
-import {Location, LocationType} from '../../model/location';
+import {Location, LocationType, Region} from '../../model/location';
 import {LocationService} from '../../service/location.service';
 import {HttpClient} from '@angular/common/http';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -25,7 +25,7 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
 
     // selectableTags: Array<LocationTag> = [];
     // selectedTags: Array<string> = [];
-    countries: Array<Location>;
+    countries: Array<Region>;
     doclist: Observable<Array<any>>;
     lotypes = LocationType;
     lotypeKeys: string[];
@@ -64,7 +64,9 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
 
     ngOnInit(): void {
         this.lotypeKeys = Object.keys(LocationType).filter(k => !isNaN(Number(k)));
-        this.countries = this.locationService.getCountries();
+        this.locationService.getRegions().then((regions) => {
+            this.countries = regions;
+        })
 
         this.route.params.forEach((params: Params) => {
             if (params['id'] !== undefined) {  // RESTful URL to existing ID?

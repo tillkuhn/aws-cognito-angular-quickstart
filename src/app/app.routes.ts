@@ -16,6 +16,7 @@ import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
 import {LocationsComponent} from './secure/locations/locations.component';
 import {LocationMapComponent} from './secure/location-map/location-map.component';
 import {LocationDetailComponent} from './secure/places/location-detail.component';
+import {RegionsComponent} from './secure/locations/regions.component';
 
 const homeRoutes: Routes = [
     {
@@ -56,6 +57,7 @@ const secureHomeRoutes: Routes = [
             {path: 'dish-details/:id', component: DishDetailComponent },
             {path: 'dish-details', component: DishDetailComponent },
             {path: 'locations', component: LocationsComponent},
+            {path: 'regions', component: RegionsComponent},
             {path: 'places', component: LocationDetailComponent},
             {path: 'places/:id', component: LocationDetailComponent },
             {path: 'map', component: LocationMapComponent},

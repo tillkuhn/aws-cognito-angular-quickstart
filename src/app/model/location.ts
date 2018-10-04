@@ -64,11 +64,9 @@ export class Location {
     }
 }
 
-export enum Region {
-    Asia,
-    Europa,
-    Americas,
-    Africa
+export class Region {
+    code: string;
+    name: string;
 }
 
 export enum LocationType {

@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {NGXLogger} from 'ngx-logger';
 import {CognitoUtil} from './cognito.service';
 import {DynamoDBUtil} from './ddb.service';
-import {Location} from '../model/location';
+import {Location, Region} from '../model/location';
 import {environment} from '../../environments/environment';
 import {GeoJson} from '../model/location';
 import {COUNTRIES} from '../model/countries';
 import {AWSError} from 'aws-sdk';
 import {DocumentClient, ScanInput} from 'aws-sdk/clients/dynamodb';
 import * as DynamoDB from 'aws-sdk/clients/dynamodb';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 // import * as mapboxgl from 'mapbox-gl';
 
@@ -18,6 +19,7 @@ export class LocationService {
     constructor(
         private cognitoUtil: CognitoUtil,
         private ddbUtil: DynamoDBUtil,
+        private http: HttpClient,
         private log: NGXLogger
     ) {
     }
@@ -66,6 +68,40 @@ export class LocationService {
     getCountries(): Array<Location> {
         return COUNTRIES.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     }
+
+    getRegions(): Promise<Array<Region>>  {
+        // see also https://github.com/aws-samples/aws-cognito-apigw-angular-auth/blob/master/src/app/aws.service.ts
+        return new Promise((resolveGet, reject) => {
+            this.cognitoUtil.getIdAsJWT().then( (resolve) => {
+                const headers = new HttpHeaders({
+                    'Authorization': resolve // Bearer prefix not necessary
+                });
+                //this.log.info(resolve);
+                this.http.get( environment.apiGatewayInvokeUrl + '/regions',{headers: headers}).subscribe(data => {
+                    //console.log(data);
+                    resolveGet(data as Array<Region>);
+                });
+
+            });
+        });
+    }
+
+    putRegion(region: Region): Promise<any> {
+        return new Promise((resolvePut, reject) => {
+            this.cognitoUtil.getIdAsJWT().then( (resolve) => {
+                const headers = new HttpHeaders({
+                    'Authorization': resolve // Bearer prefix not necessary
+                });
+                //this.log.info(resolve);
+                this.http.put( environment.apiGatewayInvokeUrl + '/regions',region, {headers: headers}).subscribe(data => {
+                    this.log.info('new region put to api gw');
+                    resolvePut(data);
+                });
+
+            });
+        });
+    }
+
 
     createMarker(data: GeoJson) {
         // return this.db.list('/markers')

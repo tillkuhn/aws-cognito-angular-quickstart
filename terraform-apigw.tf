@@ -174,9 +174,6 @@ resource "aws_api_gateway_integration" "put-region-integration" {
         "code": {
             "S": "$input.path('$.code')"
         },
-        "test": {
-            "S": "Huhu"
-        },
         "name": {
             "S": "$input.path('$.name')"
         }

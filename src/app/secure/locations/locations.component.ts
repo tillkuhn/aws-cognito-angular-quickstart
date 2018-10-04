@@ -58,11 +58,6 @@ export class LocationsComponent implements OnInit {
         }
     }
 
-    getApi(): void {
-        this.log.info('isses soweit');
-        this.apigate.getKlaus();
-    }
-
     onRefresh(): void {
         this.progress.start();
         this.log.info('locations not cached loading start');
