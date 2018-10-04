@@ -143,6 +143,18 @@ export class CognitoUtil {
             callback.callbackWithParam(null);
     }
 
+    getIdAsJWT(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.getCurrentUser().getSession( (err, session) => {
+                if (err) {
+                    reject(new Error('Cannot get Cognito Session: ' + JSON.stringify(err)));
+                } else {
+                    resolve(session.getIdToken().getJwtToken());
+                }
+            });
+        });
+    }
+
     getRefreshToken(callback: Callback): void {
         if (callback == null) {
             throw('CognitoUtil: callback in getRefreshToken is null...returning');

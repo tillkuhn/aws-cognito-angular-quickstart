@@ -26,17 +26,20 @@ export class ApigateService {
 
 
     getKlaus(): void {
-        const headers = new HttpHeaders({
-            'Content-Type':'application/json; charset=utf-8',
-            'Authorization': 'Bearer xxx'
+        // see also https://github.com/aws-samples/aws-cognito-apigw-angular-auth/blob/master/src/app/aws.service.ts
+        this.cognitoUtil.getIdAsJWT().then( (resolve) => {
+            const headers = new HttpHeaders({
+                'Content-Type':'application/json; charset=utf-8',
+                'Authorization': resolve // Bearer prefix not necessary
+            });
+            this.log.info(resolve);
+            this.http.get(this.endpoint + '/regions',{headers: headers}).subscribe(data => {
+                console.log(data);
+            });
+            this.http.put(this.endpoint + '/regions',{ "code": "at",name: "Oeschis"},{headers: headers}).subscribe(data => {
+                console.log(data);
+            });
         });
-        this.http.get(this.endpoint + '/regions',{headers: headers}).subscribe(data => {
-         console.log(data);
-        });
-        this.http.put(this.endpoint + '/regions',{ "code": "at",name: "Oeschis"},{headers: headers}).subscribe(data => {
-            console.log(data);
-        });
-
     }
 }
 
