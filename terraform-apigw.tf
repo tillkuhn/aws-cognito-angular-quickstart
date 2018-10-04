@@ -1,3 +1,5 @@
+variable "api_gateway_stage_name" { default = "v1" }
+
 #####################################################################
 ## Create API Gateway + Resources for future API Calls
 ## https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/
@@ -23,6 +25,7 @@ resource "aws_api_gateway_rest_api" "main" {
     types = ["REGIONAL"]
   }
 }
+
 # Create IAM role for API Gateway
 resource "aws_iam_role" "api-gateway" {
   name = "${var.role_name_prefix}-api-gateway"
@@ -72,6 +75,7 @@ resource "aws_iam_role_policy" "api-gateway" {
 EOF
 }
 
+## Create Authrizer to secure requests
 ## Example for usage with cognito: https://www.terraform.io/docs/providers/aws/r/api_gateway_method.html
 resource "aws_api_gateway_authorizer" "main" {
   depends_on = ["aws_cognito_user_pool.main"]
@@ -88,12 +92,66 @@ resource "aws_api_gateway_resource" "regions" {
   path_part = "regions"
 }
 
+## WELCOME TOP CORS HELL
+## Thank You https://medium.com/@MrPonath/terraform-and-aws-api-gateway-a137ee48a8ac
+resource "aws_api_gateway_method" "options_method" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+resource "aws_api_gateway_method_response" "options_200" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method   = "${aws_api_gateway_method.options_method.http_method}"
+  ##  Execution failed due to configuration error: statusCode should be an integer which defined in request template
+  status_code   = "200"
+  response_models {
+    "application/json" = "Empty"
+  }
+  response_parameters {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+  depends_on = ["aws_api_gateway_method.options_method"]
+}
+resource "aws_api_gateway_integration" "options_integration" {
+  depends_on = ["aws_api_gateway_method.options_method"]
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method   = "${aws_api_gateway_method.options_method.http_method}"
+  type          = "MOCK"
+  request_templates {
+    "application/json" = <<EOF
+{"statusCode": 200}
+EOF
+  }
+}
+
+resource "aws_api_gateway_integration_response" "options_integration_response" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method   = "${aws_api_gateway_method.options_method.http_method}"
+  status_code   = "${aws_api_gateway_method_response.options_200.status_code}"
+  response_parameters = {
+  #  "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,PUT'",
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+  depends_on = ["aws_api_gateway_method_response.options_200"]
+}
+## END OPTIONS
+
+
 ## Method: PUT a region
 resource "aws_api_gateway_method" "put-region" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
   http_method = "PUT"
-  authorization = "NONE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = "${aws_api_gateway_authorizer.main.id}"
 
 }
 
@@ -126,19 +184,23 @@ EOF
   }
 }
 
+##############
 ## Method: PUT a region Response Integration
 resource "aws_api_gateway_method_response" "put-region-response-200" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
   http_method = "${aws_api_gateway_method.put-region.http_method}"
   status_code = "200"
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
 }
 
 resource "aws_api_gateway_integration_response" "put-region-response" {
   depends_on = ["aws_api_gateway_integration.put-region-integration"]
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
-  http_method  = "${aws_api_gateway_method.put-region.http_method}"
+  http_method = "${aws_api_gateway_method.put-region.http_method}"
   status_code = "${aws_api_gateway_method_response.put-region-response-200.status_code}"
 }
 
@@ -150,7 +212,6 @@ resource "aws_api_gateway_method" "get-region" {
   #authorization = "NONE"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = "${aws_api_gateway_authorizer.main.id}"
-
 }
 
 ## Method: GET All regions response integration
@@ -171,15 +232,20 @@ EOF
   }
 }
 
+###########
 ## Method: GET All regions 200 response
 resource "aws_api_gateway_method_response" "get-region-response-200" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
   http_method = "${aws_api_gateway_method.get-region.http_method}"
   status_code = "200"
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
 }
 
-
+## Mapping reference: https://docs.aws.amazon.com/de_de/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
+## conditional? https://stackoverflow.com/questions/32511087/aws-api-gateway-how-do-i-make-querystring-parameters-optional-in-mapping-templa
 resource "aws_api_gateway_integration_response" "get-region-response" {
   depends_on = ["aws_api_gateway_integration.get-region-integration"]
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
@@ -200,19 +266,18 @@ EOF
   }
 }
 
-
-## deploy it
+############################
+## Deploy the Gateway Stage
 resource "aws_api_gateway_deployment" "main" {
   depends_on = ["aws_api_gateway_resource.regions"]
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  stage_name  = "beta"
-
+  stage_name  = "${var.api_gateway_stage_name}"
   variables = {
     "answer" = "42"
   }
 }
 
-## e.g.  https://xxxxx.execute-api.eu-central-1.amazonaws.com/beta
+## e.g.  https://xxxxx.execute-api.eu-central-1.amazonaws.com/v2
 output "api-invoke-url" {
   value = "${aws_api_gateway_deployment.main.invoke_url}"
 }

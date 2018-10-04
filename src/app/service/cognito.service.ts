@@ -143,11 +143,12 @@ export class CognitoUtil {
             callback.callbackWithParam(null);
     }
 
+    // more convinient method to get the JWT e.g. for API Gateway communication Authorization header
     getIdAsJWT(): Promise<string> {
         return new Promise((resolve, reject) => {
             this.getCurrentUser().getSession( (err, session) => {
-                if (err) {
-                    reject(new Error('Cannot get Cognito Session: ' + JSON.stringify(err)));
+                if (err || (! session.isValid())) {
+                    reject(new Error('Cannot get Cognito Session or invalid: ' + JSON.stringify(err)));
                 } else {
                     resolve(session.getIdToken().getJwtToken());
                 }

@@ -24,12 +24,10 @@ export class ApigateService {
 
     }
 
-
     getKlaus(): void {
         // see also https://github.com/aws-samples/aws-cognito-apigw-angular-auth/blob/master/src/app/aws.service.ts
         this.cognitoUtil.getIdAsJWT().then( (resolve) => {
             const headers = new HttpHeaders({
-                'Content-Type':'application/json; charset=utf-8',
                 'Authorization': resolve // Bearer prefix not necessary
             });
             this.log.info(resolve);
