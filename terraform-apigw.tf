@@ -93,7 +93,7 @@ resource "aws_api_gateway_resource" "regions" {
 }
 
 ## WELCOME TOP CORS HELL
-## Thank You https://medium.com/@MrPonath/terraform-and-aws-api-gateway-a137ee48a8ac
+## Thank You: https://medium.com/@MrPonath/terraform-and-aws-api-gateway-a137ee48a8ac
 resource "aws_api_gateway_method" "options_method" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
@@ -101,10 +101,10 @@ resource "aws_api_gateway_method" "options_method" {
   authorization = "NONE"
 }
 resource "aws_api_gateway_method_response" "options_200" {
+  depends_on = ["aws_api_gateway_method.options_method"]
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
   http_method   = "${aws_api_gateway_method.options_method.http_method}"
-  ##  Execution failed due to configuration error: statusCode should be an integer which defined in request template
   status_code   = "200"
   response_models {
     "application/json" = "Empty"
@@ -114,7 +114,6 @@ resource "aws_api_gateway_method_response" "options_200" {
     "method.response.header.Access-Control-Allow-Methods" = true,
     "method.response.header.Access-Control-Allow-Origin" = true
   }
-  depends_on = ["aws_api_gateway_method.options_method"]
 }
 resource "aws_api_gateway_integration" "options_integration" {
   depends_on = ["aws_api_gateway_method.options_method"]
@@ -122,6 +121,9 @@ resource "aws_api_gateway_integration" "options_integration" {
   resource_id = "${aws_api_gateway_resource.regions.id}"
   http_method   = "${aws_api_gateway_method.options_method.http_method}"
   type          = "MOCK"
+  ## required or you get: Execution failed due to configuration error:
+  ## ... statusCode should be an integer which defined in request template
+  ## see also https://forums.aws.amazon.com/thread.jspa?threadID=248513
   request_templates {
     "application/json" = <<EOF
 {"statusCode": 200}
