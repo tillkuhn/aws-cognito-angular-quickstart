@@ -201,6 +201,9 @@ resource "aws_api_gateway_integration_response" "put-region-response" {
   resource_id = "${aws_api_gateway_resource.regions.id}"
   http_method = "${aws_api_gateway_method.put-region.http_method}"
   status_code = "${aws_api_gateway_method_response.put-region-response-200.status_code}"
+  response_parameters {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
 }
 
 ## Method: GET All regions
@@ -213,6 +216,7 @@ resource "aws_api_gateway_method" "get-region" {
   authorizer_id = "${aws_api_gateway_authorizer.main.id}"
 }
 
+###
 ## Method: GET All regions response integration
 resource "aws_api_gateway_integration" "get-region-integration" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
@@ -251,6 +255,9 @@ resource "aws_api_gateway_integration_response" "get-region-response" {
   resource_id = "${aws_api_gateway_resource.regions.id}"
   http_method  = "${aws_api_gateway_method.get-region.http_method}"
   status_code = "${aws_api_gateway_method_response.get-region-response-200.status_code}"
+  response_parameters {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
   response_templates {
     "application/json" = <<EOF
 #set($inputRoot = $input.path('$'))
