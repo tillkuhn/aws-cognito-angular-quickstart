@@ -174,6 +174,11 @@ resource "aws_api_gateway_integration" "put-region-integration" {
         "code": {
             "S": "$input.path('$.code')"
         },
+        #if($input.path('$.parentCode') && $input.path('$.parentCode').length() > 0)
+        "parentCode": {
+            "S": "$input.path('$.parentCode')"
+        },
+        #end 
         "name": {
             "S": "$input.path('$.name')"
         }
@@ -249,6 +254,7 @@ resource "aws_api_gateway_method_response" "get-region-response-200" {
 
 ## Mapping reference: https://docs.aws.amazon.com/de_de/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
 ## conditional? https://stackoverflow.com/questions/32511087/aws-api-gateway-how-do-i-make-querystring-parameters-optional-in-mapping-templa
+
 resource "aws_api_gateway_integration_response" "get-region-response" {
   depends_on = ["aws_api_gateway_integration.get-region-integration"]
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
@@ -264,6 +270,9 @@ resource "aws_api_gateway_integration_response" "get-region-response" {
 [
         #foreach($elem in $inputRoot.Items) {
             "code": "$elem.code.S",
+            #if($elem.parentCode && $elem.parentCode.S.length() > 0)
+            "parentCode": "$elem.parentCode.S",
+            #end
             "name": "$elem.name.S"
         }#if($foreach.hasNext),#end
 	#end
@@ -271,6 +280,7 @@ resource "aws_api_gateway_integration_response" "get-region-response" {
 EOF
   }
 }
+
 
 ############################
 ## Deploy the Gateway Stage
