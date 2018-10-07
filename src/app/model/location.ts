@@ -64,8 +64,11 @@ export class Location {
     }
 }
 
+// Managed by API Gateway
+@table('region')
 export class Region {
     code: string;
+    parentCode: string;
     name: string;
 }
 

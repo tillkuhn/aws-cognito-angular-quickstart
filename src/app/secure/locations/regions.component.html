@@ -2,39 +2,30 @@
     <form (ngSubmit)="onSubmitRegion()" #locationForm="ngForm">
         <div class="form-group row">
             <div class="col-md-2">
-                <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" type="test" class="form-control input-lg"/>
+                <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" type="test" class="form-control"/>
             </div>
             <div class="col-md-4">
-                <input name="code" [(ngModel)]="newRegion.name" placeholder="Nice Name" type="test" class="form-control input-lg"/>
+                <input name="code" [(ngModel)]="newRegion.name" placeholder="Nice Name" type="test" class="form-control"/>
             </div>
             <div class="col-md-2">
-            <button type="submit" class="btn btn-success btn-lg">
+                <input name="code" [(ngModel)]="newRegion.parentCode" placeholder="parentCode" type="test" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group row">
+            <button type="submit" class="btn btn-success">
             <span class="glyphicon glyphicon-save"></span>
             Submit Region
           </button>
-            </div>
-        </div>
-    </form>
-
-</div>
-<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2">Open ISO 2 Codes</a>
-
-<div class="form-group row">
-    <form (ngSubmit)="onRefresh()" #placesForm="ngForm" >
-        <!--
-        <div class="col-xs-5">
-            <input type="text" class="form-control input-lg" [(ngModel)]="query" name="query"/>
-        </div>
-        -->
-        <div class="col-xs-2">
-            <button type="button" class="btn btn-primary btn-sm" (click)="onRefresh()" >
+            <button type="button" class="btn btn-primary" (click)="onRefresh()" >
                 <span class="glyphicon glyphicon-apple"></span>
                 Apigate
             </button>
+            <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2"> Open ISO 2 Codes</a>
         </div>
     </form>
-
 </div>
+
+
 <div>
     <input type="checkbox" [(ngModel)]="debug"> Debug
     <pre *ngIf="debug">{{regions|json}}</pre>

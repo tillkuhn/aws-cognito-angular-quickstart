@@ -48,7 +48,7 @@ export class RegionsComponent implements OnInit {
     onSubmitRegion(): void {
         this.log.info("Submitting new region");
         this.locationService.putRegion(this.newRegion).then( (data) => {
-            this.toastr.info('New Region saved ' + data);
+            this.toastr.info('New Region saved ' + JSON.stringify(data) );
         })
     }
 
