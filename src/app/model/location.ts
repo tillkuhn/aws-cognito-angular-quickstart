@@ -68,8 +68,9 @@ export class Location {
 @table('region')
 export class Region {
     code: string;
-    parentCode: string;
     name: string;
+    parentCode?: string;
+    children?: Array<Region>;
 }
 
 export enum LocationType {

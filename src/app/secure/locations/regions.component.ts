@@ -19,7 +19,9 @@ export class RegionsComponent implements OnInit {
 
     debug: boolean = true;
     regions: Array<Region>;
+    regionTree: Array<Object>;
     newRegion: Region;
+    rootCode = 'www';
 
     constructor(
         private locationService: LocationService,
@@ -41,8 +43,8 @@ export class RegionsComponent implements OnInit {
         this.locationService.getRegions().then( (data) => {
             this.log.info("Received");
             this.regions = data;
+            this.regionTree = this.unflatten(this.regions);
         })
-
     }
 
     onSubmitRegion(): void {
@@ -52,5 +54,29 @@ export class RegionsComponent implements OnInit {
         })
     }
 
+    unflatten(array: Array<Region> , parent?: Region, tree?: Array<Region>): Array<Object> {
+
+        tree = typeof tree !== 'undefined' ? tree : [];
+        parent = typeof parent !== 'undefined' ? parent : {code: this.rootCode, name: 'World'};
+        console.log(array);
+        let children = array.filter(function (child) {
+            return child.parentCode == parent.code;
+        });
+
+        if (children && children.length > 0)  {
+            if (parent.code == this.rootCode) {
+                tree = children;
+            } else {
+                parent['children'] = children;
+            }
+            children.forEach((child) =>{
+                this.unflatten(array, child)
+            });
+        } else {
+            parent['children'] = [];
+        }
+
+        return tree;
+    }
 
 }
