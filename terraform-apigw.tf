@@ -179,6 +179,14 @@ resource "aws_api_gateway_integration" "put-region-integration" {
             "S": "$input.path('$.parentCode')"
         },
         #end
+        #if($input.path('$.season') && $input.path('$.season').size() > 0)
+        "season": {
+            "L": [
+            #foreach($elem in $input.path('$.season'))
+            {"N": "$elem" }#if($foreach.hasNext),#end
+            #end
+        ]},
+        #end
         "name": {
             "S": "$input.path('$.name')"
         }
@@ -273,6 +281,14 @@ resource "aws_api_gateway_integration_response" "get-region-response" {
             #if($elem.parentCode && $elem.parentCode.S.length() > 0)
             "parentCode": "$elem.parentCode.S",
             #end
+            #if($elem.season && $elem.season.L.size() > 0)
+            "season": [
+            #foreach($season in $elem.season.L)
+             $season.N
+             #if($foreach.hasNext),#end
+            #end
+            ],
+            #end
             "name": "$elem.name.S"
         }#if($foreach.hasNext),#end
 	#end
@@ -289,7 +305,7 @@ resource "aws_api_gateway_deployment" "main" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   stage_name  = "${var.api_gateway_stage_name}"
   variables = {
-    "answer" = "42"
+    "answer" = "43"
   }
 }
 

@@ -79,6 +79,7 @@ export class LocationService {
                 });
                 //this.log.info(resolve);
                 this.http.get( environment.apiGatewayInvokeUrl + '/regions',{headers: headers}).subscribe(data => {
+                    //this.log.info(JSON.stringify(data));
                     resolveGet((data as Array<Region>).sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)));
                 });
 

@@ -5,7 +5,8 @@
                 <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" type="test" class="form-control"/>
             </div>
             <div class="col-md-4">
-                <input name="code" [(ngModel)]="newRegion.name" placeholder="Nice Name" type="test" class="form-control"/>
+                <input name="code" [(ngModel)]="newRegion.name" placeholder="Nice Name" type="test"
+                       class="form-control"/>
             </div>
             <div class="col-md-2">
                 <select name="country" class="form-control" [(ngModel)]="newRegion.parentCode"
@@ -17,21 +18,22 @@
         </div>
         <div class="form-group row">
             <button type="submit" class="btn btn-success">
-            <span class="glyphicon glyphicon-save"></span>
-            Submit Region
-          </button>
-            <button type="button" class="btn btn-primary" (click)="onRefresh()" >
-                <span class="glyphicon glyphicon-apple"></span>
-                Apigate
+                <span class="glyphicon glyphicon-save"></span>
+                Submit Region
             </button>
-            <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2"> Open ISO 2 Codes</a>
+            &nbsp;
+            <button type="button" class="btn btn-primary" (click)="onRefresh()">
+                <span class="glyphicon glyphicon-apple"></span>
+                Refresh
+            </button>
+            <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2"> &rarr; Open ISO 2 Codes</a>
         </div>
     </form>
 </div>
 
 <div>
     <!-- http://emilsunesson.com/code/tree-ngx-intro -->
-    <tree-ngx [nodeItems]="regionTree" > </tree-ngx>
+    <tree-ngx [nodeItems]="regionTree"></tree-ngx>
 </div>
 <div>
     <input type="checkbox" [(ngModel)]="debug"> Debug

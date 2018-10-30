@@ -43,9 +43,6 @@ export class RegionsComponent implements OnInit {
         this.locationService.getRegions().then( (data) => {
             this.log.info("Received");
             this.regions = data;
-            this.regions.forEach((r)=>{
-                r.id = r.code;
-            });
             this.regionTree = this.unflatten(this.regions);
         })
     }
@@ -61,8 +58,8 @@ export class RegionsComponent implements OnInit {
 
         tree = typeof tree !== 'undefined' ? tree : [];
         parent = typeof parent !== 'undefined' ? parent : {code: this.rootCode, name: 'World'};
-        console.log(array);
-        let children = array.filter(function (child) {
+        //console.log(array);
+        let children = array.filter( (child) =>{
             return child.parentCode == parent.code;
         });
 
