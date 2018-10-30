@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {TagModel} from 'ngx-chips/core/accessor';
+//import {TagModel} from 'ngx-chips/core/accessor';
 import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
 import {NgProgress} from '@ngx-progressbar/core';

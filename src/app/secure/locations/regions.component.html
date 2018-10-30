@@ -8,7 +8,11 @@
                 <input name="code" [(ngModel)]="newRegion.name" placeholder="Nice Name" type="test" class="form-control"/>
             </div>
             <div class="col-md-2">
-                <input name="code" [(ngModel)]="newRegion.parentCode" placeholder="parentCode" type="test" class="form-control"/>
+                <select name="country" class="form-control" [(ngModel)]="newRegion.parentCode"
+                        class="form-control">
+                    <option *ngFor="let region of regions" [value]="region.code">{{ region.name}}</option>
+                    <option value="www">The World</option>
+                </select>
             </div>
         </div>
         <div class="form-group row">

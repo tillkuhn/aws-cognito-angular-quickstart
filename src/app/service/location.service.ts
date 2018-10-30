@@ -69,6 +69,7 @@ export class LocationService {
         return COUNTRIES.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
     }
 
+    // Regions retrieved the "new" way thru API Gateway
     getRegions(): Promise<Array<Region>>  {
         // see also https://github.com/aws-samples/aws-cognito-apigw-angular-auth/blob/master/src/app/aws.service.ts
         return new Promise((resolveGet, reject) => {
@@ -78,8 +79,7 @@ export class LocationService {
                 });
                 //this.log.info(resolve);
                 this.http.get( environment.apiGatewayInvokeUrl + '/regions',{headers: headers}).subscribe(data => {
-                    //console.log(data);
-                    resolveGet(data as Array<Region>);
+                    resolveGet((data as Array<Region>).sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0)));
                 });
 
             });
