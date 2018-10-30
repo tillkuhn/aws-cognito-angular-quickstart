@@ -27,7 +27,8 @@
               "node_modules/@swimlane/ngx-datatable/release/index.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/bootstrap/dist/css/bootstrap-theme.css",
-              "node_modules/mapbox-gl/dist/mapbox-gl.css"
+              "node_modules/mapbox-gl/dist/mapbox-gl.css",
+              "node_modules/tree-ngx/style/ngx-tree.scss"
               //"node_modules/@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css"
             ],
             "scripts": [

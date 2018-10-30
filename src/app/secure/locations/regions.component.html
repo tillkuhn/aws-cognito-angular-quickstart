@@ -29,7 +29,10 @@
     </form>
 </div>
 
-
+<div>
+    <!-- http://emilsunesson.com/code/tree-ngx-intro -->
+    <tree-ngx [nodeItems]="regionTree" > </tree-ngx>
+</div>
 <div>
     <input type="checkbox" [(ngModel)]="debug"> Debug
     <pre *ngIf="debug">{{regionTree|json}}</pre>

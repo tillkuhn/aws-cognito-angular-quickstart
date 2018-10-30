@@ -17,7 +17,7 @@ import {NGXLogger} from 'ngx-logger';
 export class RegionsComponent implements OnInit {
 
 
-    debug: boolean = true;
+    debug: boolean = false;
     regions: Array<Region>;
     regionTree: Array<Object>;
     newRegion: Region;
@@ -43,6 +43,9 @@ export class RegionsComponent implements OnInit {
         this.locationService.getRegions().then( (data) => {
             this.log.info("Received");
             this.regions = data;
+            this.regions.forEach((r)=>{
+                r.id = r.code;
+            });
             this.regionTree = this.unflatten(this.regions);
         })
     }

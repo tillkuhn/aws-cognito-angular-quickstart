@@ -71,6 +71,7 @@ export class Region {
     name: string;
     parentCode?: string;
     children?: Array<Region>;
+    id?: string;
 }
 
 export enum LocationType {

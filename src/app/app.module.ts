@@ -44,6 +44,7 @@ import {S3Service} from './service/s3.service';
 import {ApigateService} from './service/apigate.service';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { MyDatePickerModule } from 'mydatepicker';
+import { TreeNgxModule } from 'tree-ngx';
 
 // import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
@@ -99,6 +100,7 @@ import { MyDatePickerModule } from 'mydatepicker';
        // NgProgressHttpModule.forRoot(),
         NgxUploaderModule,
         MyDatePickerModule,
+        TreeNgxModule,
         routing
     ],
     providers: [
