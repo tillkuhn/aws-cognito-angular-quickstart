@@ -37,13 +37,23 @@
                 </select>
             </div>
         </div>
+        <div class="form-group row" *ngIf="newRegion.season">
+            <ng-container *ngFor="let month of newRegion.season; index as i" >
+                <select [(ngModel)]="newRegion.season[i]" name="month_{{i}}" [attr.placeholder]="newRegion.season[i]" >
+                    <option  [ngValue]=0>no</option>
+                    <option  [ngValue]=0.5>low</option>
+                    <option  [ngValue]=1>high</option>
+                </select>
+            </ng-container>
+        </div>
+
         <div class="form-group row">
             <button type="submit" class="btn btn-success">
                 <span class="glyphicon glyphicon-save"></span>
                 Submit Region
             </button>
             &nbsp;
-            <button type="button" class="btn btn-success" (click)="onRefresh()">
+            <button type="button" class="btn btn-success" (click)="onToggleSeason()">
                 <span class="glyphicon glyphicon-sunglasses"></span>
                 ToggleSeason
             </button>

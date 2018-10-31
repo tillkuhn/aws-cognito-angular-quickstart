@@ -39,43 +39,54 @@ export class RegionsComponent implements OnInit {
     }
 
     onRefresh(): void {
-        this.locationService.getRegions().then( (data) => {
-            this.log.info("Received");
+        this.locationService.getRegions().then((data) => {
+            this.log.info('Received');
             this.regions = data;
             this.regionTree = this.buildTree(this.regions);
         })
     }
 
+    onToggleSeason(): void {
+        if (Array.isArray(this.newRegion.season)) {
+            this.newRegion.season = null;
+        } else {
+            this.newRegion.season = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        }
+    }
+
     onSubmitRegion(): void {
-        this.log.info("Submitting new region");
-        this.locationService.putRegion(this.newRegion).then( (data) => {
-            this.toastr.info('New Region ' + this.newRegion.name + 'saved', 'Success' );
+        this.log.info('Submitting new region');
+        this.locationService.putRegion(this.newRegion).then((data) => {
+            this.toastr.info('New Region ' + this.newRegion.name + 'saved', 'Success');
         })
     }
+
     selecedItemsChanged(items: any[]): void {
         this.log.info(JSON.stringify(items));
     }
-    buildTree(array: Array<Region> , parent?: Region, tree?: Array<Region>): Array<Object> {
+
+    buildTree(array: Array<Region>, parent?: Region, tree?: Array<Region>): Array<Object> {
 
         tree = typeof tree !== 'undefined' ? tree : [];
         parent = typeof parent !== 'undefined' ? parent : {code: this.rootCode, name: 'World'};
         //console.log(array);
-        let children = array.filter( (child) =>{
+        let children = array.filter((child) => {
             return child.parentCode == parent.code;
         });
 
-        if (children && children.length > 0)  {
+        if (children && children.length > 0) {
             if (parent.code == this.rootCode) {
                 tree = children;
             } else {
                 parent['children'] = children;
             }
-            children.forEach((child) =>{
+            children.forEach((child) => {
                 this.buildTree(array, child)
             });
-        }/* else {
-            parent['children'] = [];
-        }*/
+        }
+        /* else {
+                    parent['children'] = [];
+                }*/
 
         return tree;
     }
