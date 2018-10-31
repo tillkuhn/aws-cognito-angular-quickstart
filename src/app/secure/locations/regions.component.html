@@ -1,6 +1,26 @@
 <div *ngIf="newRegion">
     <form (ngSubmit)="onSubmitRegion()" #locationForm="ngForm">
-        {{newRegion.code}}
+        <div class="form-group row">
+            <tree-select name="simpleSelect"
+                         [items]="regionTree"
+                         [(ngModel)]="newRegion"
+                         childrenField="children"
+                         required=true
+                         idField="code"
+                         textField="name"
+                         #simpleSelect="ngModel"
+                         [filterPlaceholder]="'Filter Region(s)'"
+                         [allowFilter]="true"
+                         [disabled]="false"
+                         [allowParentSelection]="true"
+                         expandMode="All">
+
+            </tree-select>
+            <div *ngIf="simpleSelect.errors && (simpleSelect.dirty || simpleSelect.touched)" class="alert alert-danger">
+
+                <div [hidden]="!simpleSelect.errors.required">Simple select is required</div>
+            </div>
+        </div>
         <div class="form-group row">
             <div class="col-md-2">
                 <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" class="form-control"/>
@@ -34,41 +54,9 @@
             </button>
             <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2"> &rarr; Open ISO 2 Codes</a>
         </div>
+
+
     </form>
-</div>
-
-<div>
-    <!-- http://emilsunesson.com/code/tree-ngx-intro
-    <tree-ngx [nodeItems]="regionTree" (selectedItems)="selecedItemsChanged($event)"   >
-        <ng-template #nodeNameTemplate let-node="node" let-context="context" >
-            <span [class.active]="context.active">{{node.name}} ({{node.code}})</span>
-
-        </ng-template>
-    </tree-ngx>
-    -->
-    <tree-select name="simpleSelect"
-                 [items]="regionTree"
-                 childrenField="children"
-                 [(ngModel)]="newRegion"
-                 required=true
-                 idField="code"
-                 textField="name"
-                 #simpleSelect="ngModel"
-                 [filterPlaceholder]="'hase'"
-                 [allowFilter]="true"
-                 [disabled]="false"
-                 [allowParentSelection]="true"
-                 expandMode="All">
-
-    </tree-select>
-    <!--   [filterPlaceholder]="FilterPlaceholder"
-                 [allowFilter]="ShowFilter"
-                 [disabled]="Disabled"
-                 [allowParentSelection]="AllowParentSelection"-->
-    <div *ngIf="simpleSelect.errors && (simpleSelect.dirty || simpleSelect.touched)" class="alert alert-danger">
-
-        <div [hidden]="!simpleSelect.errors.required">Simple select is required</div>
-    </div>
 </div>
 <div>
     <input type="checkbox" [(ngModel)]="debug"> Debug

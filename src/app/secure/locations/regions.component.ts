@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {LocationService} from '../../service/location.service';
-import {Location, Region, GeoJson, FeatureCollection} from '../../model/location';
-import {ApigateService} from '../../service/apigate.service';
+import {Region} from '../../model/location';
 import {NgProgress} from '@ngx-progressbar/core';
 import {Router} from '@angular/router';
 import {CacheService} from '@ngx-cache/core';

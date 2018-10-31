@@ -61,7 +61,6 @@
     "ngx-uploader": "^6.0.4",
     "rxjs": "^6.0.0",
     "rxjs-compat": "^6.3.3",
-    "tree-ngx": "^2.2.1",
     "webpack": "^4.17.2",
     "webpack-dev-server": "^3.1.8",
     "zone.js": "~0.8.26"
