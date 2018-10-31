@@ -42,8 +42,9 @@ import {LocationDetailComponent} from './secure/places/location-detail.component
 import {RegionsComponent} from './secure/locations/regions.component';
 import {S3Service} from './service/s3.service';
 import {ApigateService} from './service/apigate.service';
-import { NgxUploaderModule } from 'ngx-uploader';
-import { MyDatePickerModule } from 'mydatepicker';
+import {NgxUploaderModule} from 'ngx-uploader';
+import {MyDatePickerModule} from 'mydatepicker';
+import {NgxTreeSelectModule, TreeSelectDefaultOptions} from 'ngx-tree-select';
 
 // import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
@@ -96,9 +97,10 @@ import { MyDatePickerModule } from 'mydatepicker';
             color: '#f71cff',
             thick: true
         }),
-       // NgProgressHttpModule.forRoot(),
+        // NgProgressHttpModule.forRoot(),
         NgxUploaderModule,
         MyDatePickerModule,
+        NgxTreeSelectModule.forRoot({allowFilter: true, expandMode: 'All'}),
         routing
     ],
     providers: [

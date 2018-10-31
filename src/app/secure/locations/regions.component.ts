@@ -1,13 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {LocationService} from '../../service/location.service';
-import {Location, Region, GeoJson, FeatureCollection} from '../../model/location';
-import {ApigateService} from '../../service/apigate.service';
+import {Region} from '../../model/location';
 import {NgProgress} from '@ngx-progressbar/core';
 import {Router} from '@angular/router';
 import {CacheService} from '@ngx-cache/core';
 import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
-
 
 @Component({
     selector: 'app-regions',
@@ -17,11 +15,12 @@ import {NGXLogger} from 'ngx-logger';
 export class RegionsComponent implements OnInit {
 
 
-    debug: boolean = true;
+    debug = false;
     regions: Array<Region>;
     regionTree: Array<Object>;
     newRegion: Region;
     rootCode = 'www';
+    months: Array<String> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     constructor(
         private locationService: LocationService,
@@ -38,43 +37,59 @@ export class RegionsComponent implements OnInit {
         this.newRegion = new Region();
         this.onRefresh();
     }
+    indexTracker(index: number, value: any) {
+        return index;
+    }
 
     onRefresh(): void {
-        this.locationService.getRegions().then( (data) => {
-            this.log.info("Received");
+        this.locationService.getRegions().then((data) => {
+            this.log.info('Received');
             this.regions = data;
-            this.regionTree = this.unflatten(this.regions);
+            this.regionTree = this.buildTree(this.regions);
         })
+    }
+
+    onToggleSeason(): void {
+        if (Array.isArray(this.newRegion.season)) {
+            this.newRegion.season = null;
+        } else {
+            this.newRegion.season = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        }
     }
 
     onSubmitRegion(): void {
-        this.log.info("Submitting new region");
-        this.locationService.putRegion(this.newRegion).then( (data) => {
-            this.toastr.info('New Region ' + this.newRegion.name + 'saved', 'Success' );
+        this.log.info('Submitting new region');
+        this.locationService.putRegion(this.newRegion).then((data) => {
+            this.toastr.info('New Region ' + this.newRegion.name + 'saved', 'Success');
         })
     }
 
-    unflatten(array: Array<Region> , parent?: Region, tree?: Array<Region>): Array<Object> {
+    selecedItemsChanged(items: any[]): void {
+        this.log.info(JSON.stringify(items));
+    }
+
+    buildTree(array: Array<Region>, parent?: Region, tree?: Array<Region>): Array<Object> {
 
         tree = typeof tree !== 'undefined' ? tree : [];
         parent = typeof parent !== 'undefined' ? parent : {code: this.rootCode, name: 'World'};
-        console.log(array);
-        let children = array.filter(function (child) {
+        //console.log(array);
+        let children = array.filter((child) => {
             return child.parentCode == parent.code;
         });
 
-        if (children && children.length > 0)  {
+        if (children && children.length > 0) {
             if (parent.code == this.rootCode) {
                 tree = children;
             } else {
                 parent['children'] = children;
             }
-            children.forEach((child) =>{
-                this.unflatten(array, child)
+            children.forEach((child) => {
+                this.buildTree(array, child)
             });
-        } else {
-            parent['children'] = [];
         }
+        /* else {
+                    parent['children'] = [];
+                }*/
 
         return tree;
     }

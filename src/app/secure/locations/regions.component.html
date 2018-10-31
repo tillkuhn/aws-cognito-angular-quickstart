@@ -1,11 +1,33 @@
 <div *ngIf="newRegion">
     <form (ngSubmit)="onSubmitRegion()" #locationForm="ngForm">
         <div class="form-group row">
+            <tree-select name="simpleSelect"
+                         [items]="regionTree"
+                         [(ngModel)]="newRegion"
+                         childrenField="children"
+                         required=true
+                         idField="code"
+                         textField="name"
+                         #simpleSelect="ngModel"
+                         [filterPlaceholder]="'Filter Region(s)'"
+                         [allowFilter]="true"
+                         [disabled]="false"
+                         [allowParentSelection]="true"
+                         expandMode="All">
+
+            </tree-select>
+            <div *ngIf="simpleSelect.errors && (simpleSelect.dirty || simpleSelect.touched)" class="alert alert-danger">
+
+                <div [hidden]="!simpleSelect.errors.required">Simple select is required</div>
+            </div>
+        </div>
+        <div class="form-group row">
             <div class="col-md-2">
-                <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" type="test" class="form-control"/>
+                <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" class="form-control"/>
             </div>
             <div class="col-md-4">
-                <input name="code" [(ngModel)]="newRegion.name" placeholder="Nice Name" type="test" class="form-control"/>
+                <input name="name" [(ngModel)]="newRegion.name" placeholder="Nice Name"
+                       class="form-control"/>
             </div>
             <div class="col-md-2">
                 <select name="country" class="form-control" [(ngModel)]="newRegion.parentCode"
@@ -15,23 +37,47 @@
                 </select>
             </div>
         </div>
+        <div class="form-group row" *ngIf="newRegion.season">
+            <ng-container *ngFor="let month of months;" >
+                <div class="col-md-1">{{month}}</div>
+            </ng-container>
+            <ng-container *ngFor="let seasonVal of newRegion.season; trackBy: indexTracker; let i=index;" >
+                <div class="col-md-1">
+                    <select [(ngModel)]="newRegion.season[i]" name="month_{{i}}"  >
+                        <option [ngValue]="0">None</option>
+                        <option [ngValue]="0.5">Low</option>
+                        <option [ngValue]="1">High</option>
+                    </select>
+                    &nbsp;
+                    <i class="fa fa-square" [ngStyle]="{'opacity': seasonVal, 'color': 'blue'}"></i>
+                </div>
+            </ng-container>
+        </div>
+
         <div class="form-group row">
             <button type="submit" class="btn btn-success">
-            <span class="glyphicon glyphicon-save"></span>
-            Submit Region
-          </button>
-            <button type="button" class="btn btn-primary" (click)="onRefresh()" >
-                <span class="glyphicon glyphicon-apple"></span>
-                Apigate
+                <span class="glyphicon glyphicon-save"></span>
+                Submit Region
             </button>
-            <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2"> Open ISO 2 Codes</a>
+            &nbsp;
+            <button type="button" class="btn btn-success" (click)="onToggleSeason()">
+                <span class="glyphicon glyphicon-sunglasses"></span>
+                ToggleSeason
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-success" (click)="onRefresh()">
+                <span class="glyphicon glyphicon-apple"></span>
+                Refresh
+            </button>
+            <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2"> &rarr; Open ISO 2 Codes</a>
         </div>
+
+
     </form>
 </div>
-
-
 <div>
     <input type="checkbox" [(ngModel)]="debug"> Debug
+    <pre *ngIf="debug">{{newRegion|json}}</pre>
     <pre *ngIf="debug">{{regionTree|json}}</pre>
 </div>
 

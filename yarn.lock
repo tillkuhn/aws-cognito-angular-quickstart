@@ -4373,6 +4373,10 @@ ngx-toastr@^9.0.2:
   dependencies:
     tslib "^1.9.0"
 
+ngx-tree-select@^0.13.3:
+  version "0.13.3"
+  resolved "https://registry.yarnpkg.com/ngx-tree-select/-/ngx-tree-select-0.13.3.tgz#399a7e7ce17c27060974887198d314672de1e11c"
+
 ngx-uploader@^6.0.4:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/ngx-uploader/-/ngx-uploader-6.0.4.tgz#0cb479c34fb3d00a9fbd124323ef8af35782ed2b"
@@ -5492,6 +5496,10 @@ rw@^1.3.3:
 rw@~0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/rw/-/rw-0.1.4.tgz#4903cbd80248ae0ede685bf58fd236a7a9b29a3e"
+
+rxjs-compat@^6.3.3:
+  version "6.3.3"
+  resolved "https://registry.yarnpkg.com/rxjs-compat/-/rxjs-compat-6.3.3.tgz#2ab3b9ac0dac0c073749d55fef9c03ea1df2045c"
 
 rxjs@^6.0.0:
   version "6.3.2"

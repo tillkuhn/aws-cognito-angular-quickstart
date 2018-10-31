@@ -58,6 +58,7 @@ export class LocationsComponent implements OnInit {
         }
     }
 
+
     onRefresh(): void {
         this.progress.start();
         this.log.info('locations not cached loading start');

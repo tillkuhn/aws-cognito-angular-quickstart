@@ -71,6 +71,7 @@ export class Region {
     name: string;
     parentCode?: string;
     children?: Array<Region>;
+    season?: Array<number>;
 }
 
 export enum LocationType {
