@@ -45,6 +45,7 @@ import {ApigateService} from './service/apigate.service';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { MyDatePickerModule } from 'mydatepicker';
 import { TreeNgxModule } from 'tree-ngx';
+import {NgxTreeSelectModule,TreeSelectDefaultOptions} from 'ngx-tree-select';
 
 // import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
@@ -101,6 +102,7 @@ import { TreeNgxModule } from 'tree-ngx';
         NgxUploaderModule,
         MyDatePickerModule,
         TreeNgxModule,
+        NgxTreeSelectModule.forRoot({allowFilter: true}),
         routing
     ],
     providers: [

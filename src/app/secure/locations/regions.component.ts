@@ -8,7 +8,6 @@ import {CacheService} from '@ngx-cache/core';
 import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
 
-
 @Component({
     selector: 'app-regions',
     templateUrl: './regions.component.html',
@@ -22,6 +21,7 @@ export class RegionsComponent implements OnInit {
     regionTree: Array<Object>;
     newRegion: Region;
     rootCode = 'www';
+    selectedCode;
 
     constructor(
         private locationService: LocationService,
@@ -43,7 +43,7 @@ export class RegionsComponent implements OnInit {
         this.locationService.getRegions().then( (data) => {
             this.log.info("Received");
             this.regions = data;
-            this.regionTree = this.unflatten(this.regions);
+            this.regionTree = this.buildTree(this.regions);
         })
     }
 
@@ -53,8 +53,10 @@ export class RegionsComponent implements OnInit {
             this.toastr.info('New Region ' + this.newRegion.name + 'saved', 'Success' );
         })
     }
-
-    unflatten(array: Array<Region> , parent?: Region, tree?: Array<Region>): Array<Object> {
+    selecedItemsChanged(items: any[]): void {
+        this.log.info(JSON.stringify(items));
+    }
+    buildTree(array: Array<Region> , parent?: Region, tree?: Array<Region>): Array<Object> {
 
         tree = typeof tree !== 'undefined' ? tree : [];
         parent = typeof parent !== 'undefined' ? parent : {code: this.rootCode, name: 'World'};
@@ -70,11 +72,11 @@ export class RegionsComponent implements OnInit {
                 parent['children'] = children;
             }
             children.forEach((child) =>{
-                this.unflatten(array, child)
+                this.buildTree(array, child)
             });
-        } else {
+        }/* else {
             parent['children'] = [];
-        }
+        }*/
 
         return tree;
     }

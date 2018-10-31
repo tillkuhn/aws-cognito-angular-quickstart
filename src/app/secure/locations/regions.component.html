@@ -1,11 +1,12 @@
 <div *ngIf="newRegion">
     <form (ngSubmit)="onSubmitRegion()" #locationForm="ngForm">
+        {{newRegion.code}}
         <div class="form-group row">
             <div class="col-md-2">
-                <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" type="test" class="form-control"/>
+                <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" class="form-control"/>
             </div>
             <div class="col-md-4">
-                <input name="code" [(ngModel)]="newRegion.name" placeholder="Nice Name" type="test"
+                <input name="name" [(ngModel)]="newRegion.name" placeholder="Nice Name"
                        class="form-control"/>
             </div>
             <div class="col-md-2">
@@ -22,7 +23,12 @@
                 Submit Region
             </button>
             &nbsp;
-            <button type="button" class="btn btn-primary" (click)="onRefresh()">
+            <button type="button" class="btn btn-success" (click)="onRefresh()">
+                <span class="glyphicon glyphicon-sunglasses"></span>
+                ToggleSeason
+            </button>
+            &nbsp;
+            <button type="button" class="btn btn-success" (click)="onRefresh()">
                 <span class="glyphicon glyphicon-apple"></span>
                 Refresh
             </button>
@@ -32,11 +38,41 @@
 </div>
 
 <div>
-    <!-- http://emilsunesson.com/code/tree-ngx-intro -->
-    <tree-ngx [nodeItems]="regionTree"></tree-ngx>
+    <!-- http://emilsunesson.com/code/tree-ngx-intro
+    <tree-ngx [nodeItems]="regionTree" (selectedItems)="selecedItemsChanged($event)"   >
+        <ng-template #nodeNameTemplate let-node="node" let-context="context" >
+            <span [class.active]="context.active">{{node.name}} ({{node.code}})</span>
+
+        </ng-template>
+    </tree-ngx>
+    -->
+    <tree-select name="simpleSelect"
+                 [items]="regionTree"
+                 childrenField="children"
+                 [(ngModel)]="newRegion"
+                 required=true
+                 idField="code"
+                 textField="name"
+                 #simpleSelect="ngModel"
+                 [filterPlaceholder]="'hase'"
+                 [allowFilter]="true"
+                 [disabled]="false"
+                 [allowParentSelection]="true"
+                 expandMode="All">
+
+    </tree-select>
+    <!--   [filterPlaceholder]="FilterPlaceholder"
+                 [allowFilter]="ShowFilter"
+                 [disabled]="Disabled"
+                 [allowParentSelection]="AllowParentSelection"-->
+    <div *ngIf="simpleSelect.errors && (simpleSelect.dirty || simpleSelect.touched)" class="alert alert-danger">
+
+        <div [hidden]="!simpleSelect.errors.required">Simple select is required</div>
+    </div>
 </div>
 <div>
     <input type="checkbox" [(ngModel)]="debug"> Debug
+    <pre *ngIf="debug">{{newRegion|json}}</pre>
     <pre *ngIf="debug">{{regionTree|json}}</pre>
 </div>
 
