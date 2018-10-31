@@ -15,12 +15,12 @@ import {NGXLogger} from 'ngx-logger';
 export class RegionsComponent implements OnInit {
 
 
-    debug: boolean = false;
+    debug = false;
     regions: Array<Region>;
     regionTree: Array<Object>;
     newRegion: Region;
     rootCode = 'www';
-    selectedCode;
+    months: Array<String> = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     constructor(
         private locationService: LocationService,
@@ -36,6 +36,9 @@ export class RegionsComponent implements OnInit {
         this.log.info('ngOnInit');
         this.newRegion = new Region();
         this.onRefresh();
+    }
+    indexTracker(index: number, value: any) {
+        return index;
     }
 
     onRefresh(): void {

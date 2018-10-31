@@ -38,12 +38,17 @@
             </div>
         </div>
         <div class="form-group row" *ngIf="newRegion.season">
-            <ng-container *ngFor="let month of newRegion.season; index as i" >
-                <select [(ngModel)]="newRegion.season[i]" name="month_{{i}}" [attr.placeholder]="newRegion.season[i]" >
-                    <option  [ngValue]=0>no</option>
-                    <option  [ngValue]=0.5>low</option>
-                    <option  [ngValue]=1>high</option>
-                </select>
+            <ng-container *ngFor="let month of months;" >
+                <div class="col-md-1">{{month}}</div>
+            </ng-container>
+            <ng-container *ngFor="let ms of newRegion.season; trackBy: indexTracker; let i=index;" >
+                <div class="col-md-1">
+                    <select [(ngModel)]="newRegion.season[i]" name="month_{{i}}"  >
+                        <option [ngValue]="0">None</option>
+                        <option [ngValue]="0.5">Low</option>
+                        <option [ngValue]="1">High</option>
+                    </select>
+                </div>
             </ng-container>
         </div>
 
