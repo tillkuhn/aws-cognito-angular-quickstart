@@ -41,13 +41,15 @@
             <ng-container *ngFor="let month of months;" >
                 <div class="col-md-1">{{month}}</div>
             </ng-container>
-            <ng-container *ngFor="let ms of newRegion.season; trackBy: indexTracker; let i=index;" >
+            <ng-container *ngFor="let seasonVal of newRegion.season; trackBy: indexTracker; let i=index;" >
                 <div class="col-md-1">
                     <select [(ngModel)]="newRegion.season[i]" name="month_{{i}}"  >
                         <option [ngValue]="0">None</option>
                         <option [ngValue]="0.5">Low</option>
                         <option [ngValue]="1">High</option>
                     </select>
+                    &nbsp;
+                    <i class="fa fa-square" [ngStyle]="{'opacity': seasonVal, 'color': 'blue'}"></i>
                 </div>
             </ng-container>
         </div>
