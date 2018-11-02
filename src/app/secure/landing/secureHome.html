@@ -24,9 +24,13 @@
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a [routerLink]="['/secure/myprofile']"><i class="fa fa-user fa-fw"></i> User
-                        Profile</a>
+                    <li>
+                        <a [routerLink]="['/secure/myprofile']"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
+                    <li>
+                        <a [routerLink]="['/secure/jwttokens']"><i class="fa fa-table fa-fw"></i> Session Tokens</a>
+                    </li>
+
                     <li class="divider"></li>
                     <li><a [routerLink]="['/secure/logout']">Logout</a>
                     </li>
@@ -56,16 +60,10 @@
                         <a [routerLink]="['/secure/regions']"><span class="glyphicon glyphicon-tree-conifer"></span> Region Tree </a>
                     </li>
                     <li>
-                        <a [routerLink]="['/secure/map']"><span class="glyphicon glyphicon-globe"></span> MapMe (alpha)</a>
+                        <a [routerLink]="['/secure/map']"><span class="glyphicon glyphicon-globe"></span> Places Map (alpha)</a>
                     </li>
                     <li>
                         <a [routerLink]="['/secure/useractivity']"><span class="glyphicon glyphicon-book"></span> My Diary</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['/secure/myprofile']"><i class="fa fa-dashboard fa-fw"></i> My Profile</a>
-                    </li>
-                    <li>
-                        <a [routerLink]="['/secure/jwttokens']"><i class="fa fa-table fa-fw"></i> Nerd Stuff</a>
                     </li>
                 </ul>
             </div>

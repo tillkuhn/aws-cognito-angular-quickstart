@@ -16,10 +16,10 @@ import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-location-detail',
-    templateUrl: './location-detail.component.html',
+    templateUrl: './places-detail.component.html',
     styleUrls: []
 })
-export class LocationDetailComponent implements OnInit, LoggedInCallback {
+export class PlacesDetailComponent implements OnInit, LoggedInCallback {
 
     @Input() location: Location;
 

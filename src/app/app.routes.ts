@@ -13,9 +13,9 @@ import {ResendCodeComponent} from './public/auth/resend/resendCode.component';
 import {NewPasswordComponent} from './public/auth/newpassword/newpassword.component';
 import {DishesComponent} from './secure/dishes/dishes.component';
 import {DishDetailComponent} from './secure/dish-detail/dish-detail.component';
-import {LocationsComponent} from './secure/locations/locations.component';
+import {PlacesComponent} from './secure/locations/places.component';
 import {LocationMapComponent} from './secure/location-map/location-map.component';
-import {LocationDetailComponent} from './secure/places/location-detail.component';
+import {PlacesDetailComponent} from './secure/locations/places-detail.component';
 import {RegionsComponent} from './secure/locations/regions.component';
 
 const homeRoutes: Routes = [
@@ -56,10 +56,10 @@ const secureHomeRoutes: Routes = [
             {path: 'dishes', component: DishesComponent},
             {path: 'dish-details/:id', component: DishDetailComponent },
             {path: 'dish-details', component: DishDetailComponent },
-            {path: 'locations', component: LocationsComponent},
+            {path: 'locations', component: PlacesComponent},
             {path: 'regions', component: RegionsComponent},
-            {path: 'places', component: LocationDetailComponent},
-            {path: 'places/:id', component: LocationDetailComponent },
+            {path: 'places', component: PlacesDetailComponent},
+            {path: 'places/:id', component: PlacesDetailComponent },
             {path: 'map', component: LocationMapComponent},
             {path: '', component: MyProfileComponent}]
     }

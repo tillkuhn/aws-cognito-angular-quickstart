@@ -35,9 +35,9 @@ import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';
 import {CacheModule, CACHE} from '@ngx-cache/core';
 import {BrowserCacheModule, MemoryCacheService} from '@ngx-cache/platform-browser';
-import {LocationsComponent} from './secure/locations/locations.component';
+import {PlacesComponent} from './secure/locations/places.component';
 import {LocationMapComponent} from './secure/location-map/location-map.component';
-import {LocationDetailComponent} from './secure/places/location-detail.component';
+import {PlacesDetailComponent} from './secure/locations/places-detail.component';
 import {RegionsComponent} from './secure/locations/regions.component';
 import {S3Service} from './service/s3.service';
 import {ApigateService} from './service/apigate.service';
@@ -69,9 +69,9 @@ import {LocationStrategy, HashLocationStrategy} from '@angular/common';
         AppComponent,
         DishesComponent,
         DishDetailComponent,
-        LocationsComponent,
+        PlacesComponent,
         LocationMapComponent,
-        LocationDetailComponent,
+        PlacesDetailComponent,
         RegionsComponent
     ],
     imports: [

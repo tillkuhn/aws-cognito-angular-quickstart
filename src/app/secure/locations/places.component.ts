@@ -13,10 +13,10 @@ import {Dish} from '../../model/dish';
 
 @Component({
     selector: 'app-locations',
-    templateUrl: './locations.component.html',
-    styleUrls: ['./locations.component.css']
+    templateUrl: './places.component.html',
+    styleUrls: []
 })
-export class LocationsComponent implements OnInit {
+export class PlacesComponent implements OnInit {
 
     readonly cacheKeyLocations: string = 'locations'
     /// default settings
