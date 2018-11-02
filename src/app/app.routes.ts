@@ -1,7 +1,7 @@
 import {RouterModule, Routes} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
 import {AboutComponent, HomeComponent, HomeLandingComponent} from './public/home.component';
-import {SecureHomeComponent} from './secure/landing/securehome.component';
+import {SecureHomeComponent} from './secure/landing/secureHome.component';
 import {MyProfileComponent} from './secure/profile/myprofile.component';
 import {JwtComponent} from './secure/jwttokens/jwt.component';
 import {UseractivityComponent} from './secure/useractivity/useractivity.component';
@@ -44,11 +44,11 @@ const homeRoutes: Routes = [
 const secureHomeRoutes: Routes = [
     {
         path: '',
-        redirectTo: '/securehome',
+        redirectTo: '/secure',
         pathMatch: 'full'
     },
     {
-        path: 'securehome', component: SecureHomeComponent, children: [
+        path: 'secure', component: SecureHomeComponent, children: [
             {path: 'logout', component: LogoutComponent},
             {path: 'jwttokens', component: JwtComponent},
             {path: 'myprofile', component: MyProfileComponent},

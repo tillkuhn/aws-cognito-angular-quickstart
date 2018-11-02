@@ -12,7 +12,7 @@ import {AboutComponent, HomeComponent, HomeLandingComponent} from './public/home
 import {AwsUtil} from './service/aws.service';
 import {UseractivityComponent} from './secure/useractivity/useractivity.component';
 import {MyProfileComponent} from './secure/profile/myprofile.component';
-import {SecureHomeComponent} from './secure/landing/securehome.component';
+import {SecureHomeComponent} from './secure/landing/secureHome.component';
 import {JwtComponent} from './secure/jwttokens/jwt.component';
 import {DynamoDBService, DynamoDBUtil} from './service/ddb.service';
 import {LoginComponent} from './public/auth/login/login.component';
@@ -30,7 +30,6 @@ import {TagInputModule} from 'ngx-chips';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BarRatingModule} from 'ngx-bar-rating';
 import {NgProgressModule} from '@ngx-progressbar/core';
-// import {NgProgressHttpModule} from '@ngx-progressbar/http';
 import {ToastrModule} from 'ngx-toastr';
 import {LoggerModule, NgxLoggerLevel} from 'ngx-logger';
 import {NgxDatatableModule} from '@swimlane/ngx-datatable';

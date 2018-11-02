@@ -89,7 +89,7 @@ export class DishesComponent implements OnInit, LoggedInCallback {
     }
 
     gotoDetail(dish: Dish): void {
-        this.router.navigate(['/securehome/dish-details', dish.id]);
+        this.router.navigate(['/secure/dish-details', dish.id]);
     }
 
     isLoggedIn(message: string, isLoggedIn: boolean) {

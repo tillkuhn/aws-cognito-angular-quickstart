@@ -147,7 +147,7 @@ export class LocationDetailComponent implements OnInit, LoggedInCallback {
             this.progress.start();
             this.locationService.delete(this.location).then(value => {
                 this.toastr.info('Location successfully deleted');
-                this.router.navigate(['/securehome/locations']);
+                this.router.navigate(['/secure/locations']);
             }).catch(reason => {
                 this.toastr.error(reason, 'Error during location deletion');
             }).finally(() => {

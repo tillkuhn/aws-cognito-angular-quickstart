@@ -88,7 +88,7 @@ export class LocationsComponent implements OnInit {
     }
 
     gotoDetail(item: Location): void {
-        this.router.navigate(['/securehome/places', item.id]);
+        this.router.navigate(['/secure/places', item.id]);
     }
 
     /*
