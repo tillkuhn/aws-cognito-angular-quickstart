@@ -198,12 +198,6 @@ export class DishDetailComponent implements OnInit, LoggedInCallback {
         } else if (output.type === 'removed') {
             // remove file from array when removed
             this.files = this.files.filter((file: UploadFile) => file !== output.file);
-        } else if (output.type === 'dragOver') {
-            this.dragOver = true;
-        } else if (output.type === 'dragOut') {
-            this.dragOver = false;
-        } else if (output.type === 'drop') {
-            this.dragOver = false;
         }
     }
 
