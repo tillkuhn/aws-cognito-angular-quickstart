@@ -10,7 +10,6 @@ import {NGXLogger} from 'ngx-logger';
 import {LoggedInCallback} from '../../service/cognito.service';
 import {IdPrefix, S3Service} from '../../service/s3.service';
 import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
-import {IMyDpOptions} from 'mydatepicker';
 import {GeoPoint} from '../../model/geopoint'
 import {Observable} from 'rxjs';
 
@@ -42,13 +41,6 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
     dragOver: boolean;
 
 
-    public myDatePickerOptions: IMyDpOptions = {
-        // other options...
-        dateFormat: 'yyyy-mm-dd',
-        inline: false,
-        width: "300px",
-    };
-
     constructor(
         private locationService: LocationService,
         private http: HttpClient,
@@ -76,7 +68,7 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
 
                 this.doclist = this.s3.viewDocs(IdPrefix.places, id);
 
-                this.locationService.get(id)
+                this.locationService.getPlace(id)
                     .then(locationItem => {
                         this.location = locationItem;
                         if (!this.location.coordinates) {
@@ -96,7 +88,7 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
                 this.location = new Location();
                 this.location.coordinates = new Array<number>(2);
                 this.location.lotype = LocationType.Place;
-                this.location.imageUrl = '/assets/unknown.jpg';
+                //this.location.imageUrl = '/assets/unknown.jpg';
             }
         });
 
@@ -111,8 +103,6 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
         this.log.info('Saving location', this.location.name);
         this.progress.start();
         // convert ngx-chips array list to ddb optimized set
-        // this.location.lotype = LocationType.PLACE;
-        // this.s3.addDoc("hase777.txt");
         this.locationService.save(this.location).then(objectSaved => {
             this.location = objectSaved; // update with values resulting from db insert e.g. id or updateDate
             this.toastr.success('Location ' + this.location.name + ' is save!', 'Got it!');
@@ -160,14 +150,7 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
         this.log.info('onUploadOutput '+ JSON.stringify(output));
         if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') { // when all files added in queue
             this.log.info('onUploadOutput allAdded ' + output);
-            //  {"type":"addedToQueue","file":{"fileIndex":0,"id":"ouacdu","name":"tk4.txt","size":8,"type":"text/plain","form":{},
-            // "progress":{"status":0,"data":{"percentage":0,"speed":0,"speedHuman":"0 Byte/s",
-            // "startTime":null,"endTime":null,"eta":null,"etaHuman":null}},"lastModifiedDate":"2018-09-17T22:57:48.809Z","nativeFile":{}}}
             const file: File = output.file.nativeFile;
-            // var fileStream = fs.createReadStream("F:/directory/fileName.ext");
-            // let fileStream = fs.createReadStream("F:/directory/fileName.ext");
-            // https://github.com/bleenco/ngx-uploader/issues/365
-            // https://stackoverflow.com/questions/13807339/upload-a-binary-file-to-s3-using-aws-sdk-for-node-js
             const reader = new FileReader();
             reader.onload = (e) => {
                 // console.log(e.target.result);
@@ -176,15 +159,6 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
                 this.toastr.success( output.file.name + ' stored in S3', 'Upload successful');
             }
             reader.readAsArrayBuffer(file);
-            // reader.readAsBinaryString(file);
-            // uncomment this if you want to auto upload files when added
-            // const event: UploadInput = {
-            //   type: 'uploadAll',
-            //   url: '/upload',
-            //   method: 'POST',
-            //   data: { foo: 'bar' }
-            // };
-            // this.uploadInput.emit(event);
         } else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') { // add file to array when added
             this.files.push(output.file);
         } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
@@ -204,6 +178,7 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
     }
 
     // https://github.com/bleenco/ngx-uploader/issues/365
+    /*
     startUpload(): void {
         this.log.info('start Uploading ');
         const event: UploadInput = {
@@ -215,6 +190,7 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
 
         this.uploadInput.emit(event);
     }
+    */
 
     isLoggedIn(message: string, isLoggedIn: boolean) {
         if (!isLoggedIn) {

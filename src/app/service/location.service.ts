@@ -24,14 +24,14 @@ export class LocationService {
     ) {
     }
 
-    getAll() {
+    getPlaces() {
         return this.ddbUtil.getMapper().scan({
             valueConstructor: Location,
             projection: ['id', 'country', 'summary', 'name', 'region', 'coordinates', 'rating']
         });
     }
 
-    get(id: string) {
+    getPlace(id: string) {
         return this.ddbUtil.getMapper().get(Object.assign(new Location(), {id: id}));
     }
 

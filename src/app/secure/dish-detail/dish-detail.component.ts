@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, EventEmitter} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 //import {TagModel} from 'ngx-chips/core/accessor';
@@ -13,6 +13,9 @@ import {LocationService} from '../../service/location.service';
 import {DishTag} from '../../model/dish-tag';
 import {Location} from '../../model/location';
 import {LoggedInCallback} from '../../service/cognito.service';
+import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
+import {IdPrefix, S3Service} from '../../service/s3.service';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-dish-detail',
@@ -29,6 +32,13 @@ export class DishDetailComponent implements OnInit, LoggedInCallback {
     error: any;
     debug: false;
     navigated = false; // true if navigated here
+    doclist: Observable<Array<any>>;
+
+    // for uploader
+    options: UploaderOptions = {concurrency: 1, maxUploads: 3};
+    files: UploadFile[] = [];
+    uploadInput: EventEmitter<UploadInput> = new EventEmitter<UploadInput>();
+    humanizeBytes: Function = humanizeBytes;
 
     constructor(
         private dishService: DishService,
@@ -39,20 +49,22 @@ export class DishDetailComponent implements OnInit, LoggedInCallback {
         private readonly cache: CacheService,
         private log: NGXLogger,
         private router: Router,
-        private locationService: LocationService
-    ) {}
+        private locationService: LocationService,
+        private s3: S3Service
+    ) {
+    }
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
-            // RESTful URL to existing ID?
             if (params['id'] !== undefined) {
                 const id = params['id'];
                 this.navigated = true;
                 this.progress.start();
+                this.doclist = this.s3.viewDocs(IdPrefix.dishes, id);
+
                 this.dishService.getDishDetails(id)
                     .then(dishItem => {
                         if (dishItem.tags) {
-                            this.log.info('found item' + dishItem.tags.entries());
                             for (let it = dishItem.tags.values(), val = null; val = it.next().value;) {
                                 this.selectedTags.push(val);
                             }
@@ -79,7 +91,7 @@ export class DishDetailComponent implements OnInit, LoggedInCallback {
         const CACHE_KEY_TAGS: string = 'tags';
 
         if (this.cache.has(CACHE_KEY_TAGS)) {
-            this.log.info("tags coming from cache ", CACHE_KEY_TAGS);
+            this.log.info('tags coming from cache ', CACHE_KEY_TAGS);
             this.selectableTags = this.cache.get(CACHE_KEY_TAGS);
         } else {
             this.progress.start();
@@ -129,9 +141,9 @@ export class DishDetailComponent implements OnInit, LoggedInCallback {
         if (confirm) {
             this.progress.start();
             this.dishService.deleteDish(this.dish).then(value => {
-                this.toastr.info("Dish successfully deleted");
+                this.toastr.info('Dish successfully deleted');
             }).catch(reason => {
-                this.toastr.error(reason,"Error during dish deletion");
+                this.toastr.error(reason, 'Error during dish deletion');
             }).finally(() => {
                 this.progress.complete();
             });
@@ -147,7 +159,7 @@ export class DishDetailComponent implements OnInit, LoggedInCallback {
     }
 
     onSubmit() {
-        this.log.info('Saving dish',this.dish.name);
+        this.log.info('Saving dish', this.dish.name);
         this.progress.start();
         // convert ngx-chips array list to ddb optimized set
         let settags: Set<string> = new Set<string>();
@@ -156,19 +168,50 @@ export class DishDetailComponent implements OnInit, LoggedInCallback {
         }
         this.dish.tags = settags;
         this.dishService.saveDish(this.dish).then(objectSaved => {
-            this.toastr.success('Dish '+this    .dish.name + ' is save!', 'Got it!');
+            this.toastr.success('Dish ' + this.dish.name + ' is save!', 'Got it!');
         }).catch(reason => {
-            this.toastr.error(reason,"Error during save");
+            this.toastr.error(reason, 'Error during save');
         }).finally(() => {
             this.progress.complete();
         })
+    }
+
+
+    onUploadOutput(output: UploadOutput): void {
+        this.log.info('onUploadOutput ' + JSON.stringify(output));
+        if (output.type === 'addedToQueue' && typeof output.file !== 'undefined') { // when all files added in queue
+            //this.log.info('onUploadOutput allAdded ' + JSON.stringify(output));
+            const file: File = output.file.nativeFile;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.log.info('Got it adding content of ' + output.file.name + ' to s3');
+                this.s3.addDoc(output.file, reader.result, IdPrefix.dishes, this.dish.id);
+                this.toastr.success(output.file.name + ' stored in S3', 'Upload successful');
+            }
+            reader.readAsArrayBuffer(file);
+        } else if (output.type === 'addedToQueue' && typeof output.file !== 'undefined') { // add file to array when added
+            this.files.push(output.file);
+        } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
+            // update current data in files array for uploading file
+            const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
+            this.files[index] = output.file;
+        } else if (output.type === 'removed') {
+            // remove file from array when removed
+            this.files = this.files.filter((file: UploadFile) => file !== output.file);
+        } else if (output.type === 'dragOver') {
+            this.dragOver = true;
+        } else if (output.type === 'dragOut') {
+            this.dragOver = false;
+        } else if (output.type === 'drop') {
+            this.dragOver = false;
+        }
     }
 
     isLoggedIn(message: string, isLoggedIn: boolean) {
         if (!isLoggedIn) {
             this.router.navigate(['/home/login']);
         } else {
-            this.log.debug("authenticated");
+            this.log.debug('authenticated');
         }
     }
 }

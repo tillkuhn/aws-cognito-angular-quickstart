@@ -3,7 +3,7 @@
 
         <div class="form-group row">
             <div class="col-md-3">
-                <img src="{{location.imageUrl}}" *ngIf="location.imageUrl" width="300"/>
+                <img src="{{location.imageUrl}}" *ngIf="location.imageUrl" width="300" />
             </div>
             <div class="col-md-9">
                 <h3>
@@ -131,7 +131,8 @@
 
 
     <ul *ngFor="let file of doclist | async">
-        <li><a href="{{file.url}}" target="_placedoc">{{file.name}}</a> {{file.size}} {{file.updatedAt}}</li>
+        <!-- file.updatedAt} -->
+        <li><a href="{{file.url}}" target="_placedoc">{{file.name}}</a> {{file.size}}</li>
     </ul>
 
     <!-- Deee Bug -->

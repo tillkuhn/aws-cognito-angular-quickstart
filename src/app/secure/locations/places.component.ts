@@ -75,7 +75,7 @@ export class PlacesComponent implements OnInit {
         // Async functions always return a promise, whether you use await or not. That promise resolves with whatever the async
         // function returns, or rejects with whatever the async function throws. So with:
         let result = new Array<Location>();
-        for await (const item of this.locationService.getAll()) {
+        for await (const item of this.locationService.getPlaces()) {
             result.push(item);
         }
         return result;

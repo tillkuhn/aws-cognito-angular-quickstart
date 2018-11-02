@@ -106,13 +106,28 @@
 
         <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">
             <span class="glyphicon glyphicon-remove"></span>
-            Delete Dish
+            Delete
         </button>
+
+        <label class="btn btn-default">
+            <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)"
+                   [uploadInput]="uploadInput" multiple>
+        </label>
+
     </form>
 
+    <table [class.hidden]="!doclist">
+        <tbody>
+        <tr *ngFor="let file of doclist | async; ">
+            <td><a href="{{file.url}}" target="_placedoc">{{file.name}}</a> </td>
+            <td>{{file.size}}</td>
+        </tr>
+        </tbody>
+    </table>
     <div>
         <br/>
         <input type="checkbox" [(ngModel)]="debug"> Debug
         <pre *ngIf="debug">{{dish|json}}{{selectableTags|json}}</pre>
     </div>
+
 </div>
