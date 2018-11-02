@@ -45,6 +45,7 @@ import {ApigateService} from './service/apigate.service';
 import {NgxUploaderModule} from 'ngx-uploader';
 import {MyDatePickerModule} from 'mydatepicker';
 import {NgxTreeSelectModule, TreeSelectDefaultOptions} from 'ngx-tree-select';
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 
 // import { BrowserCacheModule, LocalStorageCacheService } from '@ngx-cache/platform-browser';
 
@@ -115,7 +116,10 @@ import {NgxTreeSelectModule, TreeSelectDefaultOptions} from 'ngx-tree-select';
         ApigateService,
         LocationService,
         TransferState,
-        UserParametersService],
+        UserParametersService,
+        // https://www.heise.de/developer/artikel/LocationStrategy-fuer-den-Angular-2-Router-aendern-3457321.html
+        {provide: LocationStrategy, useClass: HashLocationStrategy}
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

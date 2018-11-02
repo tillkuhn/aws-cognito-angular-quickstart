@@ -1,26 +1,28 @@
 <div *ngIf="newRegion">
     <form (ngSubmit)="onSubmitRegion()" #locationForm="ngForm">
         <div class="form-group row">
-            <tree-select name="simpleSelect"
-                         [items]="regionTree"
-                         [(ngModel)]="newRegion"
-                         childrenField="children"
-                         required=true
-                         idField="code"
-                         textField="name"
-                         #simpleSelect="ngModel"
-                         [filterPlaceholder]="'Filter Region(s)'"
-                         [allowFilter]="true"
-                         [disabled]="false"
-                         [allowParentSelection]="true"
-                         expandMode="All">
+            <div class="col-md-2">
+                <tree-select name="regionSelect"
+                             [items]="regionTree"
+                             [(ngModel)]="newRegion"
+                             childrenField="children"
+                             required=true
+                             idField="code"
+                             textField="name"
+                             #simpleSelect="ngModel"
+                             [filterPlaceholder]="'Filter Region(s)'"
+                             [allowFilter]="true"
+                             [disabled]="false"
+                             [allowParentSelection]="true"
+                             expandMode="All">
 
-            </tree-select>
-            <div *ngIf="simpleSelect.errors && (simpleSelect.dirty || simpleSelect.touched)" class="alert alert-danger">
-
-                <div [hidden]="!simpleSelect.errors.required">Simple select is required</div>
+                </tree-select>
+                <div *ngIf="simpleSelect.errors && (simpleSelect.dirty || simpleSelect.touched)" class="alert alert-danger">
+                    <div [hidden]="!simpleSelect.errors.required">Simple select is required</div>
+                </div>
             </div>
         </div>
+
         <div class="form-group row">
             <div class="col-md-2">
                 <input name="code" [(ngModel)]="newRegion.code" placeholder="iso 2" class="form-control"/>
@@ -37,6 +39,7 @@
                 </select>
             </div>
         </div>
+
         <div class="form-group row" *ngIf="newRegion.season">
             <ng-container *ngFor="let month of months;" >
                 <div class="col-md-1">{{month}}</div>

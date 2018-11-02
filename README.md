@@ -80,7 +80,9 @@ terraform apply [-auto-approve]
 
 *Caution:* You might incur AWS charges after running the setup script
 
-### After initially running `terrfaform`, use the below commands to rebuild and redeploy
+## _Mapbox GL_ Support
+
+* _Yummy_ uses [Mapbox](https://www.mapbox.com/maps/) to visualize places and regions, so to use this featuere you need to register on their side and register your `mapbox_access_token`in `terraform.tfvars`
 
 ### _S3:_ Update, Build and Deploy
 ```
@@ -118,3 +120,4 @@ pip install awscli-local
 * [simple/sample AngularV4-based web app that demonstrates different API authentication options using Amazon Cognito and API Gateway inc AWS CLI User setup](https://github.com/aws-samples/aws-cognito-apigw-angular-auth)
 * [secure-api-access-with-amazon-cognito-federated-identities-amazon-cognito-user-pools-and-amazon-api-gateway](https://aws.amazon.com/de/blogs/compute/secure-api-access-with-amazon-cognito-federated-identities-amazon-cognito-user-pools-and-amazon-api-gateway/)
 * [serverless-website-using-angular-aws-s3-lambda-dynamodb-and-api-gateway](http://www.carbonrider.com/2018/05/11/serverless-website-using-angular-aws-s3-lambda-dynamodb-and-api-gateway/)
+* [Resizing Images in the Browser in Angular With ng2-img-max](https://alligator.io/angular/resizing-images-in-browser-ng2-img-max/)
