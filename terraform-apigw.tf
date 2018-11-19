@@ -297,6 +297,28 @@ EOF
   }
 }
 
+## Method: DELETE REGION
+resource "aws_api_gateway_method" "delete-region" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.regions.id}"
+  http_method = "DELETE"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = "${aws_api_gateway_authorizer.main.id}"
+}
+
+
+## And easier way to apply CORS config?
+module "cors" {
+  source = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
+  version = "0.1.0"
+  api_id          = "${aws_api_gateway_rest_api.main.id}"
+  api_resource_id = "${aws_api_gateway_resource.regions.id}"
+  # allowed_headers = ["Content-Type","X-Amz-Date","Authorization","X-Api-Key","X-Amz-Security-Token"]
+  allowed_headers = ["Content-Type","Authorization"]
+  allowed_methods = ["GET","OPTIONS","PUT","DELETE"]
+  allowed_origin = "*"
+  allowed_max_age = 7200
+}
 
 ############################
 ## Deploy the Gateway Stage
@@ -305,7 +327,7 @@ resource "aws_api_gateway_deployment" "main" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   stage_name  = "${var.api_gateway_stage_name}"
   variables = {
-    "answer" = "43"
+    "answer" = "44"
   }
 }
 

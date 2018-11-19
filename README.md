@@ -123,3 +123,4 @@ pip install awscli-local
 * [serverless-website-using-angular-aws-s3-lambda-dynamodb-and-api-gateway](http://www.carbonrider.com/2018/05/11/serverless-website-using-angular-aws-s3-lambda-dynamodb-and-api-gateway/)
 * [Resizing Images in the Browser in Angular With ng2-img-max](https://alligator.io/angular/resizing-images-in-browser-ng2-img-max/)
 * [AWS API Gateway and Lambda to return image](https://stackoverflow.com/questions/35804042/aws-api-gateway-and-lambda-to-return-image) and [Image Upload and Retrieval from S3 Using AWS API Gateway and Lambda](https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1)
+* [Easily add an OPTIONS method to an API Gateway resource to enable CORS (Terraform)](https://github.com/squidfunk/terraform-aws-api-gateway-enable-cors)
