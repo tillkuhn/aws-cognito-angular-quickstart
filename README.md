@@ -11,12 +11,12 @@
   - [AWS Setup](#aws-setup)
     - [Install the required tools)](#install-the-required-tools)
     - [Creating AWS Resources](#creating-aws-resources)
-    - [After initially running `terrfaform`, use the below commands to rebuild and redeploy](#after-initially-running-terrfaform-use-the-below-commands-to-rebuild-and-redeploy)
+  - [_Mapbox GL_ Support](#_mapbox-gl_-support)
     - [_S3:_ Update, Build and Deploy](#_s3_-update-build-and-deploy)
   - [Import Data](#import-data)
   - [Local Testing](#local-testing)
     - [LocalStack](#localstack)
-  - [Todos](#todos)
+  - [Roadmap](#roadmap)
   - [Other interesting resources](#other-interesting-resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -30,7 +30,7 @@ Yummy Dishes & Places
 ## Get the Code and get running quickly
 ```bash
 git clone https://github.com/tillkuhn/yummy-aws.git yummy
-cd yummy
+cd yummy    
 yarn
 # Run the app in dev mode
 yarn start
@@ -107,12 +107,13 @@ To test this application using [LocalStack](https://github.com/localstack/locals
 pip install awscli-local
 ```
 
-## Todos
+## Roadmap
+* [Support Markdown in node fields](https://github.com/jfcere/ngx-markdown)
 * Admin and Editor, check out [Authorization and Cognito groups](ttps://stackoverflow.com/questions/41828359/how-do-i-access-the-group-for-a-cognito-user-account) and [fine grained access](https://aws.amazon.com/de/blogs/mobile/building-fine-grained-authorization-using-amazon-cognito-user-pools-groups/) and [Cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access](https://stackoverflow.com/questions/34214240/cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access) 
 * [https://www.reddit.com/r/aws/comments/808cf9/how_do_i_use_a_cognito_group_role_in_front_end/More on elevated S3 roles]()
 * Try [In place edit module](https://github.com/qontu/ngx-inline-editor)
 * [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
-* Finish S3 Integration [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
+* Finish S3 Integration (delete and unique filename still missing) [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
 
 ## Other interesting resources
 * [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a)

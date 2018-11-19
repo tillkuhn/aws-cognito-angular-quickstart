@@ -8,7 +8,7 @@ fi
 
 set -x
 mkdir -p ${LOCAL_BACKUP}
-for TABLE in dish place; do
+for TABLE in dish place region; do
   aws dynamodb scan --table-name ${APP_ID}-${TABLE} --profile ${AWS_PROFILE} --region eu-central-1  >${LOCAL_BACKUP}/${TABLE}.dmp
   aws s3 cp ${LOCAL_BACKUP}/${TABLE}.dmp  ${S3_BACKUP} --profile ${AWS_PROFILE} --region ${AWS_REGION}
 done
