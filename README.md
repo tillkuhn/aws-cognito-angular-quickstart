@@ -114,6 +114,7 @@ pip install awscli-local
 * Try [In place edit module](https://github.com/qontu/ngx-inline-editor)
 * [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
 * Finish S3 Integration (delete and unique filename still missing) [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
+* Enable TTL for audit items with epoch attribute and [Enabling Time To Live](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-how-to.html)
 
 ## Other interesting resources
 * [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a)

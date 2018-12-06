@@ -39,7 +39,6 @@ export class LocationMapComponent implements OnInit {
                 this.toastr.error('DynamoDBService: Unable to query location table.', JSON.stringify(err, null, 2));
                 this.progress.complete();
             } else {
-                // print all the movies
                 this.log.info('DynamoDBService: Query succeeded.');
                 data.Items.forEach((poi: Location) => {
                     this.log.info(poi.name, poi.coordinates)
@@ -75,7 +74,7 @@ export class LocationMapComponent implements OnInit {
                 });
 
                 map.addLayer({
-                    'id': 'images',
+                    'id': 'places',
                     'type': 'symbol',
                     'source': {
                         'type': 'geojson',
@@ -88,7 +87,8 @@ export class LocationMapComponent implements OnInit {
                                     'coordinates': poi.coordinates,
                                 },
                                 'properties': {
-                                    'title': poi.name
+                                    'title': poi.name,
+                                    'primaryUrl': poi.primaryUrl
                                 }
                             }))
                         }
@@ -100,10 +100,42 @@ export class LocationMapComponent implements OnInit {
                         'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
                         'text-offset': [0, 0.6],
                         'text-size': 10,
-                        'text-anchor': 'top'
+                        'text-anchor': 'top',
+                        // display all pointseven in low zoom by allowing icons and text to overlap
+                        'icon-allow-overlap': true,
+                        'text-allow-overlap': true
                     }
                 });
             });
+        });
+        // When a click event occurs on a feature in the places layer, open a popup at the
+        // location of the feature, with description HTML from its properties.
+        map.on('click', 'places', function (e) {
+            let coordinates = e.features[0].geometry.coordinates.slice();
+            let primaryUrl = e.features[0].properties.primaryUrl;
+            let title = e.features[0].properties.title;
+
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML('<a href="' + primaryUrl + '" target="_blank">' + title + '</a>')
+                .addTo(map);
+        });
+
+        // Change the cursor to a pointer when the mouse is over the places layer.
+        map.on('mouseenter', 'places', function () {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // Change it back to a pointer when it leaves.
+        map.on('mouseleave', 'places', function () {
+            map.getCanvas().style.cursor = '';
         });
 
         if (this.draw) {
