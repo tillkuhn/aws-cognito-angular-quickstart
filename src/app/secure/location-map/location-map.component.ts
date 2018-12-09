@@ -88,7 +88,8 @@ export class LocationMapComponent implements OnInit {
                                 },
                                 'properties': {
                                     'title': poi.name,
-                                    'primaryUrl': poi.primaryUrl
+                                    'id': poi.id
+                                    //'primaryUrl': poi.primaryUrl
                                 }
                             }))
                         }
@@ -112,7 +113,7 @@ export class LocationMapComponent implements OnInit {
         // location of the feature, with description HTML from its properties.
         map.on('click', 'places', function (e) {
             let coordinates = e.features[0].geometry.coordinates.slice();
-            let primaryUrl = e.features[0].properties.primaryUrl;
+            let id = e.features[0].properties.id;
             let title = e.features[0].properties.title;
 
             // Ensure that if the map is zoomed out such that multiple
@@ -124,7 +125,7 @@ export class LocationMapComponent implements OnInit {
 
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
-                .setHTML('<a href="' + primaryUrl + '" target="_blank">' + title + '</a>')
+                .setHTML('<a href="/#/secure/places/' + id + '" target="_place">' + title + '</a>')
                 .addTo(map);
         });
 

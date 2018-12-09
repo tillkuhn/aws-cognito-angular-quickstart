@@ -35,10 +35,13 @@ export class LocationService {
         return this.ddbUtil.getMapper().get(Object.assign(new Location(), {id: id}));
     }
 
+    /*
+     * Get reduces PoI Locations for Map Display
+     */
     getPois(callback: (err: AWSError, data: DocumentClient.ScanOutput) => void): void {
         let params: ScanInput  = {
             TableName: this.ddbUtil.getTableName('place'),
-            ProjectionExpression: 'id,coordinates,#locationname,primaryUrl',
+            ProjectionExpression: 'id,coordinates,#locationname',
             ExpressionAttributeNames: {'#locationname': 'name'}
         };
         let docClient = new DynamoDB.DocumentClient(this.ddbUtil.getClientParams());
