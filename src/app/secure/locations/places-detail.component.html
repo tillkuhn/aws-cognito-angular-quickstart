@@ -12,13 +12,9 @@
                     <span class="badge badge-pill badge-warning" *ngIf="location.isNew()" >NEW</span>
                 </h3>
                 <i>{{location.summary}}</i>
-                <!--https://github.com/kekeh/mydatepicker -->
                 <br />
                 <h4><i class="glyphicon glyphicon-screenshot"></i> {{ getDegrees() }}</h4>
-                <!--
-                <my-date-picker name="mydate" [options]="myDatePickerOptions"
-                                [(ngModel)]="location.beenThere" required></my-date-picker>
-                                -->
+
                 <bar-rating [(rate)]="location.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
                             [titles]="['Find out', 'Lousy','Potential','Nice', 'Yo','Hossa','OK','Good','Great','Awesome']"></bar-rating>
                 <a href="{{location.primaryUrl}}" target="_location" *ngIf="location.primaryUrl"> → Open Location </a>

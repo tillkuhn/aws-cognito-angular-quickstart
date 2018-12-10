@@ -107,13 +107,4 @@ export class LocationService {
     }
 
 
-    createMarker(data: GeoJson) {
-        // return this.db.list('/markers')
-        //    .push(data)
-    }
-
-    removeMarker($key: string) {
-        // return this.db.object('/markers/' + $key).remove()
-    }
-
 }

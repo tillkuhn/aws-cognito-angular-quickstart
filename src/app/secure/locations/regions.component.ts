@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {CacheService} from '@ngx-cache/core';
 import {ToastrService} from 'ngx-toastr';
 import {NGXLogger} from 'ngx-logger';
+import {GeoPoint} from '../../model/geopoint';
 
 @Component({
     selector: 'app-regions',
@@ -63,6 +64,27 @@ export class RegionsComponent implements OnInit {
             this.toastr.info('New Region ' + this.newRegion.name + 'saved', 'Success');
         })
     }
+
+    // todo would be nice to share with places-detail.component
+    onChangeCoordinates(event: any) {
+        // https://github.com/perfectline/geopoint
+        if (event.target.value) {
+            this.newRegion.coordinates = new Array(2);
+            this.newRegion.coordinates[0] =  Number(event.target.value.split(/[\s]+/)[1]);
+            this.newRegion.coordinates[1] =  Number(event.target.value.split(/[\s]+/)[0]);
+        } else {
+            // clean
+        }
+    }
+    getDegrees(): string {
+        if (Array.isArray(this.newRegion.coordinates) && this.newRegion.coordinates.length > 1) {
+            const point = new GeoPoint(this.newRegion.coordinates[0],this.newRegion.coordinates[1]);
+            return point.getLatLonDeg();
+        } else {
+            return "No coordinates defined";
+        }
+    }
+
 
     selecedItemsChanged(items: any[]): void {
         this.log.info(JSON.stringify(items));

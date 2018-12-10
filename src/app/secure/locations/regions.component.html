@@ -1,7 +1,7 @@
 <div *ngIf="newRegion">
     <form (ngSubmit)="onSubmitRegion()" #locationForm="ngForm">
         <div class="form-group row">
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <tree-select name="regionSelect"
                              [items]="regionTree"
                              [(ngModel)]="newRegion"
@@ -21,7 +21,14 @@
                     <div [hidden]="!simpleSelect.errors.required">Simple select is required</div>
                 </div>
             </div>
-        </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-success" (click)="onRefresh()">
+                    <span class="glyphicon glyphicon-apple"></span>
+                    Refresh
+                </button>
+            </div>
+
+            </div>
 
         <div class="form-group row">
             <div class="col-md-2">
@@ -40,6 +47,7 @@
             </div>
         </div>
 
+        <!-- seasons in the sun -->
         <div class="form-group row" *ngIf="newRegion.season">
             <ng-container *ngFor="let month of months;" >
                 <div class="col-md-1">{{month}}</div>
@@ -57,6 +65,26 @@
             </ng-container>
         </div>
 
+
+        <!-- coordinates -->
+        <div class="form-group row">
+            <div class="col-md-2">
+                <input (change)="onChangeCoordinates($event)" placeholder="d.dddddd (lat) d.dddddd (lon)"
+                       class="form-control input-lg" name="latlon" >
+            </div>
+            <div class="col-md-2">
+                <i class="glyphicon glyphicon-screenshot"></i> {{ getDegrees() }}
+            </div>
+            <div class="col-md-2">
+                <a href="https://latitude.to/" target="_latitude">
+                    <span class="glyphicon glyphicon-map"></span>
+                    → Open latitude.to
+                </a>
+            </div>
+
+        </div>
+
+        <!-- here we go -->
         <div class="form-group row">
             <button type="submit" class="btn btn-success">
                 <span class="glyphicon glyphicon-save"></span>
@@ -68,10 +96,6 @@
                 ToggleSeason
             </button>
             &nbsp;
-            <button type="button" class="btn btn-success" (click)="onRefresh()">
-                <span class="glyphicon glyphicon-apple"></span>
-                Refresh
-            </button>
             <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2" target="_iso2"> &rarr; Open ISO 2 Codes</a>
         </div>
 

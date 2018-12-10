@@ -110,18 +110,19 @@ pip install awscli-local
 ## Roadmap
 * [Support Markdown in node fields](https://github.com/jfcere/ngx-markdown)
 * Admin and Editor, check out [Authorization and Cognito groups](ttps://stackoverflow.com/questions/41828359/how-do-i-access-the-group-for-a-cognito-user-account) and [fine grained access](https://aws.amazon.com/de/blogs/mobile/building-fine-grained-authorization-using-amazon-cognito-user-pools-groups/) and [Cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access](https://stackoverflow.com/questions/34214240/cognito-role-and-aws-s3-bucket-policy-for-mobile-and-web-access) 
-* [https://www.reddit.com/r/aws/comments/808cf9/how_do_i_use_a_cognito_group_role_in_front_end/More on elevated S3 roles]()
-* Try [In place edit module](https://github.com/qontu/ngx-inline-editor)
-* [dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
-* Finish S3 Integration (delete and unique filename still missing) [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
-* Enable TTL for audit items with epoch attribute and [Enabling Time To Live](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-how-to.html)
+* More on elevated S3 roles [How do I use a Cognito group role in front end application?](https://www.reddit.com/r/aws/comments/808cf9/how_do_i_use_a_cognito_group_role_in_front_end/) 
+* Try out the [In place edit module](https://github.com/qontu/ngx-inline-editor)
+* Add [Dish location mapbox support](https://angularfirebase.com/lessons/build-realtime-maps-in-angular-with-mapbox-gl/)https://www.flag-sprites.com/de/
+* Improve S3 Upload Doc Integration (delete and unique filename still missing) [Example](https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html)* https://github.com/perfectline/geopoint
+* Enable [Time To Live](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-how-to.html) for audit items with epoch attribute and
 
-## Other interesting resources
-* [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a)
+## Other useful resources
+* [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a) and [Creating a serverless API using AWS API Gateway and DynamoDB](https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/)
 * [integrating-api-with-aws-services-s3](https://docs.aws.amazon.com/apigateway/latest/developerguide/integrating-api-with-aws-services-s3.html)
-* [simple/sample AngularV4-based web app that demonstrates different API authentication options using Amazon Cognito and API Gateway inc AWS CLI User setup](https://github.com/aws-samples/aws-cognito-apigw-angular-auth)
-* [secure-api-access-with-amazon-cognito-federated-identities-amazon-cognito-user-pools-and-amazon-api-gateway](https://aws.amazon.com/de/blogs/compute/secure-api-access-with-amazon-cognito-federated-identities-amazon-cognito-user-pools-and-amazon-api-gateway/)
-* [serverless-website-using-angular-aws-s3-lambda-dynamodb-and-api-gateway](http://www.carbonrider.com/2018/05/11/serverless-website-using-angular-aws-s3-lambda-dynamodb-and-api-gateway/)
-* [Resizing Images in the Browser in Angular With ng2-img-max](https://alligator.io/angular/resizing-images-in-browser-ng2-img-max/)
-* [AWS API Gateway and Lambda to return image](https://stackoverflow.com/questions/35804042/aws-api-gateway-and-lambda-to-return-image) and [Image Upload and Retrieval from S3 Using AWS API Gateway and Lambda](https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1)
 * [Easily add an OPTIONS method to an API Gateway resource to enable CORS (Terraform)](https://github.com/squidfunk/terraform-aws-api-gateway-enable-cors)
+* [Simple/sample AngularV4-based web app that demonstrates different API authentication options using Amazon Cognito and API Gateway inc AWS CLI User setup](https://github.com/aws-samples/aws-cognito-apigw-angular-auth)
+* [Secure API Access with Amazon Cognito Federated Identities, Amazon Cognito User Pools, and Amazon API Gateway](https://aws.amazon.com/de/blogs/compute/secure-api-access-with-amazon-cognito-federated-identities-amazon-cognito-user-pools-and-amazon-api-gateway/)
+* [Serverless website using Angular, AWS S3, Lambda, DynamoDB and API Gateway](http://www.carbonrider.com/2018/05/11/serverless-website-using-angular-aws-s3-lambda-dynamodb-and-api-gateway/)
+* [Resizing Images in the Browser in Angular With ng2-img-max](https://alligator.io/angular/resizing-images-in-browser-ng2-img-max/)
+* [AWS API Gateway and Lambda to return image data](https://stackoverflow.com/questions/35804042/aws-api-gateway-and-lambda-to-return-image) and [Image Upload and Retrieval from S3 Using AWS API Gateway and Lambda](https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1)
+* [Bike and other icons for custom map markers depending on location type](https://icons8.com/icon/set/bike/windows)

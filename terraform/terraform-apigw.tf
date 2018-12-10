@@ -1,4 +1,5 @@
 variable "api_gateway_stage_name" { default = "v1" }
+variable "deployment_id" { default = "47" } ### increment to force deployment
 
 #####################################################################
 ## Create API Gateway + Resources for future API Calls
@@ -144,6 +145,14 @@ resource "aws_api_gateway_integration" "put-region-integration" {
             #end
         ]},
         #end
+        #if($input.path('$.coordinates') && $input.path('$.coordinates').size() > 0)
+        "coordinates": {
+            "L": [
+            #foreach($elem in $input.path('$.coordinates'))
+            {"N": "$elem" }#if($foreach.hasNext),#end
+            #end
+        ]},
+        #end
         "name": {
             "S": "$input.path('$.name')"
         }
@@ -245,6 +254,14 @@ resource "aws_api_gateway_integration_response" "get-region-response" {
             #end
             ],
             #end
+            #if($elem.coordinates && $elem.coordinates.L.size() > 0)
+            "coordinates": [
+            #foreach($coordinate in $elem.coordinates.L)
+             $coordinate.N
+             #if($foreach.hasNext),#end
+            #end
+            ],
+            #end
             "name": "$elem.name.S"
         }#if($foreach.hasNext),#end
 	#end
@@ -321,7 +338,7 @@ resource "aws_api_gateway_deployment" "main" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   stage_name  = "${var.api_gateway_stage_name}"
   variables = {
-    "answer" = "45"
+    "answer" = "${var.deployment_id}"
   }
 }
 

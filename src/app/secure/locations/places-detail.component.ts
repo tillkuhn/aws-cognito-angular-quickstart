@@ -131,6 +131,7 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
             return "No coordinates defined";
         }
     }
+
     onDelete() {
         const confirm = window.confirm('Do you really want to delete this location?');
         if (confirm) {
