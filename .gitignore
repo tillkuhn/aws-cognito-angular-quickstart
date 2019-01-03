@@ -6,6 +6,7 @@
 
 # dependencies
 /node_modules
+/lambda/node_modules
 /src/bower_components
 /public/bower_components
 package-lock.json
@@ -37,6 +38,7 @@ Thumbs.db
 
 # Build Artifacts
 upload.zip
+lambda.zip
 resetConfig.sh
 
 # Terraform
