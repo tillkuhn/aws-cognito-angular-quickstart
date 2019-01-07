@@ -12,6 +12,7 @@ import {IdPrefix, S3Service} from '../../service/s3.service';
 import {humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput} from 'ngx-uploader';
 import {GeoPoint} from '../../model/geopoint'
 import {Observable} from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-location-detail',
@@ -130,6 +131,10 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
         } else {
             return "No coordinates defined";
         }
+    }
+
+    getRelativeCreationDate() {
+        return this.location.createdAt? moment(this.location.createdAt).fromNow() : null;
     }
 
     onDelete() {

@@ -42,7 +42,7 @@ lambda.zip
 resetConfig.sh
 
 # Terraform
-.terraform
+/terraform/.terraform
 terraform.tfstate*
 
 ## generated from templates / terraform
