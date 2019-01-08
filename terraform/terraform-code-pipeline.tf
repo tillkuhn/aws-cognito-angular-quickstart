@@ -3,6 +3,8 @@
 ## To allow AWS CodeBuild to retrieve custom environment variables stored in Amazon EC2 Systems Manager Parameter Store,
 ## you must add the ssm:GetParameters action to your AWS CodeBuild service role. For more information, see Create an AWS CodeBuild Service Role.
 
+
+
 #####################################################################
 # update environment.ts template with actual IDs used
 # by the application, create local env specific scripts
@@ -37,8 +39,32 @@ resource "local_file" "environment_prod" {
 ## in environment.prod.ts by code pipeline
 #####################################################################
 
-resource "aws_ssm_parameter" "aws_cognito_identity_pool_id" {
-  name  = "/${var.app_id}/${var.env}/AWS_COGNITO_IDENTITY_POOL_ID"
+resource "aws_ssm_parameter" "bucketRegion" {
+  name  = "/${var.app_id}/${var.env}/bucketRegion"
+  type  = "String"
+  description = "The ID of the cognito Identy Pool managed by Terraform"
+  value = "${var.aws_region}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
+resource "aws_ssm_parameter" "region" {
+  name  = "/${var.app_id}/${var.env}/region"
+  type  = "String"
+  description = "The ID of the cognito Identy Pool managed by Terraform"
+  value = "${var.aws_region}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
+resource "aws_ssm_parameter" "identityPoolId" {
+  name  = "/${var.app_id}/${var.env}/identityPoolId"
   type  = "String"
   description = "The ID of the cognito Identy Pool managed by Terraform"
   value = "${aws_cognito_identity_pool.main.id}"
@@ -49,52 +75,74 @@ resource "aws_ssm_parameter" "aws_cognito_identity_pool_id" {
   }
 }
 
-resource "aws_ssm_parameter" "region" {
-  name  = "${var.app_id}-region"
+resource "aws_ssm_parameter" "userPoolId" {
+  name  = "/${var.app_id}/${var.env}/userPoolId"
   type  = "String"
-  value = "${var.aws_region}"
-}
-
-resource "aws_ssm_parameter" "bucket_region" {
-  name  = "${var.app_id}-bucket_region"
-  type  = "String"
-  value = "${var.aws_region}"
-}
-
-resource "aws_ssm_parameter" "ddb_table_name_prefix" {
-  name  = "${var.app_id}-ddb_table_name_prefix"
-  type  = "String"
-  value = "${var.table_name_prefix}"
-}
-
-resource "aws_ssm_parameter" "bucket_name_prefix" {
-  name  = "${var.app_id}-bucket_name_prefix"
-  type  = "String"
-  value = "${var.bucket_name_prefix}"
-}
-
-resource "aws_ssm_parameter" "user_pool_id" {
-  name  = "${var.app_id}-user_pool_id"
-  type  = "String"
+  description = "The ID of the cognito User Pool managed by Terraform"
   value = "${aws_cognito_user_pool.main.id}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
 }
 
-resource "aws_ssm_parameter" "client_id" {
-  name  = "${var.app_id}-client_id"
+resource "aws_ssm_parameter" "clientId" {
+  name  = "/${var.app_id}/${var.env}/clientId"
   type  = "String"
+  description = "The ID of the cognito User Pool Client managed by Terraform"
   value = "${aws_cognito_user_pool_client.main.id}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
 }
 
-
-resource "aws_ssm_parameter" "mapbox_access_token" {
-  name  = "${var.app_id}-mapbox_access_token"
+resource "aws_ssm_parameter" "ddbTableNamePrefix" {
+  name  = "/${var.app_id}/${var.env}/ddbTableNamePrefix"
   type  = "String"
+  description = "Prefix for generated DynamoDB Tables"
+  value = "${var.table_name_prefix}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
+resource "aws_ssm_parameter" "bucketNamePrefix" {
+  name  = "/${var.app_id}/${var.env}/bucketNamePrefix"
+  type  = "String"
+  description = "Prefix for bucket (e.g. for multi tenancy)"
+  value = "${var.bucket_name_prefix}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
+resource "aws_ssm_parameter" "mapboxAccessToken" {
+  name  = "/${var.app_id}/${var.env}/mapboxAccessToken"
+  type  = "String"
+  description = "Token to Access Mapbox API for geo visualization"
   value = "${var.mapbox_access_token}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
 }
 
-resource "aws_ssm_parameter" "api_gateway_invoke_url" {
-  name  = "${var.app_id}-api_gateway_invoke_url"
+resource "aws_ssm_parameter" "apiGatewayInvokeUrl" {
+  name  = "/${var.app_id}/${var.env}/apiGatewayInvokeUrl"
   type  = "String"
+  description = "Endpoint of the deployed API Gateway"
   value = "${aws_api_gateway_deployment.main.invoke_url}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
 }
-
