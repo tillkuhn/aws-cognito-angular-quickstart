@@ -31,31 +31,3 @@ resource "aws_sns_topic" "events" {
   name = "${var.app_id}-events"
 }
 
-#####################################################################
-# update environment.ts template with actual IDs used
-# by the application, create local env specific scripts
-#####################################################################
-data "template_file" "environment" {
-  template = "${file("${path.module}/../src/environments/environment.ts.tmpl")}"
-  vars {
-    identityPoolId = "${aws_cognito_identity_pool.main.id}"
-    region = "${var.aws_region}"
-    bucketRegion = "${var.aws_region}"
-    bucketNamePrefix = "${var.bucket_name_prefix}"
-    ddbTableNamePrefix = "${var.table_name_prefix}"
-    userPoolId = "${aws_cognito_user_pool.main.id}"
-    clientId = "${aws_cognito_user_pool_client.main.id}"
-    mapboxAccessToken = "${var.mapbox_access_token}"
-    apiGatewayInvokeUrl = "${aws_api_gateway_deployment.main.invoke_url}"
-  }
-}
-
-resource "local_file" "environment" {
-  content     = "${data.template_file.environment.rendered}"
-  filename = "${path.module}/../src/environments/environment.ts"
-}
-
-resource "local_file" "environment_prod" {
-  content     = "${data.template_file.environment.rendered}"
-  filename = "${path.module}/../src/environments/environment.prod.ts"
-}
