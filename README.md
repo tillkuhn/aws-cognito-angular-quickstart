@@ -126,3 +126,4 @@ pip install awscli-local
 * [Resizing Images in the Browser in Angular With ng2-img-max](https://alligator.io/angular/resizing-images-in-browser-ng2-img-max/)
 * [AWS API Gateway and Lambda to return image data](https://stackoverflow.com/questions/35804042/aws-api-gateway-and-lambda-to-return-image) and [Image Upload and Retrieval from S3 Using AWS API Gateway and Lambda](https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1)
 * [Bike and other icons for custom map markers depending on location type](https://icons8.com/icon/set/bike/windows)
+* https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-cloudwatch-sns-notifications.html
