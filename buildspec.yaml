@@ -13,7 +13,6 @@ env:
         BUILD_ENV: "prod"
     #parameter-store vars are in the format /[stage]/[repo]/[branch]/[eyecatcher]/key
     parameter-store: #see https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-syntax
-        AWS_COGNITO_IDENTITY_POOL_ID: "/yummy/prod/AWS_COGNITO_IDENTITY_POOL_ID"
         bucketRegion: "/yummy/prod/bucketRegion"
         region: "/yummy/prod/region"
         identityPoolId: "/yummy/prod/identityPoolId"
