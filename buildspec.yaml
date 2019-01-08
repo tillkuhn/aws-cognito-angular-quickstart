@@ -10,7 +10,6 @@ env:
     variables:
         APP_NAME: "yummy"
         BUILD_ENV: "prod"
-    #parameter-store vars are in the format /[stage]/[repo]/[branch]/[eyecatcher]/key
     parameter-store: #see https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-syntax
         bucketRegion: "/yummy/prod/bucketRegion"
         region: "/yummy/prod/region"
@@ -22,6 +21,7 @@ env:
         mapboxAccessToken: "/yummy/prod/mapboxAccessToken"
         apiGatewayInvokeUrl: "/yummy/prod/apiGatewayInvokeUrl"
         webappBucketS3: "/yummy/prod/webappBucketS3"
+        publishDeployResultTopic: "/yummy/prod/publishDeployResultTopic"
 
 phases:
     install:
@@ -54,6 +54,7 @@ phases:
         - aws s3 sync ./dist/ ${webappBucketS3} --region ${bucketRegion} --delete --size-only
         ## size-only is not good for index.html as the size may not change but the checksum of included scripts does
         - aws s3 cp ./dist/index.html ${webappBucketS3}/index.html --region ${bucketRegion}
+        - aws sns publish --topic-arn "${publishDeployResultTopic}" --subject "$APP_NAME Deployment" --message "$APP_NAME $CODEBUILD_RESOLVED_SOURCE_VERSION successfully deployed by $CODEBUILD_INITIATOR"
         #- echo Build completed on `date`
 
 #artifacts:

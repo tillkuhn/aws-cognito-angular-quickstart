@@ -9,6 +9,14 @@ data "aws_caller_identity" "current" {}
 
 
 #####################################################################
+## Create SNS Topic for important events,
+## email event subscription is not supported so we skip subscriptions
+#####################################################################
+resource "aws_sns_topic" "events" {
+  name = "${var.app_id}-events"
+}
+
+#####################################################################
 # update environment.ts template with actual IDs used
 # by the application, create local env specific scripts
 #####################################################################
@@ -162,6 +170,18 @@ resource "aws_ssm_parameter" "webappBucketS3" {
   }
 }
 
+resource "aws_ssm_parameter" "publishDeployResultTopic" {
+  name  = "/${var.app_id}/${var.env}/publishDeployResultTopic"
+  type  = "String"
+  description = "Topic ARN to publish pipelines results"
+  value = "${aws_sns_topic.events.arn}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
 ## ROLLI ROLLI
 
 resource "aws_iam_role" "code_pipeline_role" {
@@ -239,6 +259,16 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
             "Resource": [
               "arn:aws:s3:::${var.route53_sub_domain}.${var.route53_zone_domain}",
               "arn:aws:s3:::${var.route53_sub_domain}.${var.route53_zone_domain}/*"
+            ]
+        },
+       {
+            "Sid": "AllowDeploymentInfoSNSPush",
+            "Effect": "Allow",
+            "Action": [
+              "SNS:Publish"
+            ],
+            "Resource": [
+              "${aws_sns_topic.events.arn}"
             ]
         }
     ]

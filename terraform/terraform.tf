@@ -15,19 +15,10 @@ variable "allow_admin_create_user_only" { default = true }
 variable "mapbox_access_token" {}
 
 #####################################################################
-## configure AWS Provide, you can use key secret here,
+## configure AWS Provider, you can use key secret here,
 ## but we prefer a profile in ~/.aws/credentials
 #####################################################################
 provider "aws" {
   region     = "${var.aws_region}"
   profile    = "${var.aws_profile}"
 }
-
-#####################################################################
-## Create SNS Topic for important events, subscribe admin mail
-## email event subscription is not supported so we skip subscriptions
-#####################################################################
-resource "aws_sns_topic" "events" {
-  name = "${var.app_id}-events"
-}
-
