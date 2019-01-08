@@ -203,8 +203,8 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
             ],
             "Resource": [
                 "arn:aws:s3:::codepipeline-${var.aws_region}-*",
-                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}",
-                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}:*"
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_id}-${var.codebuild_suffix}",
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_id}-${var.codebuild_suffix}:*"
             ]
         },
         {
@@ -212,8 +212,8 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
             "Effect": "Allow",
             "Action": "logs:CreateLogGroup",
             "Resource": [
-                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}",
-                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}:*"
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_id}-${var.codebuild_suffix}",
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_id}-${var.codebuild_suffix}:*"
             ]
         },
         {
@@ -223,7 +223,7 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
                 "ssm:GetParametersByPath",
                 "ssm:GetParameters"
             ],
-            "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.app_name}*"
+            "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.app_id}*"
         },
        {
             "Sid": "AllowWebsiteDeploy",
