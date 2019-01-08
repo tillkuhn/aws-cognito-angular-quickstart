@@ -8,7 +8,6 @@ env:
     ## DEFAULT ENV VARIABLES: https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
     ## CODEBUILD_RESOLVED_SOURCE_VERSION,CODEBUILD_INITIATOR
     variables:
-        S3_BUCKET: "yummy-hase"
         APP_NAME: "yummy"
         BUILD_ENV: "prod"
     #parameter-store vars are in the format /[stage]/[repo]/[branch]/[eyecatcher]/key
@@ -22,6 +21,7 @@ env:
         bucketNamePrefix: "/yummy/prod/bucketNamePrefix"
         mapboxAccessToken: "/yummy/prod/mapboxAccessToken"
         apiGatewayInvokeUrl: "/yummy/prod/apiGatewayInvokeUrl"
+        webappBucketS3: "/yummy/prod/webappBucketS3"
 
 phases:
     install:
@@ -59,7 +59,10 @@ phases:
         # Clear S3 bucket.
         - echo About to deploy to s3://${S3_BUCKET}
         ## e.g. aws-cli/1.16.69 Python/3.4.3 Linux/4.14.77-70.59.amzn1.x86_64 exec-env/AWS_ECS_EC2 botocore/1.12.59
-        - aws --version||echo aws not installed
+        - aws --version || echo aws not installed
+        - aws s3 sync ./dist/ ${webappBucketS3} --region ${bucketRegion} --delete --size-only
+        ## size-only is not good for index.html as the size may not change but the checksum of included scripts does
+        - aws s3 cp ./dist/index.html ${webappBucketS3}/index.html --region ${bucketRegion}
         #- aws s3 rm s3://${S3_BUCKET} --recursive
         #- echo S3 bucket is cleared.
         ## Copy dist folder to S3 bucket, As of Angular 6, builds are stored inside an app folder in distribution and not at the root of the dist folder

@@ -1,8 +1,11 @@
-
 ## todo
 ## To allow AWS CodeBuild to retrieve custom environment variables stored in Amazon EC2 Systems Manager Parameter Store,
 ## you must add the ssm:GetParameters action to your AWS CodeBuild service role. For more information, see Create an AWS CodeBuild Service Role.
 
+# https://www.terraform.io/docs/providers/aws/d/caller_identity.html
+variable "codebuild_suffix" { default = "pipeline-build" }
+
+data "aws_caller_identity" "current" {}
 
 
 #####################################################################
@@ -145,4 +148,98 @@ resource "aws_ssm_parameter" "apiGatewayInvokeUrl" {
     Environment = "${var.env}"
     ManagedBy = "Terraform"
   }
+}
+
+resource "aws_ssm_parameter" "webappBucketS3" {
+  name  = "/${var.app_id}/${var.env}/webappBucketS3"
+  type  = "String"
+  description = "S3 Target of deployment of webapp"
+  value = "s3://${var.route53_sub_domain}.${var.route53_zone_domain}"
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
+## ROLLI ROLLI
+
+resource "aws_iam_role" "code_pipeline_role" {
+  name = "${var.role_name_prefix}-code-pipeline"
+  description = "Managed by Terraform"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "codebuild.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+## TODO Code Pipeline should be managed by TF as well so we can use resource references and not hardcoded arns
+resource "aws_iam_role_policy" "code_pipeline_role_policy" {
+  name = "${var.role_name_prefix}-code-pipeline-policy"
+  role = "${aws_iam_role.code_pipeline_role.id}"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowS3CodeAndLogsAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetObjectVersion",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": [
+                "arn:aws:s3:::codepipeline-${var.aws_region}-*",
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}",
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}:*"
+            ]
+        },
+        {
+            "Sid": "AllowLogGroupCreation",
+            "Effect": "Allow",
+            "Action": "logs:CreateLogGroup",
+            "Resource": [
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}",
+                "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_name}-${var.codebuild_suffix}:*"
+            ]
+        },
+        {
+            "Sid": "AllowAccessParameterStore",
+            "Effect": "Allow",
+            "Action": [
+                "ssm:GetParametersByPath",
+                "ssm:GetParameters"
+            ],
+            "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.app_name}*"
+        },
+       {
+            "Sid": "AllowWebsiteDeploy",
+            "Effect": "Allow",
+            "Action": [
+              "s3:ListBucket",
+              "s3:PutObject",
+              "s3:PutObjectAcl",
+              "s3:DeleteObject"
+            ],
+            "Resource": [
+              "arn:aws:s3:::${var.route53_sub_domain}.${var.route53_zone_domain}",
+              "arn:aws:s3:::${var.route53_sub_domain}.${var.route53_zone_domain}/*"
+            ]
+        }
+    ]
+}
+EOF
 }
