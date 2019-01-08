@@ -23,19 +23,21 @@ phases:
         - sudo apt-get install -y yarn
         # Install Angular CLI, If you are not using Angular 6, install angular/cli@1.7.0 or lower, confirm by running ng -v inside your project folder
         - yarn global add @angular/cli@6.0.8
-        # Install node dependancies, ignore engine b/c of node 10 vs node 9 issue (e.g. gzippo)
+        # Install node dependancies, ignore engine b/c of node 10 vs node 9 issues
         - yarn install --ignore-engines
 
     build:
         commands:
         # Builds Angular application. You can also build using custom environment here like mock or staging
-        - echo Build started on `date`
+        - echo Build for ${BUILD_ENV} started
+        - yarn build
         #- ng build --${BUILD_ENV}
 
     post_build:
         commands:
         # Clear S3 bucket.
-        - echo About to clean s3://${S3_BUCKET}
+        - echo About to deploy to s3://${S3_BUCKET}
+        - aws --version||echo aws not installed
         #- aws s3 rm s3://${S3_BUCKET} --recursive
         #- echo S3 bucket is cleared.
         ## Copy dist folder to S3 bucket, As of Angular 6, builds are stored inside an app folder in distribution and not at the root of the dist folder
