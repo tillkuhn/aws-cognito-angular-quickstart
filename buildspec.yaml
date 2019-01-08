@@ -30,13 +30,14 @@ phases:
         commands:
         # Builds Angular application. You can also build using custom environment here like mock or staging
         - echo Build for ${BUILD_ENV} started
-        - yarn build
+        - yarn buildci
         #- ng build --${BUILD_ENV}
 
     post_build:
         commands:
         # Clear S3 bucket.
         - echo About to deploy to s3://${S3_BUCKET}
+        ## e.g. aws-cli/1.16.69 Python/3.4.3 Linux/4.14.77-70.59.amzn1.x86_64 exec-env/AWS_ECS_EC2 botocore/1.12.59
         - aws --version||echo aws not installed
         #- aws s3 rm s3://${S3_BUCKET} --recursive
         #- echo S3 bucket is cleared.
