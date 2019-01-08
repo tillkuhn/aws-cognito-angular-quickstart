@@ -203,6 +203,7 @@ resource "aws_iam_role" "code_pipeline_role" {
 EOF
 }
 
+## 
 ## TODO Code Pipeline should be managed by TF as well so we can use resource references and not hardcoded arns
 resource "aws_iam_role_policy" "code_pipeline_role_policy" {
   name = "${var.role_name_prefix}-code-pipeline-policy"
