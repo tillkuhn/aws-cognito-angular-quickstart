@@ -48,9 +48,9 @@ phases:
     post_build:
         commands:
         # Clear S3 bucket.
-        - echo About to deploy to s3://${S3_BUCKET}
         ## e.g. aws-cli/1.16.69 Python/3.4.3 Linux/4.14.77-70.59.amzn1.x86_64 exec-env/AWS_ECS_EC2 botocore/1.12.59
         - aws --version || echo aws not installed
+        - echo About to deploy to ${webappBucketS3} in regsion ${bucketRegion}
         - aws s3 sync ./dist/ ${webappBucketS3} --region ${bucketRegion} --delete --size-only
         ## size-only is not good for index.html as the size may not change but the checksum of included scripts does
         - aws s3 cp ./dist/index.html ${webappBucketS3}/index.html --region ${bucketRegion}

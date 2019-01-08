@@ -226,10 +226,12 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
             "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.app_id}*"
         },
        {
-            "Sid": "AllowWebsiteDeploy",
+            "Sid": "AllowWebsiteDeployS3SyncTaskPolicy",
             "Effect": "Allow",
             "Action": [
               "s3:ListBucket",
+              "s3:GetObject",
+              "s3:GetBucketLocation",
               "s3:PutObject",
               "s3:PutObjectAcl",
               "s3:DeleteObject"
