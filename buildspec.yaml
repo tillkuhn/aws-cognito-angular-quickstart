@@ -41,7 +41,8 @@ phases:
         # Builds Angular application. You can also build using custom environment here like mock or staging
         - echo Build for ${BUILD_ENV} started
         - envsubst <"./src/environments/environment.ts.tmpl"  > "./src/environments/environment.prod.ts"
-        - cat ./src/environments/environment.prod.ts
+        ## todo investigate why substition as per angular.json does not work
+        - cp ./src/environments/environment.prod.ts ./src/environments/environment.ts
         - yarn build
 
     post_build:
