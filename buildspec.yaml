@@ -43,7 +43,7 @@ phases:
         - touch "./src/environments/environment.ts"
         - envsubst <"./src/environments/environment.ts.tmpl"  > "./src/environments/environment.prod.ts"
         - cat ./src/environments/environment.prod.ts
-        - yarn buildci
+        - yarn build
 
     post_build:
         commands:
