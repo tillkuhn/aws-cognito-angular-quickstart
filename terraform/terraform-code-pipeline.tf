@@ -243,7 +243,7 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
                 "ssm:GetParametersByPath",
                 "ssm:GetParameters"
             ],
-            "Resource": "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.app_id}*"
+            "Resource": "arn:aws:ssm:${var.aws_region}:${data.aws_caller_identity.current.account_id}:parameter/${var.app_id}*"
         },
        {
             "Sid": "AllowWebsiteDeployS3SyncTaskPolicy",
