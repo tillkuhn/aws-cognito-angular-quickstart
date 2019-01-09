@@ -247,7 +247,7 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
                 "s3:GetObjectVersion"
             ],
             "Resource": [
-                "arn:aws:s3:::${var.bucket_name_prefix}-artifacts"
+                "arn:aws:s3:::${var.bucket_name_prefix}-artifacts*"
             ]
         },
         {
