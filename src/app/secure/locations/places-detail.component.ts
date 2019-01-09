@@ -56,7 +56,7 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
     }
 
     ngOnInit(): void {
-        this.lotypeKeys = Object.keys(LocationType).filter(k => !isNaN(Number(k)));
+        this.lotypeKeys = Object.keys(LocationType); //.filter(k => !isNaN(Number(k)));
         this.locationService.getRegions().then((regions) => {
             this.countries = regions;
         })
@@ -88,7 +88,8 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
                 this.navigated = false;
                 this.location = new Location();
                 this.location.coordinates = new Array<number>(2);
-                this.location.lotype = LocationType.Place;
+                this.location.lotype = LocationType.PLACE;
+                this.route.paramss
                 //this.location.imageUrl = '/assets/unknown.jpg';
             }
         });

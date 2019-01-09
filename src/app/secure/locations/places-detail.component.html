@@ -71,6 +71,7 @@
                            class="form-control input-sm"/>
                 </div>
             </div>
+            <!-- location type -->
             <div class="col-md-2">
                 <label class="control-label" for="lotype">Location Type</label>
                 <select [(ngModel)]="location.lotype" class="form-control input-sm" name="lotype">
@@ -93,10 +94,10 @@
         <!-- Notes-->
         <div class="form-group row">
             <div class="col-md-6">
-                <label class="control-label" for="url">Notes for this location</label>
+                <label class="control-label" for="url">Notes for this place</label>
 
                 <div class="controls">
-                <textarea [(ngModel)]="location.notes" name="notes" placeholder="Recipe Notes"
+                <textarea [(ngModel)]="location.notes" name="notes" placeholder="Paste something nice"
                           rows="5" class="form-control input-sm"></textarea>
                 </div>
             </div>
@@ -110,7 +111,7 @@
             <!--https://angular.io/guide/forms-->
             <button type="submit" class="btn btn-success btn-lg">
                 <span class="glyphicon glyphicon-save"></span>
-                Submit Place
+                {{location.isNew() ? 'Add' : 'Update'}} Place
             </button>&nbsp;
 
             <button type="button" (click)="onDelete()" class="btn btn-warning btn-lg">

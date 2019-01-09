@@ -65,6 +65,10 @@ export class Location {
     isNew?(): boolean {
         return (! this.id);
     }
+
+    locationType() {
+        return LocationType[this.lotype];
+    }
 }
 
 // Managed by API Gateway
@@ -79,10 +83,14 @@ export class Region {
     coordinates?: Array<number>; // lon/länge, lat/breite
 }
 
+// Location types also used in location dropdown
 export enum LocationType {
-    Place,
-    Country,
-    Region
+    PLACE = 'Place',
+    ACCOM = 'Accomodation',
+    BEACH = 'Beach / Island',
+    CITY = 'Citytrip',
+    EXCURS = 'Excursion',
+    MONUM = 'Monument'
 }
 
 export interface IGeometry {
