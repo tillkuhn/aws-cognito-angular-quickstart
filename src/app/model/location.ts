@@ -66,7 +66,8 @@ export class Location {
         return (! this.id);
     }
 
-    locationType() {
+    // resolve enum key to readable value
+    locationType?() {
         return LocationType[this.lotype];
     }
 }

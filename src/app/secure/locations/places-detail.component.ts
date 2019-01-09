@@ -89,7 +89,6 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
                 this.location = new Location();
                 this.location.coordinates = new Array<number>(2);
                 this.location.lotype = LocationType.PLACE;
-                this.route.paramss
                 //this.location.imageUrl = '/assets/unknown.jpg';
             }
         });
