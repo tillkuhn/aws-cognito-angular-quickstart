@@ -203,7 +203,21 @@ resource "aws_iam_role" "code_pipeline_role" {
 EOF
 }
 
-##
+#####################################################################
+## Create S3 artifacts buckets for github sources
+#####################################################################
+resource "aws_s3_bucket" "artifacts" {
+  bucket = "${var.bucket_name_prefix}-artifacts"
+  region = "${var.aws_region}"
+  force_destroy = false
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
+
+##################################################
 ## TODO Code Pipeline should be managed by TF as well so we can use resource references and not hardcoded arns
 resource "aws_iam_role_policy" "code_pipeline_role_policy" {
   name = "${var.role_name_prefix}-code-pipeline-policy"
@@ -213,19 +227,27 @@ resource "aws_iam_role_policy" "code_pipeline_role_policy" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "AllowS3CodeAndLogsAccess",
+            "Sid": "AllowS3LogsAccess",
             "Effect": "Allow",
             "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:GetObjectVersion",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents"
             ],
             "Resource": [
-                "arn:aws:s3:::codepipeline-${var.aws_region}-*",
                 "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_id}-${var.codebuild_suffix}",
                 "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/${var.app_id}-${var.codebuild_suffix}:*"
+            ]
+        },
+        {
+            "Sid": "AllowS3ArtifactBucketAccess",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": [
+                "arn:aws:s3:::${var.bucket_name_prefix}-artifacts"
             ]
         },
         {
