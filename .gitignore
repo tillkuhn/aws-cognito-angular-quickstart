@@ -37,8 +37,7 @@ Thumbs.db
 !.elasticbeanstalk/*.global.yml
 
 # Build Artifacts
-upload.zip
-lambda.zip
+*.zip
 resetConfig.sh
 
 # Terraform

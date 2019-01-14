@@ -5,7 +5,7 @@ const util = require('util');
 const Promise = require('bluebird');
 Promise.promisifyAll(gm.prototype);
 
-// constants
+// constants yeah
 const MAX_WIDTH = process.env.MAX_WIDTH ? process.env.MAX_WIDTH : 250;
 const MAX_HEIGHT = process.env.MAX_HEIGHT ? process.env.MAX_HEIGHT : 250;
 

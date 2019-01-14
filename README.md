@@ -126,4 +126,8 @@ pip install awscli-local
 * [Resizing Images in the Browser in Angular With ng2-img-max](https://alligator.io/angular/resizing-images-in-browser-ng2-img-max/)
 * [AWS API Gateway and Lambda to return image data](https://stackoverflow.com/questions/35804042/aws-api-gateway-and-lambda-to-return-image) and [Image Upload and Retrieval from S3 Using AWS API Gateway and Lambda](https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1)
 * [Bike and other icons for custom map markers depending on location type](https://icons8.com/icon/set/bike/windows)
-* https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-cloudwatch-sns-notifications.html
+* https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-cloudwatch-sns-notifications.htmlhttps://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-how-to.html
+* https://aws.amazon.com/de/blogs/aws/new-amazon-cognito-groups-and-fine-grained-role-based-access-control-2/
+* https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html return and log TOTALs 
+* https://stackoverflow.com/questions/37266269/aws-lambda-how-to-store-an-image-retrieved-via-https-in-s3
+* https://github.com/aws-samples/aws-serverless-workshops/tree/master/ImageProcessing 
