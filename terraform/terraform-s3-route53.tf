@@ -49,7 +49,6 @@ EOF
   }
 }
 
-
 ## register bucket as alias in route53, get zone first for id
 data "aws_route53_zone" "selected" {
   name         = "${var.route53_zone_domain}."

@@ -1,5 +1,39 @@
 {
-  "userId": "johndoe",
-  "s3Bucket": "wildrydes-riderphotos-johndoe",
-  "s3Key": "1_happy_face.jpg"
+  "Records": [
+    {
+      "eventVersion": "2.1",
+      "eventSource": "aws:s3",
+      "awsRegion": "eu-central-1",
+      "eventTime": "2019-01-15T18:10:30.300Z",
+      "eventName": "ObjectCreated:Put",
+      "userIdentity": {
+        "principalId": "AWS:AIDAI3PPLCYDEZEUX35FG"
+      },
+      "requestParameters": {
+        "sourceIPAddress": "185.46.212.111"
+      },
+      "responseElements": {
+        "x-amz-request-id": "1FB991075711D8E0",
+        "x-amz-id-2": "HQ0eIqTgyLucGBbn/zaUlCbzPPOP7ayvsJmKV8o37vhmlYQtmfgJvOmNvBUpNBzw/KW9VfGdeAU="
+      },
+      "s3": {
+        "s3SchemaVersion": "1.0",
+        "configurationId": "tf-s3-lambda-20190115000402493900000001",
+        "bucket": {
+          "name": "yummy-docs",
+          "ownerIdentity": {
+            "principalId": "A1RW98QX7LAKZ3"
+          },
+          "arn": "arn:aws:s3:::yummy-docs"
+        },
+        "object": {
+          "key": "test/404-KlaasNotFoundException.jpg",
+          "size": 381698,
+          "eTag": "ad94c7196b3ffcdf554692b0f248b979",
+          "sequencer": "005C3E22164003BA47"
+        }
+      }
+    }
+  ]
 }
+

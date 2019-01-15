@@ -131,3 +131,4 @@ pip install awscli-local
 * https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html return and log TOTALs 
 * https://stackoverflow.com/questions/37266269/aws-lambda-how-to-store-an-image-retrieved-via-https-in-s3
 * https://github.com/aws-samples/aws-serverless-workshops/tree/master/ImageProcessing 
+* https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1
