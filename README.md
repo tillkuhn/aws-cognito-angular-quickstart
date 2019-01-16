@@ -132,3 +132,4 @@ pip install awscli-local
 * https://stackoverflow.com/questions/37266269/aws-lambda-how-to-store-an-image-retrieved-via-https-in-s3
 * https://github.com/aws-samples/aws-serverless-workshops/tree/master/ImageProcessing 
 * https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1
+https://learn.hashicorp.com/terraform/aws/lambda-api-gateway
