@@ -41,7 +41,7 @@ export class LocationService {
     getPois(callback: (err: AWSError, data: DocumentClient.ScanOutput) => void): void {
         let params: ScanInput  = {
             TableName: this.ddbUtil.getTableName('place'),
-            ProjectionExpression: 'id,coordinates,#locationname',
+            ProjectionExpression: 'id,coordinates,lotype,#locationname',
             ExpressionAttributeNames: {'#locationname': 'name'}
         };
         let docClient = new DynamoDB.DocumentClient(this.ddbUtil.getClientParams());

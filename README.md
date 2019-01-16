@@ -133,3 +133,4 @@ pip install awscli-local
 * https://github.com/aws-samples/aws-serverless-workshops/tree/master/ImageProcessing 
 * https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1
 https://learn.hashicorp.com/terraform/aws/lambda-api-gateway
+* ICONS like beach: https://material.io/tools/icons/?icon=beach_access&style=baseline

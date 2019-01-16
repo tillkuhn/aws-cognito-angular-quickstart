@@ -15,7 +15,7 @@ declare var MapboxDraw: any;
     styleUrls: []
 })
 export class LocationMapComponent implements OnInit {
-    @Input() center: number[] = [100.50177, 13.75633 ]; // lon lat BKK
+    @Input() center: number[] = [100.50177, 13.75633]; // lon lat BKK
     @Input() zoom = 3; //  10.61041 104.18145
     @Input() pois: Array<Location> = [];
     @Input() allowDraw = false;
@@ -56,58 +56,69 @@ export class LocationMapComponent implements OnInit {
         });
 
         map.addControl(new mapboxgl.NavigationControl());
+        map.addControl(new mapboxgl.FullscreenControl());
 
         if (this.allowDraw) {
             this.createDrawControl(map);
         }
 
         // wait until map is fully initialized
-        map.on('load', () => {
-            // load image once, see also https://www.mapbox.com/mapbox-gl-js/example/geojson-markers/
-            map.loadImage('assets/marker32.png', (error, image) => {
+        const markers = ['BEACH', 'CITY', 'ACCOM', 'EXCURS', 'MONUM', 'PLACE'];
+        markers.forEach(loctype => {
+            map.loadImage('assets/markers/' + loctype + '.png', (error, image) => {
                 if (error) throw error;
-                // add image to the map with a given name so that we can reference it later
-                map.addImage('my-icon', image);
-                // https://www.mapbox.com/mapbox-gl-js/example/flyto/
-                map.flyTo({
-                    center: this.center
-                });
-
-                map.addLayer({
-                    'id': 'places',
-                    'type': 'symbol',
-                    'source': {
-                        'type': 'geojson',
-                        'data': {
-                            'type': 'FeatureCollection',
-                            'features': this.pois.map(poi => ({
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': poi.coordinates,
-                                },
-                                'properties': {
-                                    'title': poi.name,
-                                    'id': poi.id
-                                    //'primaryUrl': poi.primaryUrl
-                                }
-                            }))
-                        }
-                    },
-                    'layout': {
-                        'icon-image': 'my-icon',
-                        'icon-size': 0.75,
-                        'text-field': '{title}',
-                        'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-                        'text-offset': [0, 0.6],
-                        'text-size': 10,
-                        'text-anchor': 'top',
-                        // display all pointseven in low zoom by allowing icons and text to overlap
-                        'icon-allow-overlap': true,
-                        'text-allow-overlap': true
-                    }
-                });
+                this.log.info('Loading icon ' + image + ' as ' + loctype);
+                map.addImage(loctype, image);
             });
+        });
+        map.on('load', () => {
+
+            // load image once, see also https://www.mapbox.com/mapbox-gl-js/example/geojson-markers/
+            //map.loadImage('assets/marker32.png', (error, image) => {
+            //if (error) throw error;
+            // add image to the map with a given name so that we can reference it later
+            //map.addImage('my-icon', image);
+            // https://www.mapbox.com/mapbox-gl-js/example/flyto/
+            map.flyTo({
+                center: this.center
+            });
+
+            map.addLayer({
+                'id': 'places',
+                'type': 'symbol',
+                'source': {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': this.pois.map(poi => ({
+                            'type': 'Feature',
+                            'geometry': {
+                                'type': 'Point',
+                                'coordinates': poi.coordinates,
+                            },
+                            'properties': {
+                                'title': poi.name,
+                                'id': poi.id,
+                                'icon': poi.lotype || 'PLACE'
+                                //'primaryUrl': poi.primaryUrl
+                            }
+                        }))
+                    }
+                },
+                'layout': {
+                    'icon-image':  '{icon}',
+                    'icon-size': 0.75,
+                    'text-field': '{title}',
+                    'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                    'text-offset': [0, 0.6],
+                    'text-size': 10,
+                    'text-anchor': 'top',
+                    // display all pointseven in low zoom by allowing icons and text to overlap
+                    'icon-allow-overlap': true,
+                    'text-allow-overlap': true
+                }
+            });
+            //});
         });
         // When a click event occurs on a feature in the places layer, open a popup at the
         // location of the feature, with description HTML from its properties.
@@ -269,6 +280,7 @@ export class LocationMapComponent implements OnInit {
         });
 
         map.addControl(this.draw);
+        //map.addControl(new mapboxgl.FullscreenControl());
     }
 
     public GetGeoference(): number[][] {

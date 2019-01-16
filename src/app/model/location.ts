@@ -86,12 +86,14 @@ export class Region {
 
 // Location types also used in location dropdown
 export enum LocationType {
-    PLACE = 'Place',
+    PLACE = 'Place (default)',
     ACCOM = 'Accomodation',
-    BEACH = 'Beach / Island',
+    BEACH = 'Beach & Island',
     CITY = 'Citytrip',
     EXCURS = 'Excursion',
-    MONUM = 'Monument'
+    MONUM = 'Monument',
+    MOUNT = 'Mountain & Skiing',
+    ROAD = 'Roadtrip'
 }
 
 export interface IGeometry {
