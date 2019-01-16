@@ -1,14 +1,21 @@
-variable "function_name" { default = "lambda-resize" }
+variable "function_name_resize" { default = "lambda-resize" }
+variable "function_name_putdoc" { default = "lambda-putdoc" }
+variable "lambda_runtime" { default = "nodejs8.10" }
 
-data "archive_file" "lambda_archive" {
+data "archive_file" "lambda_archive_resize" {
   type        = "zip"
-  source_dir = "${path.module}/../lambda"
-  output_path = "${path.module}/../${var.function_name}.zip"
+  source_dir  = "${path.module}/../lambda/resize"
+  output_path = "${path.module}/../lambda/dist/${var.function_name_resize}.zip"
 }
 
-resource "aws_iam_role" "iam_lambda_resize" {
-  name = "${var.role_name_prefix}-${var.function_name}"
+data "archive_file" "lambda_archive_putdoc" {
+  type        = "zip"
+  source_dir  = "${path.module}/../lambda/putdoc"
+  output_path = "${path.module}/../lambda/dist/${var.function_name_putdoc}.zip"
+}
 
+resource "aws_iam_role" "iam_lambda" {
+  name = "${var.role_name_prefix}-lambda-role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -65,21 +72,20 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role = "${aws_iam_role.iam_lambda_resize.name}"
+  role = "${aws_iam_role.iam_lambda.name}"
   policy_arn = "${aws_iam_policy.lambda_logging_s3.arn}"
 }
 
 resource "aws_lambda_function" "lambda_resize" {
-  filename         = "${data.archive_file.lambda_archive.output_path}"
-  function_name    = "${var.function_name}"
-  role             = "${aws_iam_role.iam_lambda_resize.arn}"
+  filename         = "${data.archive_file.lambda_archive_resize.output_path}"
+  function_name    = "${var.function_name_resize}"
+  role             = "${aws_iam_role.iam_lambda.arn}"
   handler          = "index.handler"
-  source_code_hash = "${base64sha256(file("${data.archive_file.lambda_archive.output_path}"))}"
-  runtime          = "nodejs8.10"
-  depends_on = ["data.archive_file.lambda_archive"]
+  source_code_hash = "${base64sha256(file("${data.archive_file.lambda_archive_resize.output_path}"))}"
+  runtime          = "${var.lambda_runtime}"
+  depends_on = ["data.archive_file.lambda_archive_resize"]
   timeout = 10
   reserved_concurrent_executions = 3
-
   environment {
     variables = {
       THUMBNAIL_BUCKET = "${aws_s3_bucket.docs.bucket}"
@@ -88,7 +94,6 @@ resource "aws_lambda_function" "lambda_resize" {
       THUMBNAIL_PREFIX = "thumbs/"
     }
   }
-
   tags {
     Name = "${var.app_name}"
     Environment = "${var.env}"
@@ -96,7 +101,27 @@ resource "aws_lambda_function" "lambda_resize" {
   }
 }
 
-## todo https://www.terraform.io/docs/providers/aws/r/s3_bucket_notification.html
+resource "aws_lambda_function" "lambda_putdoc" {
+  filename         = "${data.archive_file.lambda_archive_putdoc.output_path}"
+  function_name    = "${var.function_name_putdoc}"
+  role             = "${aws_iam_role.iam_lambda.arn}"
+  handler          = "index.handler"
+  source_code_hash = "${base64sha256(file("${data.archive_file.lambda_archive_putdoc.output_path}"))}"
+  runtime          = "${var.lambda_runtime}"
+  depends_on = ["data.archive_file.lambda_archive_putdoc"]
+  timeout = 10
+  reserved_concurrent_executions = 3
+  environment {
+    variables = {
+      TARGET_BUCKET = "${aws_s3_bucket.docs.bucket}"
+    }
+  }
+  tags {
+    Name = "${var.app_name}"
+    Environment = "${var.env}"
+    ManagedBy = "Terraform"
+  }
+}
 ## for aws_s3_bucket.docs.arn
 resource "aws_lambda_permission" "allow_bucket_notify_lambda" {
   statement_id  = "AllowExecutionFromS3Bucket"
@@ -106,9 +131,11 @@ resource "aws_lambda_permission" "allow_bucket_notify_lambda" {
   source_arn    = "${aws_s3_bucket.docs.arn}"
 }
 
-resource "aws_s3_bucket_notification" "bucket_notification" {
+## multiple for same function does not seem to work
+resource "aws_s3_bucket_notification" "bucket_notification_jpg" {
   bucket = "${aws_s3_bucket.docs.id}"
   lambda_function {
+    id = "bucket_notification_jpg"
     lambda_function_arn = "${aws_lambda_function.lambda_resize.arn}"
     events              = ["s3:ObjectCreated:*"]
     filter_prefix       = "places/"
@@ -116,6 +143,4 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
   }
 }
 
-output "lambda_archive" {
-  value = "${data.archive_file.lambda_archive.output_path}"
-}
+
