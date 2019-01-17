@@ -1,5 +1,5 @@
 variable "api_gateway_stage_name" { default = "v1" }
-variable "deployment_id" { default = "47" } ### increment to force deployment
+variable "deployment_id" { default = "48" } ### increment to force deployment
 
 #####################################################################
 ## Create API Gateway + Resources for future API Calls
@@ -58,7 +58,6 @@ EOF
 resource "aws_iam_role_policy" "api-gateway" {
   name = "DDBPolicy"
   role = "${aws_iam_role.api-gateway.id}"
-
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -83,7 +82,7 @@ EOF
 }
 
 #####################################################################
-## Create Authrizer to secure requests
+## Create Authorizer to secure requests
 ## Example for usage with cognito: https://www.terraform.io/docs/providers/aws/r/api_gateway_method.html
 #####################################################################
 resource "aws_api_gateway_authorizer" "main" {
@@ -103,9 +102,8 @@ resource "aws_api_gateway_resource" "regions" {
   path_part = "regions"
 }
 
-
 #####################################################################
-## Method: PUT a region
+## Region Method: PUT a region
 #####################################################################
 resource "aws_api_gateway_method" "put-region" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
@@ -115,7 +113,7 @@ resource "aws_api_gateway_method" "put-region" {
   authorizer_id = "${aws_api_gateway_authorizer.main.id}"
 }
 
-## Method: PUT a region - Request Integration
+## Region Method: PUT a region - Request Integration
 resource "aws_api_gateway_integration" "put-region-integration" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
@@ -162,7 +160,7 @@ EOF
   }
 }
 
-## Method: PUT a region - Response Integration
+## Region Method: PUT a region - Response Integration
 resource "aws_api_gateway_method_response" "put-region-response-200" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
@@ -184,7 +182,7 @@ resource "aws_api_gateway_integration_response" "put-region-response" {
   }
 }
 #####################################################################
-## Method: GET All regions
+## Region Method: GET All regions
 #####################################################################
 resource "aws_api_gateway_method" "get-region" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
@@ -195,7 +193,7 @@ resource "aws_api_gateway_method" "get-region" {
   authorizer_id = "${aws_api_gateway_authorizer.main.id}"
 }
 
-## Method: GET All regions - integration
+## Region Method: GET All regions - integration
 resource "aws_api_gateway_integration" "get-region-integration" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
@@ -213,7 +211,7 @@ EOF
   }
 }
 
-## Method: GET All regions - method response 200
+## Region Method: GET All regions - method response 200
 resource "aws_api_gateway_method_response" "get-region-response-200" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
@@ -227,7 +225,7 @@ resource "aws_api_gateway_method_response" "get-region-response-200" {
 ## Mapping reference: https://docs.aws.amazon.com/de_de/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html
 ## conditional? https://stackoverflow.com/questions/32511087/aws-api-gateway-how-do-i-make-querystring-parameters-optional-in-mapping-templa
 
-## Method: GET All regions - method response integration
+## Region Method: GET All regions - method response integration
 resource "aws_api_gateway_integration_response" "get-region-response" {
   depends_on = ["aws_api_gateway_integration.get-region-integration"]
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
@@ -271,7 +269,7 @@ EOF
 }
 
 #####################################################################
-## Method: DELETE REGION
+## Region Method: DELETE REGION
 #####################################################################
 resource "aws_api_gateway_method" "delete-region" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
@@ -305,7 +303,7 @@ EOF
   }
 }
 
-## Method: DELETE regions - method response 200
+## Region Method: DELETE regions - method response 200
 resource "aws_api_gateway_method_response" "delete-region-response-200" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   resource_id = "${aws_api_gateway_resource.regions.id}"
@@ -316,8 +314,10 @@ resource "aws_api_gateway_method_response" "delete-region-response-200" {
   }
 }
 
-############################
-## And easier way to apply CORS config?
+#########################################################
+## Apply CORS for Region using external module otherwise
+## this would be even more complicated
+##########################################
 module "cors" {
   source = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
   version = "0.1.0"
@@ -328,6 +328,37 @@ module "cors" {
   allowed_methods = ["GET","OPTIONS","PUT","DELETE"]
   allowed_origin = "*"
   allowed_max_age = 7200
+}
+
+#####################################################################
+# Create resoucre "docs" (/docs)
+#####################################################################
+resource "aws_api_gateway_resource" "docs" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  parent_id = "${aws_api_gateway_rest_api.main.root_resource_id}"
+  path_part = "docs"
+}
+
+#####################################################################
+## Region Method: PUT a region
+#####################################################################
+resource "aws_api_gateway_method" "put-doc" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_resource.docs.id}"
+  http_method = "PUT"
+  authorization = "COGNITO_USER_POOLS"
+  authorizer_id = "${aws_api_gateway_authorizer.main.id}"
+}
+
+## Region Method: PUT a region integration to  putdoc lambda
+resource "aws_api_gateway_integration" "put-doc_lambda_proxy" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  resource_id = "${aws_api_gateway_method.put-doc.resource_id}"
+  http_method = "${aws_api_gateway_method.put-doc.http_method}"
+  integration_http_method = "POST"
+  type                    = "AWS_PROXY"
+  uri                     = "${aws_lambda_function.lambda_putdoc.invoke_arn}"
+  depends_on = ["aws_lambda_function.lambda_putdoc"]
 }
 
 ############################

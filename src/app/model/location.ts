@@ -72,7 +72,9 @@ export class Location {
     }
 }
 
-// Managed by API Gateway
+/*
+ * Region Managed by API Gateway
+ */
 @table('region')
 export class Region {
     code: string;
@@ -82,18 +84,22 @@ export class Region {
     season?: Array<number>;
     // new to "flyto" center of region
     coordinates?: Array<number>; // lon/länge, lat/breite
+    zoom?: number;
 }
 
-// Location types also used in location dropdown
+/*
+ * Location types also used in
+ * dropdown for places
+ */
 export enum LocationType {
     PLACE = 'Place (default)',
     ACCOM = 'Accomodation',
     BEACH = 'Beach & Island',
     CITY = 'Citytrip',
-    EXCURS = 'Excursion',
+    EXCURS = 'Excursion & Activities',
     MONUM = 'Monument',
     MOUNT = 'Mountain & Skiing',
-    ROAD = 'Roadtrip'
+    ROAD = 'Roadtrip Destination'
 }
 
 export interface IGeometry {

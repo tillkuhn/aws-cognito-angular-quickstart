@@ -117,7 +117,7 @@ pip install awscli-local
 * Enable [Time To Live](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/time-to-live-ttl-how-to.html) for audit items with epoch attribute and
 
 ## Other useful resources
-* [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a) and [Creating a serverless API using AWS API Gateway and DynamoDB](https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/)
+* [Nice collection of icons in PNG/SVG format](https://material.io/tools/icons/?icon=beach_access&style=baseline)* [tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway](https://medium.com/employbl/tutorial-for-building-a-web-application-with-amazon-s3-lambda-dynamodb-and-api-gateway-6d3ddf77f15a) and [Creating a serverless API using AWS API Gateway and DynamoDB](https://sanderknape.com/2017/10/creating-a-serverless-api-using-aws-api-gateway-and-dynamodb/)
 * [integrating-api-with-aws-services-s3](https://docs.aws.amazon.com/apigateway/latest/developerguide/integrating-api-with-aws-services-s3.html)
 * [Easily add an OPTIONS method to an API Gateway resource to enable CORS (Terraform)](https://github.com/squidfunk/terraform-aws-api-gateway-enable-cors)
 * [Simple/sample AngularV4-based web app that demonstrates different API authentication options using Amazon Cognito and API Gateway inc AWS CLI User setup](https://github.com/aws-samples/aws-cognito-apigw-angular-auth)
@@ -132,5 +132,4 @@ pip install awscli-local
 * https://stackoverflow.com/questions/37266269/aws-lambda-how-to-store-an-image-retrieved-via-https-in-s3
 * https://github.com/aws-samples/aws-serverless-workshops/tree/master/ImageProcessing 
 * https://medium.com/think-serverless/image-upload-and-retrieval-from-s3-using-aws-api-gateway-and-lambda-b4c2961e8d1
-https://learn.hashicorp.com/terraform/aws/lambda-api-gateway
-* ICONS like beach: https://material.io/tools/icons/?icon=beach_access&style=baseline
+* [HashiCorp Serverless Applications with AWS Lambda and API Gateway](https://learn.hashicorp.com/terraform/aws/lambda-api-gateway)
