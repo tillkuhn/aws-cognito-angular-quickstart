@@ -320,14 +320,14 @@ resource "aws_api_gateway_method_response" "delete-region-response-200" {
 ##########################################
 module "cors" {
   source = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
-  version = "0.1.0"
+  version = "0.2.0"
   api_id          = "${aws_api_gateway_rest_api.main.id}"
   api_resource_id = "${aws_api_gateway_resource.regions.id}"
   # allowed_headers = ["Content-Type","X-Amz-Date","Authorization","X-Api-Key","X-Amz-Security-Token"]
-  allowed_headers = ["Content-Type","Authorization"]
-  allowed_methods = ["GET","OPTIONS","PUT","DELETE"]
-  allowed_origin = "*"
-  allowed_max_age = 7200
+  allow_headers = ["Content-Type","Authorization"]
+  allow_methods = ["GET","OPTIONS","PUT","DELETE"]
+  allow_origin = "*"
+  allow_max_age = 7200
 }
 
 #####################################################################
