@@ -44,6 +44,12 @@
                 <img src="assets/markers/{{row.lotype}}.png" alt="{{row.locationType()}}" />
             </ng-template>
         </ngx-datatable-column>
+
+        <ngx-datatable-column name="Created" prop="createdAt" [width]="120">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                {{row.relativeCreationDate()}}
+            </ng-template>
+        </ngx-datatable-column>
         <!--<ngx-datatable-column name="Region" prop="region" [width]="100"></ngx-datatable-column> -->
         <!-- coordinates  {{value[0]}} {{value[1]}} -->
 

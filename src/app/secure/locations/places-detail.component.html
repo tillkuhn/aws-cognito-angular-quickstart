@@ -17,7 +17,7 @@
 
                 <bar-rating [(rate)]="location.rating" [max]="10" [theme]="'fontawesome'" [showText]="false"
                             [titles]="['Find out', 'Lousy','Potential','Nice', 'Yo','Hossa','OK','Good','Great','Awesome']"></bar-rating>
-                <span>Created {{getRelativeCreationDate()}}</span>
+                <span>Created {{location.relativeCreationDate()}}</span>
                 <a href="{{location.primaryUrl}}" target="_location" *ngIf="location.primaryUrl"> → Open Primary Link </a>
             </div>
         </div>

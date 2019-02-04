@@ -18,18 +18,10 @@ import {Dish} from '../../model/dish';
 export class PlacesComponent implements OnInit {
 
     readonly cacheKeyLocations: string = 'locations'
-    /// default settings
-    map: mapboxgl.Map;
-    style = 'mapbox://styles/mapbox/outdoors-v9';
-    // lat = 37.75;lng = -122.41;
-    message = 'Hello World!';
 
     locations: Array<Location> = [];
     selected: Array<Location> = [];
     debug: false;
-    // data
-    source: any;
-    markers: any;
 
     constructor(
         private locationService: LocationService,
@@ -60,7 +52,7 @@ export class PlacesComponent implements OnInit {
 
     onRefresh(): void {
         this.progress.start();
-        this.log.info('locations not cached loading start');
+        this.log.info('Places not cached loading start');
         this.load().then((resolve) => {
             this.locations = resolve;
             this.cache.set(this.cacheKeyLocations, resolve);

@@ -24,13 +24,19 @@ export class LocationService {
     ) {
     }
 
+    /*
+     * Retrieve a list of all places, only selected attributes
+     */
     getPlaces() {
         return this.ddbUtil.getMapper().scan({
             valueConstructor: Location,
-            projection: ['id', 'country', 'summary', 'name', 'region', 'coordinates', 'lotype']
+            projection: ['id', 'country', 'summary', 'name', 'region', 'coordinates', 'lotype','createdAt']
         });
     }
 
+    /*
+     * Retrieve a particular place, ALL available attribues (no projection)
+     */
     getPlace(id: string) {
         return this.ddbUtil.getMapper().get(Object.assign(new Location(), {id: id}));
     }

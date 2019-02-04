@@ -133,10 +133,6 @@ export class PlacesDetailComponent implements OnInit, LoggedInCallback {
         }
     }
 
-    getRelativeCreationDate() {
-        return this.location.createdAt? moment(this.location.createdAt).fromNow() : null;
-    }
-
     onDelete() {
         const confirm = window.confirm('Do you really want to delete this location?');
         if (confirm) {
