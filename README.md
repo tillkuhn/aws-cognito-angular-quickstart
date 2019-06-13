@@ -38,13 +38,19 @@ yarn start
 
 ## What does this app do?
 
-Technially this is a fork from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) based on Angular 6, API Gateway, Cognito, DynamoDB and S3 with a lot of additions and changes.
+*Yummy Dishes & Places* is a 2-in-1 application that manages international recipes for my favourite dishes and places I'd like to visit some day 🥣 🥡
 
-None technically it's an app that lets me managed recipes for my favourite dishes and places I'd like to visit some day 🥣 🥡
+Technically it's a fork from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) based on Angular 6, API Gateway, Cognito, DynamoDB and S3 with a lot of additions and changes.
+
+![Snapshot Yummy Dishes](/docs/yummy-dishes.jpg?raw=true)
+
+![Snapshot Yummy Places Map](/docs/yummy-map.jpg?raw=true)
+
+
+## Tech Stack
 
 ![QuickStart Angular2 Cognito App](/docs/meta/Cognito-Angular2-QuickStart.png?raw=true)
 
-## Tech Stack
 ### Required Tools
 * Package Manager [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com)
 * A recent version of [Angular CLI](https://github.com/angular/angular-cli)
