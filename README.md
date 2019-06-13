@@ -1,3 +1,29 @@
+Yummy Dishes & Places
+===
+
+[![Build Status](https://travis-ci.org/tillkuhn/yummy-aws.svg?branch=master)](https://travis-ci.org/tillkuhn/yummy-aws)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![dependencies Status](https://david-dm.org/tillkuhn/yummy-aws/status.svg)](https://david-dm.org/tillkuhn/yummy-aws)
+
+## About
+
+*Yummy Dishes & Places* is a 2-in-1 application that manages international recipes for my favourite dishes and places I'd like to visit some day 🥣 🥡
+
+It has been forked from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) and is based on Angular 6, API Gateway, Cognito, DynamoDB and S3 and a couple of other AWS specific Services. 
+You may find this project useful if you need to train for *AWS Solution Architect* or *Certified Developer* Exam, which was used to be my main motivation to play around with it.
+
+### Preview Dishlist
+
+![Snapshot Yummy Dishes](/docs/yummy-dishes.jpg?raw=true)
+
+### Preview Map of Places
+
+![Snapshot Yummy Places Map](/docs/yummy-map.jpg?raw=true)
+
+### Preview Place Details
+
+![Snapshot Yummy Place Details](/docs/yummy-places-details.jpg?raw=true)
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
@@ -21,12 +47,6 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Yummy Dishes & Places
-===
-[![Build Status](https://travis-ci.org/tillkuhn/yummy-aws.svg?branch=master)](https://travis-ci.org/tillkuhn/yummy-aws)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![dependencies Status](https://david-dm.org/tillkuhn/yummy-aws/status.svg)](https://david-dm.org/tillkuhn/yummy-aws)
-
 ## Get the Code and get running quickly
 ```bash
 git clone https://github.com/tillkuhn/yummy-aws.git yummy
@@ -35,17 +55,6 @@ yarn
 # Run the app in dev mode
 yarn start
 ```
-
-## What does this app do?
-
-*Yummy Dishes & Places* is a 2-in-1 application that manages international recipes for my favourite dishes and places I'd like to visit some day 🥣 🥡
-
-Technically it's a fork from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) based on Angular 6, API Gateway, Cognito, DynamoDB and S3 with a lot of additions and changes.
-
-![Snapshot Yummy Dishes](/docs/yummy-dishes.jpg?raw=true)
-
-![Snapshot Yummy Places Map](/docs/yummy-map.jpg?raw=true)
-
 
 ## Tech Stack
 
