@@ -22,7 +22,7 @@ You may find this project useful if you need to train for *AWS Solution Architec
 
 ### Preview Place Details
 
-![Snapshot Yummy Place Details](/docs/yummy-places-details.jpg?raw=true)
+![Snapshot Yummy Place Details](/docs/yummy-place-details.jpg?raw=true)
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
