@@ -28,22 +28,20 @@ You may find this project useful if you need to train for *AWS Solution Architec
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Yummy Dishes & Places](#yummy-dishes--places)
-  - [Get the Code and get running quickly](#get-the-code-and-get-running-quickly)
-  - [What does this app do?](#what-does-this-app-do)
-  - [Tech Stack](#tech-stack)
-    - [Required Tools](#required-tools)
-    - [Frameworks](#frameworks)
-  - [AWS Setup](#aws-setup)
-    - [Install the required tools)](#install-the-required-tools)
-    - [Creating AWS Resources](#creating-aws-resources)
-  - [_Mapbox GL_ Support](#_mapbox-gl_-support)
-    - [_S3:_ Update, Build and Deploy](#_s3_-update-build-and-deploy)
-  - [Import Data](#import-data)
-  - [Local Testing](#local-testing)
-    - [LocalStack](#localstack)
-  - [Roadmap](#roadmap)
-  - [Other interesting resources](#other-interesting-resources)
+- [Get the Code and get running quickly](#get-the-code-and-get-running-quickly)
+- [Tech Stack](#tech-stack)
+  - [Required Tools](#required-tools)
+  - [Frameworks](#frameworks)
+- [AWS Setup](#aws-setup)
+  - [Install the required tools)](#install-the-required-tools)
+  - [Creating AWS Resources](#creating-aws-resources)
+- [_Mapbox GL_ Support](#_mapbox-gl_-support)
+  - [_S3:_ Update, Build and Deploy](#_s3_-update-build-and-deploy)
+- [Import Data](#import-data)
+- [Local Testing](#local-testing)
+  - [LocalStack](#localstack)
+- [Roadmap](#roadmap)
+- [Other useful resources](#other-useful-resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
