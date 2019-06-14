@@ -7,12 +7,11 @@ Yummy Dishes & Places
 
 ## About
 
-*Yummy Dishes & Places* is a 2-in-1 application that manages international recipes for my favourite dishes and places I'd like to visit some day 🥣 🥡
+*Yummy Dishes & Places* is a 2-in-1 app that manages international recipes for your favorite dishes as well as places you'd like to visit some day. Key technologies: Angular 6 based single-page app with Mapbox GL, AWS Cognito, S3, DynamoDB and API Gateway as backend (serverless architecture)  🥣 🥡
 
-It has been forked from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) and is based on Angular 6, API Gateway, Cognito, DynamoDB and S3 and a couple of other AWS specific Services. 
-You may find this project useful if you need to train for *AWS Solution Architect* or *Certified Developer* Exam, which was used to be my main motivation to play around with it.
+It has been initially forked from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) and deliberetely makes use of a lot of AWS specific Services. You may find this project useful if you need to train for AWS *Solution Architect* or *Certified Developer* Exam, which used to be my main motivation to kick it off. Of course you may just as well use it only to maintain recipes and places to visit :-) 
 
-### Preview Dishlist
+### Preview Dishlist Overview
 
 ![Snapshot Yummy Dishes](/docs/yummy-dishes.jpg?raw=true)
 
@@ -59,7 +58,7 @@ yarn start
 ![QuickStart Angular2 Cognito App](/docs/meta/Cognito-Angular2-QuickStart.png?raw=true)
 
 ### Required Tools
-* Package Manager [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com)
+* Package Manager [npm](https://www.npmjs.com/) or  [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com)
 * A recent version of [Angular CLI](https://github.com/angular/angular-cli)
 * To build up AWS Infrastructure [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) and [Terraform](https://www.terraform.io/intro/getting-started/install.html)
 
@@ -70,16 +69,7 @@ yarn start
 * [Bootstrap](http://getbootstrap.com/)
 * ... and many more 
 
-## AWS Setup
-### Install the required tools)
-* Create an AWS account
-* Install [npm](https://www.npmjs.com/)
-* [Install or update your aws cli](http://docs.aws.amazon.com/cli/latest/userguide/installing.html) 
-* [Install or update your eb cli](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html) 
-* [Install angular-cli](https://github.com/angular/angular-cli)
-
-
-### Creating AWS Resources
+### AWS Resources
 This sample application can be deployed S3. S3 will host this application as a static site
 
 * [What is S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
@@ -93,10 +83,6 @@ terraform apply [-auto-approve]
 
 *Caution:* You might incur AWS charges after running the setup script
 
-## _Mapbox GL_ Support
-
-* _Yummy_ uses [Mapbox](https://www.mapbox.com/maps/) to visualize places and regions, so to use this featuere you need to register on their side and register your `mapbox_access_token`in `terraform.tfvars`
-
 ### _S3:_ Update, Build and Deploy
 ```
 # Build the project and sync the output with the S3 bucket.
@@ -104,16 +90,12 @@ terraform apply [-auto-approve]
 # Test your deployed application
 curl –I http://[BUCKET_NAME].s3-website-[REGION].amazonaws.com/
 ```
-## Import Data
+## _Mapbox GL_ Support
 
-* https://docs.aws.amazon.com/cli/latest/reference/dynamodb/put-item.html
-* https://docs.aws.amazon.com/de_de/amazondynamodb/latest/developerguide/SampleData.LoadData.html
+* _Yummy_ uses [Mapbox](https://www.mapbox.com/maps/) to visualize places and regions, so to use this featuere you need to register on their side and register your `mapbox_access_token`in `terraform.tfvars`
 
-## Local Testing
 
-This section contains instructions on how to test the application locally (using mocked services instead of the real AWS services).
-
-### LocalStack
+### Local testing with LocalStack
 
 To test this application using [LocalStack](https://github.com/localstack/localstack), you can use the `awslocal` CLI (https://github.com/localstack/awscli-local).
 ```
