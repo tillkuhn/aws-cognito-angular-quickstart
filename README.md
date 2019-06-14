@@ -9,7 +9,7 @@ Yummy Dishes & Places
 
 *Yummy Dishes & Places* is a 2-in-1 app that manages international recipes for your favorite dishes as well as places you'd like to visit some day. Key technologies: Angular 6 based single-page app with Mapbox GL, AWS Cognito, S3, DynamoDB and API Gateway as backend (serverless architecture)  🥣 🥡
 
-It has been initially forked from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) and deliberetely makes use of a lot of AWS specific Services. You may find this project useful if you need to train for AWS *Solution Architect* or *Certified Developer* Exam, which used to be my main motivation to kick it off. Of course you may just as well use it only to maintain recipes and places to visit :-) 
+It has been initially forked from [aws-cognito-angular-quickstart](https://github.com/awslabs/aws-cognito-angular-quickstart) and deliberately makes use of a lot of [AWS](https://aws.amazon.com/) specific Seervices. You may find this project useful if you need to train for AWS *Solution Architect* or *Certified Developer* Exam, which used to be my main motivation to kick it off. Of course you may just as well use it only to maintain recipes and places to visit :-) 
 
 ### Preview Dishlist Overview
 
@@ -72,8 +72,8 @@ yarn start
 ### AWS Resources
 This sample application can be deployed S3. S3 will host this application as a static site
 
-* [What is S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
-* Run terraform to build the underlying infrastructrure
+* [Hosting a Static Website on Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)
+* Run terraform to build the underlying infrastructrure in the `[terraform](./terraform)` subfolder
 
 ```
 terraform init
